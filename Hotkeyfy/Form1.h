@@ -1,5 +1,11 @@
-#include "KeyListener.h"
 #pragma once
+#include "KeyListener.h"
+#include "config.h"
+#include <Shlobj.h>
+#include <msclr\marshal.h>
+#include <msclr\marshal_cppstd.h>
+
+#pragma comment(lib, "Shell32.lib")
 
 namespace CppCLRWinFormsProject {
 
@@ -230,15 +236,31 @@ namespace CppCLRWinFormsProject {
 
 		}
 #pragma endregion
+		private: void setAction(System::String^ _name) {
+			label2->Text = _name;
+			std::wstring keys;
+			for (auto& key : config::getHotkeys(msclr::interop::marshal_as<std::wstring>(_name)))
+			{
+				keys += KeyListener::getKeyName(key);
+			}
+			label4->Text = gcnew System::String(keys.c_str());
+		}
 	private: System::Void listView1_SelectedIndexChanged(System::Object^ sender, System::EventArgs^ e) {
 		ListView^ listView = (ListView^)sender;
 		// this feels stupid
 		for each (ListViewItem ^ selectedItem in listView->SelectedItems) {
-			label2->Text = selectedItem->Text;
+			setAction(selectedItem->Text);
 		}
 	}
 private: System::Void Form1_Load(System::Object^ sender, System::EventArgs^ e) {
 	button1->Focus();
+	listView1->Select();
+
+	std::wstring path;
+	path.resize(MAX_PATH);
+	SHGetSpecialFolderPathW(NULL, path.data(), CSIDL_APPDATA, true);
+	config::load(path + L"/config");
+
 	KeyListener::init();
 }
 private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e) {
@@ -252,9 +274,20 @@ private: System::Void button2_Click(System::Object^ sender, System::EventArgs^ e
 	timer1->Start();
 }
 private: System::Void timer1_Tick(System::Object^ sender, System::EventArgs^ e) {
+	std::wstring keys;
 	for (auto& i : KeyListener::getKeys())
 	{
-
+		if (keys.empty())
+		{
+			keys = i;
+			continue;
+		}
+		keys += L"+" + i;
+	}
+	label4->Text = gcnew System::String(keys.c_str());
+	if (!KeyListener::isListening())
+	{
+		timer1->Stop();
 	}
 }
 };

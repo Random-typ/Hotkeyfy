@@ -3,6 +3,7 @@
 #include <thread>
 #include <vector>
 #include <mutex>
+#include <algorithm>
 #include <Windows.h>
 
 #pragma comment(lib, "User32.lib")
@@ -22,6 +23,8 @@ public:
 
 	static void enableHotkeys();
 	static void disableHotkeys();
+
+	static std::wstring getKeyName(DWORD _scanCode);
 
 	static std::vector<DWORD> PlayPauseKeys;
 private:

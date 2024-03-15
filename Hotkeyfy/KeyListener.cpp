@@ -24,11 +24,18 @@ void KeyListener::cleanup()
 	loopTh.request_stop();
 	PostThreadMessageA(GetThreadId(loopTh.native_handle()), WM_USER, 0, 0);
 	loopTh.join();
-	UnhookWindowsHookEx(keyboardHook);
+	if (keyboardHook)
+	{
+		UnhookWindowsHookEx(keyboardHook);
+		keyboardHook = NULL;
+	}
 }
 
 void KeyListener::listen()
 {
+	keyList_mutex.lock();
+	keyList.clear();
+	keyList_mutex.unlock();
 	doListen = true;
 }
 
@@ -52,6 +59,19 @@ void KeyListener::disableHotkeys()
 	hotkeysEnabled = false;
 }
 
+std::wstring KeyListener::getKeyName(DWORD _scanCode)
+{
+	std::wstring key;
+	key.resize(64);
+	int len;
+	if (len = GetKeyNameTextW(_scanCode << 16, key.data(), key.size()); !len)
+	{
+		return std::wstring();
+	}
+	key.resize(len);
+	return key;
+}
+
 LRESULT KeyListener::KeyboardProc(int nCode, WPARAM wParam, LPARAM lParam)
 {
 	KBDLLHOOKSTRUCT* kbStruct = reinterpret_cast<KBDLLHOOKSTRUCT*>(lParam);
@@ -61,15 +81,21 @@ LRESULT KeyListener::KeyboardProc(int nCode, WPARAM wParam, LPARAM lParam)
 		if (wParam == WM_KEYUP || wParam == WM_SYSKEYUP)
 		{
 			doListen = false;
+			return CallNextHookEx(keyboardHook, nCode, wParam, lParam);
 		}
-		std::wstring key;
-		key.resize(256);
-		if (!GetKeyNameTextW(lParam, key.data(), key.size()))
+
+		std::wstring key = getKeyName(kbStruct->scanCode);
+		if (key.empty())
 		{
 			return CallNextHookEx(keyboardHook, nCode, wParam, lParam);
 		}
 		keyList_mutex.lock();
-		keyList.emplace_back(key);
+		if (std::none_of(keyList.begin(), keyList.end(), [&](const std::wstring& str){
+			return key == str;
+			}))
+		{
+			keyList.emplace_back(key);
+		}
 		keyList_mutex.unlock();
 	}
 	if (!hotkeysEnabled)
@@ -90,4 +116,6 @@ void KeyListener::loop(std::stop_token _stoken)
 		TranslateMessage(&msg);
 		DispatchMessage(&msg);
 	}
+	UnhookWindowsHookEx(keyboardHook);
+	keyboardHook = NULL;
 }
