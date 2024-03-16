@@ -1,12 +1,13 @@
 #pragma once
 #include "KeyListener.h"
-#include "config.h"
+#include "../Hotkeyfy-api/config.h"
 #include <Shlobj.h>
 #include <msclr\marshal.h>
 #include <msclr\marshal_cppstd.h>
 
 #pragma comment(lib, "Shell32.lib")
 
+#import "file:../x64/Debug/Hotkeyfy-api.dll"
 namespace CppCLRWinFormsProject {
 
 	using namespace System::ComponentModel;
@@ -54,6 +55,7 @@ namespace CppCLRWinFormsProject {
 	private: System::Windows::Forms::Label^ label4;
 	private: System::Windows::Forms::OpenFileDialog^ openFileDialog1;
 	private: System::Windows::Forms::Timer^ timer1;
+	private: System::Windows::Forms::CheckBox^ checkBox2;
 	private: System::ComponentModel::IContainer^ components;
 
 
@@ -79,8 +81,8 @@ namespace CppCLRWinFormsProject {
 		void InitializeComponent(void)
 		{
 			this->components = (gcnew System::ComponentModel::Container());
-			System::Windows::Forms::ListViewItem^ listViewItem1 = (gcnew System::Windows::Forms::ListViewItem(L"Play Pause"));
-			System::Windows::Forms::ListViewItem^ listViewItem2 = (gcnew System::Windows::Forms::ListViewItem(L"Previous Track"));
+			System::Windows::Forms::ListViewItem^ listViewItem5 = (gcnew System::Windows::Forms::ListViewItem(L"Play Pause"));
+			System::Windows::Forms::ListViewItem^ listViewItem6 = (gcnew System::Windows::Forms::ListViewItem(L"Previous Track"));
 			this->label1 = (gcnew System::Windows::Forms::Label());
 			this->textBox1 = (gcnew System::Windows::Forms::TextBox());
 			this->button1 = (gcnew System::Windows::Forms::Button());
@@ -93,13 +95,14 @@ namespace CppCLRWinFormsProject {
 			this->listView1 = (gcnew System::Windows::Forms::ListView());
 			this->openFileDialog1 = (gcnew System::Windows::Forms::OpenFileDialog());
 			this->timer1 = (gcnew System::Windows::Forms::Timer(this->components));
+			this->checkBox2 = (gcnew System::Windows::Forms::CheckBox());
 			this->panel1->SuspendLayout();
 			this->SuspendLayout();
 			// 
 			// label1
 			// 
 			this->label1->AutoSize = true;
-			this->label1->Location = System::Drawing::Point(12, 9);
+			this->label1->Location = System::Drawing::Point(118, 9);
 			this->label1->Name = L"label1";
 			this->label1->Size = System::Drawing::Size(62, 13);
 			this->label1->TabIndex = 0;
@@ -107,9 +110,9 @@ namespace CppCLRWinFormsProject {
 			// 
 			// textBox1
 			// 
-			this->textBox1->Location = System::Drawing::Point(80, 6);
+			this->textBox1->Location = System::Drawing::Point(186, 6);
 			this->textBox1->Name = L"textBox1";
-			this->textBox1->Size = System::Drawing::Size(536, 20);
+			this->textBox1->Size = System::Drawing::Size(430, 20);
 			this->textBox1->TabIndex = 1;
 			this->textBox1->Text = L"Spotify.exe";
 			// 
@@ -194,7 +197,7 @@ namespace CppCLRWinFormsProject {
 			this->listView1->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
 			this->listView1->HideSelection = false;
-			this->listView1->Items->AddRange(gcnew cli::array< System::Windows::Forms::ListViewItem^  >(2) { listViewItem1, listViewItem2 });
+			this->listView1->Items->AddRange(gcnew cli::array< System::Windows::Forms::ListViewItem^  >(2) { listViewItem5, listViewItem6 });
 			this->listView1->LabelWrap = false;
 			this->listView1->Location = System::Drawing::Point(12, 32);
 			this->listView1->MultiSelect = false;
@@ -216,18 +219,35 @@ namespace CppCLRWinFormsProject {
 			// 
 			this->timer1->Tick += gcnew System::EventHandler(this, &Form1::timer1_Tick);
 			// 
+			// checkBox2
+			// 
+			this->checkBox2->AutoSize = true;
+			this->checkBox2->Checked = true;
+			this->checkBox2->CheckState = System::Windows::Forms::CheckState::Checked;
+			this->checkBox2->Location = System::Drawing::Point(12, 8);
+			this->checkBox2->Name = L"checkBox2";
+			this->checkBox2->Size = System::Drawing::Size(68, 17);
+			this->checkBox2->TabIndex = 5;
+			this->checkBox2->Text = L"Autostart";
+			this->checkBox2->UseVisualStyleBackColor = true;
+			this->checkBox2->CheckedChanged += gcnew System::EventHandler(this, &Form1::checkBox2_CheckedChanged);
+			// 
 			// Form1
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->ClientSize = System::Drawing::Size(704, 225);
+			this->Controls->Add(this->checkBox2);
 			this->Controls->Add(this->listView1);
 			this->Controls->Add(this->panel1);
 			this->Controls->Add(this->button1);
 			this->Controls->Add(this->textBox1);
 			this->Controls->Add(this->label1);
+			this->MaximumSize = System::Drawing::Size(720, 264);
+			this->MinimumSize = System::Drawing::Size(720, 264);
 			this->Name = L"Form1";
 			this->Text = L"Hotkeyfy";
+			this->FormClosing += gcnew System::Windows::Forms::FormClosingEventHandler(this, &Form1::Form1_FormClosing);
 			this->Load += gcnew System::EventHandler(this, &Form1::Form1_Load);
 			this->panel1->ResumeLayout(false);
 			this->panel1->PerformLayout();
@@ -259,7 +279,7 @@ private: System::Void Form1_Load(System::Object^ sender, System::EventArgs^ e) {
 	std::wstring path;
 	path.resize(MAX_PATH);
 	SHGetSpecialFolderPathW(NULL, path.data(), CSIDL_APPDATA, true);
-	config::load(path + L"/config");
+	config::load(path + L"/Hotkeyfy/config");
 
 	KeyListener::init();
 }
@@ -289,6 +309,11 @@ private: System::Void timer1_Tick(System::Object^ sender, System::EventArgs^ e) 
 	{
 		timer1->Stop();
 	}
+}
+private: System::Void Form1_FormClosing(System::Object^ sender, System::Windows::Forms::FormClosingEventArgs^ e) {
+	config::save();
+}
+private: System::Void checkBox2_CheckedChanged(System::Object^ sender, System::EventArgs^ e) {
 }
 };
 }

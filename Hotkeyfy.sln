@@ -7,6 +7,10 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Hotkeyfy", "Hotkeyfy\Hotkey
 EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Hotkeyfy-Setup", "Hotkeyfy-Setup\Hotkeyfy-Setup.vdproj", "{B0E9DF76-6D37-44A5-97CA-9DD0D70A22A2}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Hotkeyfy-service", "Hotkeyfy-service\Hotkeyfy-service.vcxproj", "{BF310F81-0B24-45A6-998D-B0115CA4A7EF}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Hotkeyfy-api", "Hotkeyfy-api\Hotkeyfy-api.vcxproj", "{354BFED9-BF45-4CEC-B8A3-6055E3E66539}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -27,6 +31,22 @@ Global
 		{B0E9DF76-6D37-44A5-97CA-9DD0D70A22A2}.Debug|x86.ActiveCfg = Debug
 		{B0E9DF76-6D37-44A5-97CA-9DD0D70A22A2}.Release|x64.ActiveCfg = Release
 		{B0E9DF76-6D37-44A5-97CA-9DD0D70A22A2}.Release|x86.ActiveCfg = Release
+		{BF310F81-0B24-45A6-998D-B0115CA4A7EF}.Debug|x64.ActiveCfg = Debug|x64
+		{BF310F81-0B24-45A6-998D-B0115CA4A7EF}.Debug|x64.Build.0 = Debug|x64
+		{BF310F81-0B24-45A6-998D-B0115CA4A7EF}.Debug|x86.ActiveCfg = Debug|Win32
+		{BF310F81-0B24-45A6-998D-B0115CA4A7EF}.Debug|x86.Build.0 = Debug|Win32
+		{BF310F81-0B24-45A6-998D-B0115CA4A7EF}.Release|x64.ActiveCfg = Release|x64
+		{BF310F81-0B24-45A6-998D-B0115CA4A7EF}.Release|x64.Build.0 = Release|x64
+		{BF310F81-0B24-45A6-998D-B0115CA4A7EF}.Release|x86.ActiveCfg = Release|Win32
+		{BF310F81-0B24-45A6-998D-B0115CA4A7EF}.Release|x86.Build.0 = Release|Win32
+		{354BFED9-BF45-4CEC-B8A3-6055E3E66539}.Debug|x64.ActiveCfg = Debug|x64
+		{354BFED9-BF45-4CEC-B8A3-6055E3E66539}.Debug|x64.Build.0 = Debug|x64
+		{354BFED9-BF45-4CEC-B8A3-6055E3E66539}.Debug|x86.ActiveCfg = Debug|Win32
+		{354BFED9-BF45-4CEC-B8A3-6055E3E66539}.Debug|x86.Build.0 = Debug|Win32
+		{354BFED9-BF45-4CEC-B8A3-6055E3E66539}.Release|x64.ActiveCfg = Release|x64
+		{354BFED9-BF45-4CEC-B8A3-6055E3E66539}.Release|x64.Build.0 = Release|x64
+		{354BFED9-BF45-4CEC-B8A3-6055E3E66539}.Release|x86.ActiveCfg = Release|Win32
+		{354BFED9-BF45-4CEC-B8A3-6055E3E66539}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
