@@ -17,7 +17,7 @@ public:
 
 	static void listen();
 
-	static const std::vector<std::wstring> getKeys();
+	static const std::vector<DWORD> getKeys();
 
 	static bool isListening();
 
@@ -25,14 +25,12 @@ public:
 	static void disableHotkeys();
 
 	static std::wstring getKeyName(DWORD _scanCode);
-
-	static std::vector<DWORD> PlayPauseKeys;
 private:
 	static LRESULT CALLBACK KeyboardProc(int nCode, WPARAM wParam, LPARAM lParam);
 
 	static void loop(std::stop_token _stoken);
 
-	static std::vector<std::wstring> keyList;
+	static std::vector<DWORD> keyList;
 	static std::mutex keyList_mutex;
 
 	static std::jthread loopTh;

@@ -1,16 +1,16 @@
+#include "Hotkeyfy.h"
 
-
-#ifdef _DEBUG
+#ifdef _DEBUGg
 int main()
 #else
-int __clrcall WinMain(
-	INSTANCE hInstance,
-	INSTANCE hPrevInstance,
-	PSTR     lpCmdLine,
-	nt       nShowCmd
+int WinMain(
+	HINSTANCE hInstance,
+	HINSTANCE hPrevInstance,
+	LPSTR     lpCmdLine,
+	int       nShowCmd
 )
 #endif // !_DEBUG
 {
-
+	Hotkeyfy::addToSystemTray();
 
 }

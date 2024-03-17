@@ -10,17 +10,17 @@
 #include <Windows.h>
 
 #ifdef HOTKEYFYAPI_EXPORTS
-#define CLASS_DECLSPEC    __declspec(dllexport)
+#define HOTKEYFYAPI_DECLSPEC    __declspec(dllexport)
 #else
-#define CLASS_DECLSPEC    __declspec(dllimport)
+#define HOTKEYFYAPI_DECLSPEC    __declspec(dllimport)
 #endif
 
-class CLASS_DECLSPEC config
+class HOTKEYFYAPI_DECLSPEC config
 {
 public:
 	static std::vector<DWORD> getHotkeys(const std::wstring& _action);
 
-	static void setHotkeys(const std::wstring& _action, const std::vector<DWORD>& _keys);
+	static void setHotkeys(const std::wstring& _action, const std::vector<DWORD>& _keys, bool _consume);
 
 	// @returns true if successful, false otherwise
 	static void load(const std::wstring& _path);

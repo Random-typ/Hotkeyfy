@@ -4,10 +4,12 @@
 #include <Shlobj.h>
 #include <msclr\marshal.h>
 #include <msclr\marshal_cppstd.h>
+#include "resource.h"
 
 #pragma comment(lib, "Shell32.lib")
 
-#import "file:../x64/Debug/Hotkeyfy-api.dll"
+#pragma comment(lib, "../x64/Debug/Hotkeyfy-api.lib")
+
 namespace CppCLRWinFormsProject {
 
 	using namespace System::ComponentModel;
@@ -81,8 +83,8 @@ namespace CppCLRWinFormsProject {
 		void InitializeComponent(void)
 		{
 			this->components = (gcnew System::ComponentModel::Container());
-			System::Windows::Forms::ListViewItem^ listViewItem5 = (gcnew System::Windows::Forms::ListViewItem(L"Play Pause"));
-			System::Windows::Forms::ListViewItem^ listViewItem6 = (gcnew System::Windows::Forms::ListViewItem(L"Previous Track"));
+			System::Windows::Forms::ListViewItem^ listViewItem1 = (gcnew System::Windows::Forms::ListViewItem(L"Play Pause"));
+			System::Windows::Forms::ListViewItem^ listViewItem2 = (gcnew System::Windows::Forms::ListViewItem(L"Previous Track"));
 			this->label1 = (gcnew System::Windows::Forms::Label());
 			this->textBox1 = (gcnew System::Windows::Forms::TextBox());
 			this->button1 = (gcnew System::Windows::Forms::Button());
@@ -115,6 +117,7 @@ namespace CppCLRWinFormsProject {
 			this->textBox1->Size = System::Drawing::Size(430, 20);
 			this->textBox1->TabIndex = 1;
 			this->textBox1->Text = L"Spotify.exe";
+			this->textBox1->TextChanged += gcnew System::EventHandler(this, &Form1::textBox1_TextChanged);
 			// 
 			// button1
 			// 
@@ -148,6 +151,7 @@ namespace CppCLRWinFormsProject {
 			this->label4->Size = System::Drawing::Size(37, 16);
 			this->label4->TabIndex = 6;
 			this->label4->Text = L"Keys";
+			this->label4->TextChanged += gcnew System::EventHandler(this, &Form1::label4_TextChanged);
 			// 
 			// button2
 			// 
@@ -179,6 +183,7 @@ namespace CppCLRWinFormsProject {
 			this->checkBox1->TabIndex = 2;
 			this->checkBox1->Text = L"Consume input*";
 			this->checkBox1->UseVisualStyleBackColor = true;
+			this->checkBox1->CheckedChanged += gcnew System::EventHandler(this, &Form1::checkBox1_CheckedChanged);
 			// 
 			// label2
 			// 
@@ -197,7 +202,7 @@ namespace CppCLRWinFormsProject {
 			this->listView1->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
 			this->listView1->HideSelection = false;
-			this->listView1->Items->AddRange(gcnew cli::array< System::Windows::Forms::ListViewItem^  >(2) { listViewItem5, listViewItem6 });
+			this->listView1->Items->AddRange(gcnew cli::array< System::Windows::Forms::ListViewItem^  >(2) { listViewItem1, listViewItem2 });
 			this->listView1->LabelWrap = false;
 			this->listView1->Location = System::Drawing::Point(12, 32);
 			this->listView1->MultiSelect = false;
@@ -266,6 +271,11 @@ namespace CppCLRWinFormsProject {
 			label4->Text = gcnew System::String(keys.c_str());
 		}
 	private: System::Void listView1_SelectedIndexChanged(System::Object^ sender, System::EventArgs^ e) {
+		label2->Visible = true;
+		label3->Visible = true;
+		label4->Visible = true;
+		button2->Visible = true;
+		checkBox1->Visible = true;
 		ListView^ listView = (ListView^)sender;
 		// this feels stupid
 		for each (ListViewItem ^ selectedItem in listView->SelectedItems) {
@@ -273,13 +283,20 @@ namespace CppCLRWinFormsProject {
 		}
 	}
 private: System::Void Form1_Load(System::Object^ sender, System::EventArgs^ e) {
-	button1->Focus();
-	listView1->Select();
+	label2->Visible = false;
+	label3->Visible = false;
+	label4->Visible = false;
+	button2->Visible = false;
+	checkBox1->Visible = false;
+	// load icon
+	HICON hIcon = LoadIconA(GetModuleHandle(NULL), MAKEINTRESOURCEA(1));
+	this->Icon = System::Drawing::Icon::FromHandle(System::IntPtr(hIcon));
 
 	std::wstring path;
 	path.resize(MAX_PATH);
 	SHGetSpecialFolderPathW(NULL, path.data(), CSIDL_APPDATA, true);
-	config::load(path + L"/Hotkeyfy/config");
+	path.resize(wcslen(path.c_str()));
+	config::load(path + L"/Hotkeyfy/config.json");
 
 	KeyListener::init();
 }
@@ -297,12 +314,13 @@ private: System::Void timer1_Tick(System::Object^ sender, System::EventArgs^ e) 
 	std::wstring keys;
 	for (auto& i : KeyListener::getKeys())
 	{
+		std::wstring key = KeyListener::getKeyName(i);
 		if (keys.empty())
 		{
-			keys = i;
+			keys = key;
 			continue;
 		}
-		keys += L"+" + i;
+		keys += L"+" + key;
 	}
 	label4->Text = gcnew System::String(keys.c_str());
 	if (!KeyListener::isListening())
@@ -314,6 +332,14 @@ private: System::Void Form1_FormClosing(System::Object^ sender, System::Windows:
 	config::save();
 }
 private: System::Void checkBox2_CheckedChanged(System::Object^ sender, System::EventArgs^ e) {
+}
+private: System::Void textBox1_TextChanged(System::Object^ sender, System::EventArgs^ e) {
+}
+private: System::Void label4_TextChanged(System::Object^ sender, System::EventArgs^ e) {
+	config::setHotkeys(msclr::interop::marshal_as<std::wstring>(label2->Text), KeyListener::getKeys(), checkBox1->Checked);
+}
+private: System::Void checkBox1_CheckedChanged(System::Object^ sender, System::EventArgs^ e) {
+	config::setHotkeys(msclr::interop::marshal_as<std::wstring>(label2->Text), KeyListener::getKeys(), checkBox1->Checked);
 }
 };
 }

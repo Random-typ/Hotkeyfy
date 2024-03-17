@@ -18,22 +18,35 @@ std::vector<DWORD> config::getHotkeys(const std::wstring& _action)
     return iterator->second.first;
 }
 
-void config::setHotkeys(const std::wstring& _action, const std::vector<DWORD>& _keys)
+void config::setHotkeys(const std::wstring& _action, const std::vector<DWORD>& _keys, bool _consume)
 {
     hotkeys[_action].first = _keys;
+    hotkeys[_action].second = _consume;
 }
 
 void config::load(const std::wstring& _path)
 {
     hotkeys.clear();
     path = _path;
-    std::filesystem::create_directories(std::filesystem::path(path).root_path());
+    std::filesystem::create_directories(std::filesystem::path(path).parent_path());
     std::ifstream fs(path);
-    if (fs.is_open())
+    if (!fs.is_open())
     {
         return;
     }
-    json conf = json::parse(fs);
+    json conf;
+    try
+    {
+        json conf = json::parse(fs);
+    }
+    catch (const json::exception&)
+    {
+        return;
+    }
+    if (!conf.contains("actions") || !conf.contains("autostart"))
+    {
+        return;
+    }
     autoStart = conf["autostart"];
     for (auto& action : conf["actions"])
     {
@@ -42,6 +55,10 @@ void config::load(const std::wstring& _path)
         for (auto& key : action["keys"])
         {
             data.first.emplace_back(key);
+        }
+        if (!action.contains("action"))
+        {
+            return;
         }
 
         hotkeys[action["action"]] = data;
@@ -59,7 +76,8 @@ void config::save()
     for (auto& key : hotkeys)
     {
         conf["actions"] += {
-            {"consume", key.second.second},
+            { "action", std::string(key.first.begin(), key.first.end()) },
+            { "consume", key.second.second },
             { "keys", key.second.first }
         };
     }

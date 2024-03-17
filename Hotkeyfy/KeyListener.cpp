@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "KeyListener.h"
 
-std::vector<std::wstring> KeyListener::keyList;
+std::vector<DWORD> KeyListener::keyList;
 std::mutex KeyListener::keyList_mutex;
 
 std::jthread KeyListener::loopTh;
@@ -39,7 +39,7 @@ void KeyListener::listen()
 	doListen = true;
 }
 
-const std::vector<std::wstring> KeyListener::getKeys()
+const std::vector<DWORD> KeyListener::getKeys()
 {
 	return keyList;
 }
@@ -90,11 +90,11 @@ LRESULT KeyListener::KeyboardProc(int nCode, WPARAM wParam, LPARAM lParam)
 			return CallNextHookEx(keyboardHook, nCode, wParam, lParam);
 		}
 		keyList_mutex.lock();
-		if (std::none_of(keyList.begin(), keyList.end(), [&](const std::wstring& str){
-			return key == str;
+		if (std::none_of(keyList.begin(), keyList.end(), [&](DWORD key){
+			return kbStruct->scanCode == key;
 			}))
 		{
-			keyList.emplace_back(key);
+			keyList.emplace_back(kbStruct->scanCode);
 		}
 		keyList_mutex.unlock();
 	}
