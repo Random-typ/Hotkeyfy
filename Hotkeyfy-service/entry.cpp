@@ -1,6 +1,6 @@
 #include "Hotkeyfy.h"
 
-#ifdef _DEBUGg
+#ifdef _DEBUG
 int main()
 #else
 int WinMain(
@@ -11,6 +11,8 @@ int WinMain(
 )
 #endif // !_DEBUG
 {
+	Hotkeyfy::createWindows();
+	Sleep(100);
 	Hotkeyfy::addToSystemTray();
 
 }
