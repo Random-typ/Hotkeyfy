@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Windows.h>
+#include <tlhelp32.h>
 #include <iostream>
 
 
@@ -17,6 +18,8 @@ public:
 	static bool addToSystemTray();
 
 	static HWND getProcessWindow();
+
+	static void showGUI();
 
 	static HWND hwnd;
 };

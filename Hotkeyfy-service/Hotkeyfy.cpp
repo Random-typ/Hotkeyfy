@@ -31,10 +31,10 @@ LRESULT CALLBACK Hotkeyfy::WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARA
     case WMAPP_NOTIFYCALLBACK:
         switch (lParam)
         {
-        case NIN_SELECT:
+        case WM_LBUTTONDOWN:
             std::cout << "open\n";
             break;
-        case WM_CONTEXTMENU:
+        case WM_RBUTTONDOWN:
             std::cout << "context\n";
             break;
         default:
@@ -135,4 +135,34 @@ HWND Hotkeyfy::getProcessWindow()
         return true;
         }, (LPARAM)&hwnd);
     return hwnd;
+}
+
+void Hotkeyfy::showGUI()
+{
+    PROCESSENTRY32 entry{ 0 };
+    entry.dwSize = sizeof(PROCESSENTRY32);
+
+    HANDLE snapshot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, NULL);
+
+    if (Process32First(snapshot, &entry))
+    {
+        do
+        {
+            if ( entry.szExeFile)
+            {
+
+            }
+
+
+        } while (Process32Next(snapshot, &entry));
+    }
+    CloseHandle(snapshot);
+
+
+
+
+
+
+
+
 }
