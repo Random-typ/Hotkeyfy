@@ -2,6 +2,7 @@
 
 #include <Windows.h>
 #include <tlhelp32.h>
+#include <filesystem>
 #include <iostream>
 
 
@@ -22,5 +23,7 @@ public:
 	static void showGUI();
 
 	static HWND hwnd;
+
+	static HANDLE guiProcess;
 };
 

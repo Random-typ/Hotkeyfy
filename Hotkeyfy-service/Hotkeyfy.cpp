@@ -2,6 +2,7 @@
 #include "resource.h"
 
 HWND Hotkeyfy::hwnd;
+HANDLE Hotkeyfy::guiProcess = NULL;
 
 UINT const WMAPP_NOTIFYCALLBACK = WM_APP + 1;
 bool Hotkeyfy::createWindows()
@@ -32,7 +33,7 @@ LRESULT CALLBACK Hotkeyfy::WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARA
         switch (lParam)
         {
         case WM_LBUTTONDOWN:
-            std::cout << "open\n";
+            showGUI();
             break;
         case WM_RBUTTONDOWN:
             std::cout << "context\n";
@@ -139,30 +140,86 @@ HWND Hotkeyfy::getProcessWindow()
 
 void Hotkeyfy::showGUI()
 {
-    PROCESSENTRY32 entry{ 0 };
-    entry.dwSize = sizeof(PROCESSENTRY32);
-
-    HANDLE snapshot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, NULL);
-
-    if (Process32First(snapshot, &entry))
+    if (GetProcessId(guiProcess))
     {
-        do
-        {
-            if ( entry.szExeFile)
-            {
-
-            }
-
-
-        } while (Process32Next(snapshot, &entry));
+        return;
     }
-    CloseHandle(snapshot);
+    guiProcess = NULL;
 
+    HANDLE hGUIprocess = NULL;
+    EnumWindows([](HWND hwnd, LPARAM lParam) -> BOOL {
+        DWORD pid;
+        GetWindowThreadProcessId(hwnd, &pid);
+        if (!pid)
+        {
+            return true;
+        }
+        HANDLE process = OpenProcess(PROCESS_QUERY_LIMITED_INFORMATION, false, pid);
+        if (!process)
+        {
+            return true;
+        }
 
+        DWORD size = MAX_PATH;
+        std::wstring path;
+        path.resize(MAX_PATH);
+        if (QueryFullProcessImageNameW(process, 0, path.data(), &size))
+        {
+            CloseHandle(process);
+            return true;
+        }
+        path.resize(size);
 
+        std::wstring exeFile = std::filesystem::path(path).filename();
+        if (exeFile != L"Hotkeyfy.exe")
+        {
+            return true;
+        }
 
+        *((bool*)lParam) = process;
+        SetFocus(hwnd);
+        return false;
+        }, (LPARAM)&hGUIprocess);
 
+    if (hGUIprocess)
+    {
+        if (guiProcess)
+        {
+            CloseHandle(hGUIprocess);
+            return;
+        }
+        if (!TerminateProcess(hGUIprocess, 0))
+        {
+            CloseHandle(hGUIprocess);
+            return;
+        }
+        CloseHandle(hGUIprocess);
+    }
+    
+    DWORD size = MAX_PATH;
+    std::wstring path;
+    path.resize(MAX_PATH);
+    if (QueryFullProcessImageNameW(GetCurrentProcess(), 0, path.data(), &size))
+    {
+        return;
+    }
+    path.resize(size);
 
+    std::wstring GUIPath = std::filesystem::path(path).parent_path().wstring() + L"/Hotkeyfy.exe";
 
+    SHELLEXECUTEINFOW executeInfo;
+    executeInfo.cbSize = sizeof(executeInfo);
+    executeInfo.lpFile = GUIPath.c_str();
+    executeInfo.nShow = SW_SHOWNORMAL;
+    executeInfo.fMask = SEE_MASK_FLAG_NO_UI;
+    executeInfo.hwnd = hwnd;
 
+    if (!ShellExecuteExW(&executeInfo)) {
+        return;
+    }
+    guiProcess = executeInfo.hProcess;
+
+    WaitForSingleObject(executeInfo.hProcess, INFINITE);
+    CloseHandle(executeInfo.hProcess);
+    guiProcess = NULL;
 }
