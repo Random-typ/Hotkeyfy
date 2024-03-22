@@ -1,3 +1,4 @@
+#include <thread>
 #include "Hotkeyfy.h"
 #include "resource.h"
 
@@ -140,12 +141,6 @@ HWND Hotkeyfy::getProcessWindow()
 
 void Hotkeyfy::showGUI()
 {
-    if (GetProcessId(guiProcess))
-    {
-        return;
-    }
-    guiProcess = NULL;
-
     HANDLE hGUIprocess = NULL;
     EnumWindows([](HWND hwnd, LPARAM lParam) -> BOOL {
         DWORD pid;
@@ -154,7 +149,7 @@ void Hotkeyfy::showGUI()
         {
             return true;
         }
-        HANDLE process = OpenProcess(PROCESS_QUERY_LIMITED_INFORMATION, false, pid);
+        HANDLE process = OpenProcess(PROCESS_QUERY_LIMITED_INFORMATION | PROCESS_TERMINATE, false, pid);
         if (!process)
         {
             return true;
@@ -163,7 +158,7 @@ void Hotkeyfy::showGUI()
         DWORD size = MAX_PATH;
         std::wstring path;
         path.resize(MAX_PATH);
-        if (QueryFullProcessImageNameW(process, 0, path.data(), &size))
+        if (!QueryFullProcessImageNameW(process, 0, path.data(), &size))
         {
             CloseHandle(process);
             return true;
@@ -176,10 +171,17 @@ void Hotkeyfy::showGUI()
             return true;
         }
 
-        *((bool*)lParam) = process;
-        SetFocus(hwnd);
+        *((HANDLE*)lParam) = process;
+        SetForegroundWindow(hwnd);
         return false;
         }, (LPARAM)&hGUIprocess);
+
+    if (GetProcessId(guiProcess))
+    {
+        return;
+    }
+    CloseHandle(guiProcess);
+    guiProcess = NULL;
 
     if (hGUIprocess)
     {
@@ -193,13 +195,29 @@ void Hotkeyfy::showGUI()
             CloseHandle(hGUIprocess);
             return;
         }
+        //DWORD code;
+        //for (size_t i = 0; i < 100; i++, std::this_thread::sleep_for(std::chrono::milliseconds(20)))
+        //{
+        //    if (!GetExitCodeProcess(hGUIprocess, &code))
+        //    {
+        //        break;
+        //    }
+        //    if (code != STILL_ACTIVE)
+        //    {
+        //        break;
+        //    }
+        //}
         CloseHandle(hGUIprocess);
+        //if (code == STILL_ACTIVE)
+        //{
+        //    return;
+        //}
     }
     
     DWORD size = MAX_PATH;
     std::wstring path;
     path.resize(MAX_PATH);
-    if (QueryFullProcessImageNameW(GetCurrentProcess(), 0, path.data(), &size))
+    if (!QueryFullProcessImageNameW(GetCurrentProcess(), 0, path.data(), &size))
     {
         return;
     }
@@ -208,18 +226,26 @@ void Hotkeyfy::showGUI()
     std::wstring GUIPath = std::filesystem::path(path).parent_path().wstring() + L"/Hotkeyfy.exe";
 
     SHELLEXECUTEINFOW executeInfo;
+    memset(&executeInfo, 0, sizeof(executeInfo));
     executeInfo.cbSize = sizeof(executeInfo);
     executeInfo.lpFile = GUIPath.c_str();
     executeInfo.nShow = SW_SHOWNORMAL;
-    executeInfo.fMask = SEE_MASK_FLAG_NO_UI;
+    executeInfo.fMask = SEE_MASK_FLAG_NO_UI | SEE_MASK_NOCLOSEPROCESS;
     executeInfo.hwnd = hwnd;
 
     if (!ShellExecuteExW(&executeInfo)) {
         return;
     }
-    guiProcess = executeInfo.hProcess;
+    guiProcess = executeInfo.hProcess; 
+}
 
-    WaitForSingleObject(executeInfo.hProcess, INFINITE);
-    CloseHandle(executeInfo.hProcess);
+void Hotkeyfy::waitForGUI()
+{
+    if (!guiProcess)
+    {
+        return;
+    }
+    WaitForSingleObject(guiProcess, INFINITE);
+    CloseHandle(guiProcess);
     guiProcess = NULL;
 }

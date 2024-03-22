@@ -9,6 +9,8 @@
 #include <filesystem>
 #include <Windows.h>
 
+#pragma comment(lib, "Advapi32.lib")
+
 #ifdef HOTKEYFYAPI_EXPORTS
 #define HOTKEYFYAPI_DECLSPEC    __declspec(dllexport)
 #else
@@ -22,14 +24,21 @@ public:
 
 	static void setHotkeys(const std::wstring& _action, const std::vector<DWORD>& _keys, bool _consume);
 
+	static void setVolumeIncrement(double _value);
+	static void setVolumeDecrement(double _value);
+
 	// @returns true if successful, false otherwise
 	static void load(const std::wstring& _path);
 
 	// @returns true if successful, false otherwise
 	static void save();
 
-	static bool autoStart;
+	static void setAutoStart(bool _autoStart);
+	static bool getAutoStart();
 private:
+	static double volumeIncrement;
+	static double volumeDecrement;
+
 	static std::map<std::wstring/*action*/, std::pair<std::vector<DWORD>/*keys*/, bool/*consume*/>> hotkeys;
 	static std::wstring path;
 };

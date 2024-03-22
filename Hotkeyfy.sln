@@ -6,7 +6,6 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Hotkeyfy", "Hotkeyfy\Hotkeyfy.vcxproj", "{4386D317-BE0D-4C07-A9B0-955DFC1D64AA}"
 	ProjectSection(ProjectDependencies) = postProject
 		{354BFED9-BF45-4CEC-B8A3-6055E3E66539} = {354BFED9-BF45-4CEC-B8A3-6055E3E66539}
-		{BF310F81-0B24-45A6-998D-B0115CA4A7EF} = {BF310F81-0B24-45A6-998D-B0115CA4A7EF}
 	EndProjectSection
 EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Hotkeyfy-Setup", "Hotkeyfy-Setup\Hotkeyfy-Setup.vdproj", "{B0E9DF76-6D37-44A5-97CA-9DD0D70A22A2}"
@@ -14,6 +13,7 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Hotkeyfy-service", "Hotkeyfy-service\Hotkeyfy-service.vcxproj", "{BF310F81-0B24-45A6-998D-B0115CA4A7EF}"
 	ProjectSection(ProjectDependencies) = postProject
 		{354BFED9-BF45-4CEC-B8A3-6055E3E66539} = {354BFED9-BF45-4CEC-B8A3-6055E3E66539}
+		{4386D317-BE0D-4C07-A9B0-955DFC1D64AA} = {4386D317-BE0D-4C07-A9B0-955DFC1D64AA}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Hotkeyfy-api", "Hotkeyfy-api\Hotkeyfy-api.vcxproj", "{354BFED9-BF45-4CEC-B8A3-6055E3E66539}"

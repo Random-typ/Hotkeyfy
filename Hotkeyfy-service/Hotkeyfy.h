@@ -22,6 +22,9 @@ public:
 
 	static void showGUI();
 
+	// blocks until GUI is closed if it is running
+	static void waitForGUI();
+
 	static HWND hwnd;
 
 	static HANDLE guiProcess;

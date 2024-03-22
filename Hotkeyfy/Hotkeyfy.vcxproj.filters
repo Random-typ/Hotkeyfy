@@ -35,6 +35,12 @@
     <ClInclude Include="KeyListener.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Rounded.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="toggle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CppCLR_WinFormsProject.cpp">
@@ -55,6 +61,9 @@
     <ClCompile Include="KeyListener.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="toggle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="icon1.ico">
@@ -63,5 +72,8 @@
     <Image Include="hotkeyfy.ico">
       <Filter>Resource Files</Filter>
     </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Font Include="font\PlusJakartaSans-2.7.1\ttf\PlusJakartaSans-Regular.ttf" />
   </ItemGroup>
 </Project>
