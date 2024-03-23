@@ -14,12 +14,15 @@
 #include "Rounded.hpp"
 
 #include "toggle.h"
+#include "CComboBox.h"
 
 #pragma comment(lib, "Shell32.lib")
+#pragma comment(lib, "User32.lib")
+#pragma comment(lib, "Gdi32.lib")
 
 #pragma comment(lib, "../x64/Debug/Hotkeyfy-api.lib")
 
-namespace CppCLRWinFormsProject {
+namespace Hotkeyfy {
 
 	using namespace System::ComponentModel;
 	using namespace System::Collections;
@@ -39,6 +42,7 @@ namespace CppCLRWinFormsProject {
 			//
 			//TODO: Add the constructor code here
 			//
+			ChangeTitleBarColor();
 		}
 
 	protected:
@@ -66,9 +70,10 @@ namespace CppCLRWinFormsProject {
 	private: System::Windows::Forms::Label^ label4;
 	private: System::Windows::Forms::OpenFileDialog^ openFileDialog1;
 	private: System::Windows::Forms::Timer^ timer1;
-	private: System::Windows::Forms::CheckBox^ checkBox2;
+
 	private: System::Windows::Forms::Label^ label5;
 	private: System::Windows::Forms::NumericUpDown^ numericUpDown1;
+	private: System::Windows::Forms::Label^ label6;
 
 	private: System::ComponentModel::IContainer^ components;
 
@@ -95,15 +100,15 @@ namespace CppCLRWinFormsProject {
 		void InitializeComponent(void)
 		{
 			this->components = (gcnew System::ComponentModel::Container());
-			System::Windows::Forms::ListViewItem^ listViewItem1 = (gcnew System::Windows::Forms::ListViewItem(gcnew cli::array< System::String^  >(1) { L"Play Pause" },
+			System::Windows::Forms::ListViewItem^ listViewItem6 = (gcnew System::Windows::Forms::ListViewItem(gcnew cli::array< System::String^  >(1) { L"Play Pause" },
 				-1, System::Drawing::SystemColors::ControlLight, System::Drawing::Color::Empty, nullptr));
-			System::Windows::Forms::ListViewItem^ listViewItem2 = (gcnew System::Windows::Forms::ListViewItem(gcnew cli::array< System::String^  >(1) { L"Previous Track" },
+			System::Windows::Forms::ListViewItem^ listViewItem7 = (gcnew System::Windows::Forms::ListViewItem(gcnew cli::array< System::String^  >(1) { L"Previous Track" },
 				-1, System::Drawing::SystemColors::ControlLight, System::Drawing::Color::Empty, nullptr));
-			System::Windows::Forms::ListViewItem^ listViewItem3 = (gcnew System::Windows::Forms::ListViewItem(gcnew cli::array< System::String^  >(1) { L"Next Track" },
+			System::Windows::Forms::ListViewItem^ listViewItem8 = (gcnew System::Windows::Forms::ListViewItem(gcnew cli::array< System::String^  >(1) { L"Next Track" },
 				-1, System::Drawing::SystemColors::ControlLight, System::Drawing::Color::Empty, nullptr));
-			System::Windows::Forms::ListViewItem^ listViewItem4 = (gcnew System::Windows::Forms::ListViewItem(gcnew cli::array< System::String^  >(1) { L"Volume Up" },
+			System::Windows::Forms::ListViewItem^ listViewItem9 = (gcnew System::Windows::Forms::ListViewItem(gcnew cli::array< System::String^  >(1) { L"Volume Up" },
 				-1, System::Drawing::SystemColors::ControlLight, System::Drawing::Color::Empty, nullptr));
-			System::Windows::Forms::ListViewItem^ listViewItem5 = (gcnew System::Windows::Forms::ListViewItem(gcnew cli::array< System::String^  >(1) { L"Volume Down" },
+			System::Windows::Forms::ListViewItem^ listViewItem10 = (gcnew System::Windows::Forms::ListViewItem(gcnew cli::array< System::String^  >(1) { L"Volume Down" },
 				-1, System::Drawing::SystemColors::ControlLight, System::Drawing::Color::Empty, nullptr));
 			this->label1 = (gcnew System::Windows::Forms::Label());
 			this->textBox1 = (gcnew System::Windows::Forms::TextBox());
@@ -119,7 +124,7 @@ namespace CppCLRWinFormsProject {
 			this->listView1 = (gcnew System::Windows::Forms::ListView());
 			this->openFileDialog1 = (gcnew System::Windows::Forms::OpenFileDialog());
 			this->timer1 = (gcnew System::Windows::Forms::Timer(this->components));
-			this->checkBox2 = (gcnew System::Windows::Forms::CheckBox());
+			this->label6 = (gcnew System::Windows::Forms::Label());
 			this->panel1->SuspendLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->numericUpDown1))->BeginInit();
 			this->SuspendLayout();
@@ -127,7 +132,7 @@ namespace CppCLRWinFormsProject {
 			// label1
 			// 
 			this->label1->AutoSize = true;
-			this->label1->Location = System::Drawing::Point(137, 13);
+			this->label1->Location = System::Drawing::Point(139, 9);
 			this->label1->Name = L"label1";
 			this->label1->Size = System::Drawing::Size(71, 18);
 			this->label1->TabIndex = 0;
@@ -154,6 +159,8 @@ namespace CppCLRWinFormsProject {
 			// 
 			// panel1
 			// 
+			this->panel1->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(18)), static_cast<System::Int32>(static_cast<System::Byte>(18)),
+				static_cast<System::Int32>(static_cast<System::Byte>(18)));
 			this->panel1->Controls->Add(this->label5);
 			this->panel1->Controls->Add(this->numericUpDown1);
 			this->panel1->Controls->Add(this->label4);
@@ -165,6 +172,7 @@ namespace CppCLRWinFormsProject {
 			this->panel1->Name = L"panel1";
 			this->panel1->Size = System::Drawing::Size(596, 257);
 			this->panel1->TabIndex = 3;
+			this->panel1->Visible = false;
 			// 
 			// label5
 			// 
@@ -176,7 +184,6 @@ namespace CppCLRWinFormsProject {
 			this->label5->Size = System::Drawing::Size(123, 16);
 			this->label5->TabIndex = 8;
 			this->label5->Text = L"% Volume Increase";
-			this->label5->Visible = false;
 			// 
 			// numericUpDown1
 			// 
@@ -188,7 +195,6 @@ namespace CppCLRWinFormsProject {
 			this->numericUpDown1->Size = System::Drawing::Size(57, 22);
 			this->numericUpDown1->TabIndex = 7;
 			this->numericUpDown1->Value = System::Decimal(gcnew cli::array< System::Int32 >(4) { 1, 0, 0, 0 });
-			this->numericUpDown1->Visible = false;
 			this->numericUpDown1->ValueChanged += gcnew System::EventHandler(this, &Form1::numericUpDown1_ValueChanged);
 			// 
 			// label4
@@ -201,7 +207,6 @@ namespace CppCLRWinFormsProject {
 			this->label4->Size = System::Drawing::Size(37, 16);
 			this->label4->TabIndex = 6;
 			this->label4->Text = L"Keys";
-			this->label4->Visible = false;
 			this->label4->TextChanged += gcnew System::EventHandler(this, &Form1::label4_TextChanged);
 			// 
 			// button2
@@ -218,7 +223,6 @@ namespace CppCLRWinFormsProject {
 			this->button2->TabIndex = 5;
 			this->button2->Text = L"Choose";
 			this->button2->UseVisualStyleBackColor = false;
-			this->button2->Visible = false;
 			this->button2->Click += gcnew System::EventHandler(this, &Form1::button2_Click);
 			// 
 			// label3
@@ -229,7 +233,6 @@ namespace CppCLRWinFormsProject {
 			this->label3->Size = System::Drawing::Size(337, 18);
 			this->label3->TabIndex = 3;
 			this->label3->Text = L"*when checked, this hotkey won\'t be send to other applications";
-			this->label3->Visible = false;
 			// 
 			// checkBox1
 			// 
@@ -242,7 +245,6 @@ namespace CppCLRWinFormsProject {
 			this->checkBox1->TabIndex = 2;
 			this->checkBox1->Text = L"Consume input*";
 			this->checkBox1->UseVisualStyleBackColor = true;
-			this->checkBox1->Visible = false;
 			this->checkBox1->CheckedChanged += gcnew System::EventHandler(this, &Form1::checkBox1_CheckedChanged);
 			// 
 			// label2
@@ -255,7 +257,6 @@ namespace CppCLRWinFormsProject {
 			this->label2->Size = System::Drawing::Size(54, 20);
 			this->label2->TabIndex = 1;
 			this->label2->Text = L"Action";
-			this->label2->Visible = false;
 			// 
 			// listView1
 			// 
@@ -265,8 +266,8 @@ namespace CppCLRWinFormsProject {
 				static_cast<System::Byte>(0)));
 			this->listView1->HideSelection = false;
 			this->listView1->Items->AddRange(gcnew cli::array< System::Windows::Forms::ListViewItem^  >(5) {
-				listViewItem1, listViewItem2,
-					listViewItem3, listViewItem4, listViewItem5
+				listViewItem6, listViewItem7,
+					listViewItem8, listViewItem9, listViewItem10
 			});
 			this->listView1->Location = System::Drawing::Point(14, 44);
 			this->listView1->MultiSelect = false;
@@ -288,27 +289,22 @@ namespace CppCLRWinFormsProject {
 			// 
 			this->timer1->Tick += gcnew System::EventHandler(this, &Form1::timer1_Tick);
 			// 
-			// checkBox2
+			// label6
 			// 
-			this->checkBox2->AutoSize = true;
-			this->checkBox2->Checked = true;
-			this->checkBox2->CheckState = System::Windows::Forms::CheckState::Checked;
-			this->checkBox2->Location = System::Drawing::Point(14, 11);
-			this->checkBox2->Name = L"checkBox2";
-			this->checkBox2->Size = System::Drawing::Size(75, 22);
-			this->checkBox2->TabIndex = 5;
-			this->checkBox2->Text = L"Autostart";
-			this->checkBox2->UseVisualStyleBackColor = true;
-			this->checkBox2->CheckedChanged += gcnew System::EventHandler(this, &Form1::checkBox2_CheckedChanged);
+			this->label6->AutoSize = true;
+			this->label6->Location = System::Drawing::Point(12, 11);
+			this->label6->Name = L"label6";
+			this->label6->Size = System::Drawing::Size(56, 18);
+			this->label6->TabIndex = 5;
+			this->label6->Text = L"Autostart";
 			// 
 			// Form1
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(7, 18);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-			this->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(46)), static_cast<System::Int32>(static_cast<System::Byte>(46)),
-				static_cast<System::Int32>(static_cast<System::Byte>(46)));
+			this->BackColor = System::Drawing::Color::Black;
 			this->ClientSize = System::Drawing::Size(820, 311);
-			this->Controls->Add(this->checkBox2);
+			this->Controls->Add(this->label6);
 			this->Controls->Add(this->listView1);
 			this->Controls->Add(this->panel1);
 			this->Controls->Add(this->button1);
@@ -316,7 +312,8 @@ namespace CppCLRWinFormsProject {
 			this->Controls->Add(this->label1);
 			this->Font = (gcnew System::Drawing::Font(L"Plus Jakarta Sans", 8.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
-			this->ForeColor = System::Drawing::SystemColors::ControlLight;
+			this->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(167)), static_cast<System::Int32>(static_cast<System::Byte>(167)),
+				static_cast<System::Int32>(static_cast<System::Byte>(167)));
 			this->MaximumSize = System::Drawing::Size(836, 350);
 			this->MinimumSize = System::Drawing::Size(836, 350);
 			this->Name = L"Form1";
@@ -358,18 +355,22 @@ namespace CppCLRWinFormsProject {
 		}
 	}
 	private: System::Void listView1_SelectedIndexChanged(System::Object^ sender, System::EventArgs^ e) {
-		label2->Visible = true;
-		label3->Visible = true;
-		label4->Visible = true;
-		button2->Visible = true;
-		checkBox1->Visible = true;
+		panel1->Visible = true;
 		ListView^ listView = (ListView^)sender;
 		// this feels stupid
 		for each (ListViewItem ^ selectedItem in listView->SelectedItems) {
 			setAction(selectedItem->Text);
 		}
 	}
+		   void ChangeTitleBarColor() {
+			   // Get the handle of the window
+			   HWND hwnd = (HWND)this->Handle.ToPointer();
+			   LONG_PTR v = SetWindowLongPtr(hwnd, GWL_EXSTYLE, GetWindowLongPtr(hwnd, GWL_EXSTYLE) | WS_EX_LAYERED);
+			   bool b = SetLayeredWindowAttributes(hwnd, RGB(255, 0, 0), 0, LWA_COLORKEY);
+
+		   }
 	private: System::Void Form1_Load(System::Object^ sender, System::EventArgs^ e) {
+
 		// load icon
 		HICON hIcon = LoadIconA(GetModuleHandle(NULL), MAKEINTRESOURCEA(1));
 		this->Icon = System::Drawing::Icon::FromHandle(System::IntPtr(hIcon));
@@ -380,15 +381,15 @@ namespace CppCLRWinFormsProject {
 		path.resize(wcslen(path.c_str()));
 		config::load(path + L"/Hotkeyfy/config.json");
 
-		// make rounded controls
-		SolidBrush^ orangeBrush = gcnew SolidBrush(Color::FromArgb(239, 87, 0));
-		SolidBrush^ blackBrush = gcnew SolidBrush(Color::FromArgb(10, 10, 10));
+		//
+		// Custom controls
+		//
 
-		Rounded::Rounded<Button>^ button = gcnew Rounded::Rounded<Button>(button2, orangeBrush, 45);
+		Rounded::Rounded<Button>^ button = gcnew Rounded::Rounded<Button>(button2, Colors::orangeBrush, 45);
 		button->FlatStyle = button2->FlatStyle;
 		button2 = button;
 
-		Rounded::Rounded<ListView>^ listView = gcnew Rounded::Rounded<ListView>(listView1, blackBrush, 100);
+		Rounded::Rounded<ListView>^ listView = gcnew Rounded::Rounded<ListView>(listView1, Colors::blackBrush, 100);
 		listView->BorderStyle = BorderStyle::None;
 		listView->View = listView1->View;
 		listView->LabelWrap = listView1->LabelWrap;
@@ -399,13 +400,33 @@ namespace CppCLRWinFormsProject {
 		}
 		listView->SelectedIndexChanged += gcnew System::EventHandler(this, &Form1::listView1_SelectedIndexChanged);
 
-		checkBox2->Checked = config::getAutoStart();
-
 
 		Hotkeyfy::Toggle^ toggle = gcnew Hotkeyfy::Toggle();
+		toggle->Location = System::Drawing::Point(70, 5);
+		toggle->ToggleChange = gcnew System::EventHandler(this, &Form1::checkBox2_CheckedChanged);
+		toggle->setCheck(config::getAutoStart());
+
+		this->Controls->Add(toggle);
+
+		// comboBox
+
+
+		Hotkeyfy::CComboBox^ actionSelector = gcnew Hotkeyfy::CComboBox();
+		actionSelector->Location = System::Drawing::Point(220, 50);
+		//actionSelector->Size = System::Drawing::Size(100, 15);
+		actionSelector->setText("combo");
+		this->Controls->Add(actionSelector);
+
+
+
+		Rounded::Rounded<Panel>^ actionPanel = gcnew Rounded::Rounded<Panel>(panel1, Colors::darkGrayBrush, 30);
+		for each (System::Windows::Forms::Control^ control in panel1->Controls)
+		{
+			actionPanel->Controls->Add(control);
+		}
 		
-		panel1->Controls->Add(toggle);
-		toggle->Size = System::Drawing::Size(50, 50);
+		panel1 = actionPanel;
+		panel1->Refresh();
 
 		KeyListener::init();
 	}
@@ -436,12 +457,13 @@ namespace CppCLRWinFormsProject {
 		{
 			timer1->Stop();
 		}
+
 	}
 	private: System::Void Form1_FormClosing(System::Object^ sender, System::Windows::Forms::FormClosingEventArgs^ e) {
 		config::save();
 	}
 	private: System::Void checkBox2_CheckedChanged(System::Object^ sender, System::EventArgs^ e) {
-		config::setAutoStart(checkBox2->Checked);
+		config::setAutoStart(((Hotkeyfy::Toggle^)sender)->isChecked());
 	}
 	private: System::Void textBox1_TextChanged(System::Object^ sender, System::EventArgs^ e) {
 	}

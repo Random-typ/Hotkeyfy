@@ -1,5 +1,6 @@
 #pragma once
 #include "Rounded.hpp"
+#include "HotkeyfyColors.hpp"
 
 using namespace System;
 using namespace System::ComponentModel;
@@ -17,6 +18,8 @@ namespace Hotkeyfy {
 	public ref class Toggle : public System::Windows::Forms::UserControl
 	{
 	public:
+		System::EventHandler^ ToggleChange;
+
 		Toggle(void)
 		{
 			InitializeComponent();
@@ -36,8 +39,8 @@ namespace Hotkeyfy {
 				delete components;
 			}
 		}
-	private: System::Windows::Forms::Panel^ panel1;
-	private: System::Windows::Forms::Panel^ panel2;
+
+
 	protected:
 
 	private:
@@ -53,51 +56,96 @@ namespace Hotkeyfy {
 		/// </summary>
 		void InitializeComponent(void)
 		{
-			this->panel1 = (gcnew System::Windows::Forms::Panel());
-			this->panel2 = (gcnew System::Windows::Forms::Panel());
-			this->panel1->SuspendLayout();
 			this->SuspendLayout();
-			// 
-			// panel1
-			// 
-			this->panel1->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(83)), static_cast<System::Int32>(static_cast<System::Byte>(83)),
-				static_cast<System::Int32>(static_cast<System::Byte>(83)));
-			this->panel1->Controls->Add(this->panel2);
-			this->panel1->Location = System::Drawing::Point(3, 3);
-			this->panel1->Name = L"panel1";
-			this->panel1->Size = System::Drawing::Size(324, 127);
-			this->panel1->TabIndex = 0;
-			// 
-			// panel2
-			// 
-			this->panel2->BackColor = System::Drawing::Color::White;
-			this->panel2->Location = System::Drawing::Point(3, 3);
-			this->panel2->Name = L"panel2";
-			this->panel2->Size = System::Drawing::Size(120, 120);
-			this->panel2->TabIndex = 1;
 			// 
 			// Toggle
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-			this->Controls->Add(this->panel1);
 			this->Name = L"Toggle";
-			this->Size = System::Drawing::Size(331, 133);
+			this->Size = System::Drawing::Size(42, 24);
 			this->Load += gcnew System::EventHandler(this, &Toggle::toggle_Load);
-			this->panel1->ResumeLayout(false);
+			this->Click += gcnew System::EventHandler(this, &Toggle::Toggle_Click);
+			this->MouseEnter += gcnew System::EventHandler(this, &Toggle::Toggle_MouseEnter);
+			this->MouseLeave += gcnew System::EventHandler(this, &Toggle::Toggle_MouseLeave);
 			this->ResumeLayout(false);
 
 		}
 #pragma endregion
-	private: System::Void toggle_Load(System::Object^ sender, System::EventArgs^ e) {
-		SolidBrush^ grayBrush = gcnew SolidBrush(Color::FromArgb(83, 83, 83));
-		SolidBrush^ orangeBrush = gcnew SolidBrush(Color::FromArgb(239, 87, 0));
-		SolidBrush^ whiteBrush = gcnew SolidBrush(Color::FromArgb(255, 255, 255));
+	private:
+		
+		bool hovering = false;
+		bool checked = false;
+	public:
+		bool isChecked() {
+			return checked;
+		}
+		void setCheck(bool _checked) {
+			checked = _checked;
+			Refresh();
+		}
+	protected:
+		virtual void OnPaint(PaintEventArgs^ e) override
+		{
+			Graphics^ g = e->Graphics;
+			g->SmoothingMode = System::Drawing::Drawing2D::SmoothingMode::AntiAlias;
 
-		Rounded::Rounded<Panel>^ backgroundPanel = gcnew Rounded::Rounded<Panel>(panel1, grayBrush, 40);
-		Rounded::Rounded<Panel>^ switchPanel = gcnew Rounded::Rounded<Panel>(panel2, whiteBrush, 50);
-		backgroundPanel->Controls->Add(switchPanel);
+			System::Drawing::Drawing2D::GraphicsPath^ switchPath = gcnew System::Drawing::Drawing2D::GraphicsPath();
+			if (checked)
+			{
+				switchPath->AddEllipse(RectangleF(24, 2, 20, 20));
+			}
+			else {
+				switchPath->AddEllipse(RectangleF(2, 2, 20, 20));
+			}
+
+
+			System::Drawing::Drawing2D::GraphicsPath^ pillPath = gcnew System::Drawing::Drawing2D::GraphicsPath();
+			RectangleF pillLeft(0, 0, 22, 24);
+			RectangleF pillRight(22, 0, 24, 24);
+			pillPath->AddArc(pillLeft, 90, 180);
+			pillPath->AddArc(pillRight, -90, 180);
+
+			if (checked)
+			{
+				if (hovering)
+				{
+					g->FillPath(Colors::lightOrangeBrush, pillPath);
+				}
+				else
+				{
+					g->FillPath(Colors::orangeBrush, pillPath);
+				}
+			}
+			else {
+				if (hovering)
+				{
+					g->FillPath(Colors::lightGrayBrush, pillPath);
+				}
+				else
+				{
+					g->FillPath(Colors::grayBrush, pillPath);
+				}
+			}
+
+			
+			g->FillPath(Colors::whiteBrush, switchPath);
+		}
+	private: System::Void toggle_Load(System::Object^ sender, System::EventArgs^ e) {
 
 	}
-	};
+	private: System::Void Toggle_MouseEnter(System::Object^ sender, System::EventArgs^ e) {
+		hovering = true;
+		Refresh();
+	}
+	private: System::Void Toggle_MouseLeave(System::Object^ sender, System::EventArgs^ e) {
+		hovering = false;
+		Refresh();
+	}
+	private: System::Void Toggle_Click(System::Object^ sender, System::EventArgs^ e) {
+		checked = !checked;
+		Refresh();
+		ToggleChange->BeginInvoke(this, {}, {}, {});
+	}
+};
 }

@@ -155,7 +155,7 @@ bool config::getAutoStart() {
         return false;
     }
 
-    bool autoStart = RegGetValueW(key, L"Hotkeyfy", NULL, RRF_RT_REG_SZ, NULL, NULL, NULL) != ERROR_FILE_NOT_FOUND;
+    bool autoStart = RegGetValueW(key, NULL, L"Hotkeyfy", RRF_RT_REG_SZ, NULL, NULL, NULL) != ERROR_FILE_NOT_FOUND;
 
     RegCloseKey(key);
     return autoStart;
