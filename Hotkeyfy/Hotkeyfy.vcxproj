@@ -25,6 +25,7 @@
     <Keyword>ManagedCProj</Keyword>
     <RootNamespace>Hotkeyfy</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformMinVersion>7.0</WindowsTargetPlatformMinVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -81,6 +82,8 @@
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
+      <ConformanceMode>false</ConformanceMode>
     </ClCompile>
     <Link>
       <AdditionalDependencies />
@@ -132,7 +135,13 @@
     <ResourceCompile Include="app.rc" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CButton.h">
+      <FileType>CppControl</FileType>
+    </ClInclude>
     <ClInclude Include="CComboBox.h">
+      <FileType>CppControl</FileType>
+    </ClInclude>
+    <ClInclude Include="CNumericUpDown.h">
       <FileType>CppControl</FileType>
     </ClInclude>
     <ClInclude Include="HotkeyfyColors.hpp" />
@@ -150,7 +159,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AssemblyInfo.cpp" />
+    <ClCompile Include="CButton.cpp" />
     <ClCompile Include="CComboBox.cpp" />
+    <ClCompile Include="CNumericUpDown.cpp" />
     <ClCompile Include="CppCLR_WinFormsProject.cpp" />
     <ClCompile Include="Form1.cpp" />
     <ClCompile Include="KeyListener.cpp" />
@@ -171,8 +182,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="CButton.resx">
+      <DependentUpon>CButton.h</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="CComboBox.resx">
       <DependentUpon>CComboBox.h</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CNumericUpDown.resx">
+      <DependentUpon>CNumericUpDown.h</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.h</DependentUpon>

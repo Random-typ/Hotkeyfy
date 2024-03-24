@@ -23,6 +23,13 @@ namespace Hotkeyfy {
 			InitializeComponent();
 			Rounded::Rounded<Panel>^ textBoxPanel = gcnew Rounded::Rounded<Panel>(panel1, Colors::highlightGrayBrush, 10);
 			textBoxPanel->Click += gcnew System::EventHandler(this, &CComboBox::panel1_Click);
+			panel1 = textBoxPanel;
+
+			Rounded::Rounded<ListView>^ listView = gcnew Rounded::Rounded<ListView>(listView1, Colors::highlightGrayBrush, 10);
+			//listView->Click += gcnew System::EventHandler(this, &CComboBox::panel1_Click);
+			listView->View = View::Details;
+			listView1 = listView;
+
 		}
 
 	protected:
@@ -74,8 +81,9 @@ namespace Hotkeyfy {
 			// 
 			this->listView1->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(51)), static_cast<System::Int32>(static_cast<System::Byte>(51)),
 				static_cast<System::Int32>(static_cast<System::Byte>(51)));
+			this->listView1->BorderStyle = System::Windows::Forms::BorderStyle::None;
 			this->listView1->HideSelection = false;
-			this->listView1->Location = System::Drawing::Point(0, 38);
+			this->listView1->Location = System::Drawing::Point(0, 27);
 			this->listView1->Name = L"listView1";
 			this->listView1->Size = System::Drawing::Size(116, 190);
 			this->listView1->TabIndex = 2;
@@ -90,7 +98,7 @@ namespace Hotkeyfy {
 			this->Controls->Add(this->panel1);
 			this->ForeColor = System::Drawing::SystemColors::Control;
 			this->Name = L"CComboBox";
-			this->Size = System::Drawing::Size(400, 228);
+			this->Size = System::Drawing::Size(117, 219);
 			this->ResumeLayout(false);
 
 		}

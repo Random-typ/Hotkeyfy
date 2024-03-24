@@ -62,6 +62,7 @@ namespace Hotkeyfy {
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
+			this->BackColor = System::Drawing::Color::Transparent;
 			this->Name = L"Toggle";
 			this->Size = System::Drawing::Size(42, 24);
 			this->Load += gcnew System::EventHandler(this, &Toggle::toggle_Load);
@@ -128,7 +129,6 @@ namespace Hotkeyfy {
 				}
 			}
 
-			
 			g->FillPath(Colors::whiteBrush, switchPath);
 		}
 	private: System::Void toggle_Load(System::Object^ sender, System::EventArgs^ e) {

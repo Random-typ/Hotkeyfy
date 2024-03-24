@@ -14,7 +14,9 @@
 #include "Rounded.hpp"
 
 #include "toggle.h"
-#include "CComboBox.h"
+//#include "CComboBox.h"
+#include "CButton.h"
+#include "CNumericUpDown.h"
 
 #pragma comment(lib, "Shell32.lib")
 #pragma comment(lib, "User32.lib")
@@ -63,17 +65,19 @@ namespace Hotkeyfy {
 	private: System::Windows::Forms::Panel^ panel1;
 	private: System::Windows::Forms::Label^ label2;
 	private: System::Windows::Forms::ListView^ listView1;
-	private: System::Windows::Forms::Button^ button2;
+
 
 	private: System::Windows::Forms::Label^ label3;
-	private: System::Windows::Forms::CheckBox^ checkBox1;
+
 	private: System::Windows::Forms::Label^ label4;
 	private: System::Windows::Forms::OpenFileDialog^ openFileDialog1;
 	private: System::Windows::Forms::Timer^ timer1;
 
-	private: System::Windows::Forms::Label^ label5;
-	private: System::Windows::Forms::NumericUpDown^ numericUpDown1;
+
+
 	private: System::Windows::Forms::Label^ label6;
+	private: System::Windows::Forms::Label^ label7;
+	private: System::Windows::Forms::Label^ label5;
 
 	private: System::ComponentModel::IContainer^ components;
 
@@ -100,33 +104,30 @@ namespace Hotkeyfy {
 		void InitializeComponent(void)
 		{
 			this->components = (gcnew System::ComponentModel::Container());
-			System::Windows::Forms::ListViewItem^ listViewItem6 = (gcnew System::Windows::Forms::ListViewItem(gcnew cli::array< System::String^  >(1) { L"Play Pause" },
+			System::Windows::Forms::ListViewItem^ listViewItem1 = (gcnew System::Windows::Forms::ListViewItem(gcnew cli::array< System::String^  >(1) { L"Play Pause" },
 				-1, System::Drawing::SystemColors::ControlLight, System::Drawing::Color::Empty, nullptr));
-			System::Windows::Forms::ListViewItem^ listViewItem7 = (gcnew System::Windows::Forms::ListViewItem(gcnew cli::array< System::String^  >(1) { L"Previous Track" },
+			System::Windows::Forms::ListViewItem^ listViewItem2 = (gcnew System::Windows::Forms::ListViewItem(gcnew cli::array< System::String^  >(1) { L"Previous Track" },
 				-1, System::Drawing::SystemColors::ControlLight, System::Drawing::Color::Empty, nullptr));
-			System::Windows::Forms::ListViewItem^ listViewItem8 = (gcnew System::Windows::Forms::ListViewItem(gcnew cli::array< System::String^  >(1) { L"Next Track" },
+			System::Windows::Forms::ListViewItem^ listViewItem3 = (gcnew System::Windows::Forms::ListViewItem(gcnew cli::array< System::String^  >(1) { L"Next Track" },
 				-1, System::Drawing::SystemColors::ControlLight, System::Drawing::Color::Empty, nullptr));
-			System::Windows::Forms::ListViewItem^ listViewItem9 = (gcnew System::Windows::Forms::ListViewItem(gcnew cli::array< System::String^  >(1) { L"Volume Up" },
+			System::Windows::Forms::ListViewItem^ listViewItem4 = (gcnew System::Windows::Forms::ListViewItem(gcnew cli::array< System::String^  >(1) { L"Volume Up" },
 				-1, System::Drawing::SystemColors::ControlLight, System::Drawing::Color::Empty, nullptr));
-			System::Windows::Forms::ListViewItem^ listViewItem10 = (gcnew System::Windows::Forms::ListViewItem(gcnew cli::array< System::String^  >(1) { L"Volume Down" },
+			System::Windows::Forms::ListViewItem^ listViewItem5 = (gcnew System::Windows::Forms::ListViewItem(gcnew cli::array< System::String^  >(1) { L"Volume Down" },
 				-1, System::Drawing::SystemColors::ControlLight, System::Drawing::Color::Empty, nullptr));
 			this->label1 = (gcnew System::Windows::Forms::Label());
 			this->textBox1 = (gcnew System::Windows::Forms::TextBox());
 			this->button1 = (gcnew System::Windows::Forms::Button());
 			this->panel1 = (gcnew System::Windows::Forms::Panel());
-			this->label5 = (gcnew System::Windows::Forms::Label());
-			this->numericUpDown1 = (gcnew System::Windows::Forms::NumericUpDown());
+			this->label7 = (gcnew System::Windows::Forms::Label());
 			this->label4 = (gcnew System::Windows::Forms::Label());
-			this->button2 = (gcnew System::Windows::Forms::Button());
 			this->label3 = (gcnew System::Windows::Forms::Label());
-			this->checkBox1 = (gcnew System::Windows::Forms::CheckBox());
 			this->label2 = (gcnew System::Windows::Forms::Label());
 			this->listView1 = (gcnew System::Windows::Forms::ListView());
 			this->openFileDialog1 = (gcnew System::Windows::Forms::OpenFileDialog());
 			this->timer1 = (gcnew System::Windows::Forms::Timer(this->components));
 			this->label6 = (gcnew System::Windows::Forms::Label());
+			this->label5 = (gcnew System::Windows::Forms::Label());
 			this->panel1->SuspendLayout();
-			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->numericUpDown1))->BeginInit();
 			this->SuspendLayout();
 			// 
 			// label1
@@ -162,99 +163,54 @@ namespace Hotkeyfy {
 			this->panel1->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(18)), static_cast<System::Int32>(static_cast<System::Byte>(18)),
 				static_cast<System::Int32>(static_cast<System::Byte>(18)));
 			this->panel1->Controls->Add(this->label5);
-			this->panel1->Controls->Add(this->numericUpDown1);
+			this->panel1->Controls->Add(this->label7);
 			this->panel1->Controls->Add(this->label4);
-			this->panel1->Controls->Add(this->button2);
 			this->panel1->Controls->Add(this->label3);
-			this->panel1->Controls->Add(this->checkBox1);
 			this->panel1->Controls->Add(this->label2);
 			this->panel1->Location = System::Drawing::Point(217, 44);
 			this->panel1->Name = L"panel1";
 			this->panel1->Size = System::Drawing::Size(596, 257);
 			this->panel1->TabIndex = 3;
-			this->panel1->Visible = false;
 			// 
-			// label5
+			// label7
 			// 
-			this->label5->AutoSize = true;
-			this->label5->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+			this->label7->AutoSize = true;
+			this->label7->Font = (gcnew System::Drawing::Font(L"Plus Jakarta Sans", 9, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
-			this->label5->Location = System::Drawing::Point(76, 137);
-			this->label5->Name = L"label5";
-			this->label5->Size = System::Drawing::Size(123, 16);
-			this->label5->TabIndex = 8;
-			this->label5->Text = L"% Volume Increase";
-			// 
-			// numericUpDown1
-			// 
-			this->numericUpDown1->DecimalPlaces = 1;
-			this->numericUpDown1->Font = (gcnew System::Drawing::Font(L"Plus Jakarta Sans", 9, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-				static_cast<System::Byte>(0)));
-			this->numericUpDown1->Location = System::Drawing::Point(11, 133);
-			this->numericUpDown1->Name = L"numericUpDown1";
-			this->numericUpDown1->Size = System::Drawing::Size(57, 22);
-			this->numericUpDown1->TabIndex = 7;
-			this->numericUpDown1->Value = System::Decimal(gcnew cli::array< System::Int32 >(4) { 1, 0, 0, 0 });
-			this->numericUpDown1->ValueChanged += gcnew System::EventHandler(this, &Form1::numericUpDown1_ValueChanged);
+			this->label7->Location = System::Drawing::Point(13, 183);
+			this->label7->Name = L"label7";
+			this->label7->Size = System::Drawing::Size(70, 20);
+			this->label7->TabIndex = 9;
+			this->label7->Text = L"Consume*";
 			// 
 			// label4
 			// 
 			this->label4->AutoSize = true;
-			this->label4->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-				static_cast<System::Byte>(0)));
-			this->label4->Location = System::Drawing::Point(123, 83);
+			this->label4->Font = (gcnew System::Drawing::Font(L"Plus Jakarta Sans", 8.25F));
+			this->label4->Location = System::Drawing::Point(128, 83);
 			this->label4->Name = L"label4";
-			this->label4->Size = System::Drawing::Size(37, 16);
+			this->label4->Size = System::Drawing::Size(34, 18);
 			this->label4->TabIndex = 6;
 			this->label4->Text = L"Keys";
 			this->label4->TextChanged += gcnew System::EventHandler(this, &Form1::label4_TextChanged);
 			// 
-			// button2
-			// 
-			this->button2->BackColor = System::Drawing::Color::White;
-			this->button2->FlatAppearance->BorderColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(239)),
-				static_cast<System::Int32>(static_cast<System::Byte>(87)), static_cast<System::Int32>(static_cast<System::Byte>(0)));
-			this->button2->Font = (gcnew System::Drawing::Font(L"Plus Jakarta Sans", 12, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
-				static_cast<System::Byte>(0)));
-			this->button2->ForeColor = System::Drawing::Color::Black;
-			this->button2->Location = System::Drawing::Point(8, 64);
-			this->button2->Name = L"button2";
-			this->button2->Size = System::Drawing::Size(106, 51);
-			this->button2->TabIndex = 5;
-			this->button2->Text = L"Choose";
-			this->button2->UseVisualStyleBackColor = false;
-			this->button2->Click += gcnew System::EventHandler(this, &Form1::button2_Click);
-			// 
 			// label3
 			// 
 			this->label3->AutoSize = true;
-			this->label3->Location = System::Drawing::Point(8, 226);
+			this->label3->Location = System::Drawing::Point(10, 226);
 			this->label3->Name = L"label3";
 			this->label3->Size = System::Drawing::Size(337, 18);
 			this->label3->TabIndex = 3;
 			this->label3->Text = L"*when checked, this hotkey won\'t be send to other applications";
 			// 
-			// checkBox1
-			// 
-			this->checkBox1->AutoSize = true;
-			this->checkBox1->Checked = true;
-			this->checkBox1->CheckState = System::Windows::Forms::CheckState::Checked;
-			this->checkBox1->Location = System::Drawing::Point(8, 193);
-			this->checkBox1->Name = L"checkBox1";
-			this->checkBox1->Size = System::Drawing::Size(111, 22);
-			this->checkBox1->TabIndex = 2;
-			this->checkBox1->Text = L"Consume input*";
-			this->checkBox1->UseVisualStyleBackColor = true;
-			this->checkBox1->CheckedChanged += gcnew System::EventHandler(this, &Form1::checkBox1_CheckedChanged);
-			// 
 			// label2
 			// 
 			this->label2->AutoSize = true;
-			this->label2->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+			this->label2->Font = (gcnew System::Drawing::Font(L"Plus Jakarta Sans", 11.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
-			this->label2->Location = System::Drawing::Point(3, 7);
+			this->label2->Location = System::Drawing::Point(13, 7);
 			this->label2->Name = L"label2";
-			this->label2->Size = System::Drawing::Size(54, 20);
+			this->label2->Size = System::Drawing::Size(57, 24);
 			this->label2->TabIndex = 1;
 			this->label2->Text = L"Action";
 			// 
@@ -266,8 +222,8 @@ namespace Hotkeyfy {
 				static_cast<System::Byte>(0)));
 			this->listView1->HideSelection = false;
 			this->listView1->Items->AddRange(gcnew cli::array< System::Windows::Forms::ListViewItem^  >(5) {
-				listViewItem6, listViewItem7,
-					listViewItem8, listViewItem9, listViewItem10
+				listViewItem1, listViewItem2,
+					listViewItem3, listViewItem4, listViewItem5
 			});
 			this->listView1->Location = System::Drawing::Point(14, 44);
 			this->listView1->MultiSelect = false;
@@ -298,6 +254,17 @@ namespace Hotkeyfy {
 			this->label6->TabIndex = 5;
 			this->label6->Text = L"Autostart";
 			// 
+			// label5
+			// 
+			this->label5->AutoSize = true;
+			this->label5->Font = (gcnew System::Drawing::Font(L"Plus Jakarta Sans", 9, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
+			this->label5->Location = System::Drawing::Point(105, 139);
+			this->label5->Name = L"label5";
+			this->label5->Size = System::Drawing::Size(116, 20);
+			this->label5->TabIndex = 10;
+			this->label5->Text = L"% Volume Increase";
+			// 
 			// Form1
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(7, 18);
@@ -320,9 +287,9 @@ namespace Hotkeyfy {
 			this->Text = L"Hotkeyfy";
 			this->FormClosing += gcnew System::Windows::Forms::FormClosingEventHandler(this, &Form1::Form1_FormClosing);
 			this->Load += gcnew System::EventHandler(this, &Form1::Form1_Load);
+			this->Shown += gcnew System::EventHandler(this, &Form1::Form1_Shown);
 			this->panel1->ResumeLayout(false);
 			this->panel1->PerformLayout();
-			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->numericUpDown1))->EndInit();
 			this->ResumeLayout(false);
 			this->PerformLayout();
 
@@ -339,18 +306,18 @@ namespace Hotkeyfy {
 
 		if (_name == "Volume Up")
 		{
-			numericUpDown1->Visible = true;
+			//numericUpDown1->Visible = true;
 			label5->Visible = true;
 			label5->Text = "% Volume Increase";
 		}
 		else if (_name == "Volume Down")
 		{
-			numericUpDown1->Visible = true;
+			//numericUpDown1->Visible = true;
 			label5->Visible = true;
 			label5->Text = "% Volume Decrease";
 		}
 		else {
-			numericUpDown1->Visible = false;
+			//numericUpDown1->Visible = false;
 			label5->Visible = false;
 		}
 	}
@@ -361,14 +328,18 @@ namespace Hotkeyfy {
 		for each (ListViewItem ^ selectedItem in listView->SelectedItems) {
 			setAction(selectedItem->Text);
 		}
+		
+		for each (System::Windows::Forms::Control ^ control in panel1->Controls)
+		{
+			control->Refresh();
+		}
 	}
-		   void ChangeTitleBarColor() {
-			   // Get the handle of the window
-			   HWND hwnd = (HWND)this->Handle.ToPointer();
-			   LONG_PTR v = SetWindowLongPtr(hwnd, GWL_EXSTYLE, GetWindowLongPtr(hwnd, GWL_EXSTYLE) | WS_EX_LAYERED);
-			   bool b = SetLayeredWindowAttributes(hwnd, RGB(255, 0, 0), 0, LWA_COLORKEY);
-
-		   }
+	void ChangeTitleBarColor() {
+		// Get the handle of the window
+		HWND hwnd = (HWND)this->Handle.ToPointer();
+		LONG_PTR v = SetWindowLongPtr(hwnd, GWL_EXSTYLE, GetWindowLongPtr(hwnd, GWL_EXSTYLE) | WS_EX_LAYERED);
+		bool b = SetLayeredWindowAttributes(hwnd, RGB(255, 0, 0), 0, LWA_COLORKEY);
+	}
 	private: System::Void Form1_Load(System::Object^ sender, System::EventArgs^ e) {
 
 		// load icon
@@ -385,9 +356,9 @@ namespace Hotkeyfy {
 		// Custom controls
 		//
 
-		Rounded::Rounded<Button>^ button = gcnew Rounded::Rounded<Button>(button2, Colors::orangeBrush, 45);
-		button->FlatStyle = button2->FlatStyle;
-		button2 = button;
+		//Rounded::Rounded<Button>^ button = gcnew Rounded::Rounded<Button>(button2, Colors::orangeBrush, 45);
+		//button->FlatStyle = button2->FlatStyle;
+		//button2 = button;
 
 		Rounded::Rounded<ListView>^ listView = gcnew Rounded::Rounded<ListView>(listView1, Colors::blackBrush, 100);
 		listView->BorderStyle = BorderStyle::None;
@@ -408,25 +379,54 @@ namespace Hotkeyfy {
 
 		this->Controls->Add(toggle);
 
+
 		// comboBox
 
 
-		Hotkeyfy::CComboBox^ actionSelector = gcnew Hotkeyfy::CComboBox();
-		actionSelector->Location = System::Drawing::Point(220, 50);
-		//actionSelector->Size = System::Drawing::Size(100, 15);
-		actionSelector->setText("combo");
-		this->Controls->Add(actionSelector);
+		//Hotkeyfy::CComboBox^ actionSelector = gcnew Hotkeyfy::CComboBox();
+		//actionSelector->Location = System::Drawing::Point(220, 50);
+		////actionSelector->Size = System::Drawing::Size(100, 15);
+		//actionSelector->setText("combo");
+		//this->Controls->Add(actionSelector);
 
-
-
+		
 		Rounded::Rounded<Panel>^ actionPanel = gcnew Rounded::Rounded<Panel>(panel1, Colors::darkGrayBrush, 30);
 		for each (System::Windows::Forms::Control^ control in panel1->Controls)
 		{
 			actionPanel->Controls->Add(control);
+			control->Refresh();
 		}
 		
+		Hotkeyfy::Toggle^ ConsumeToggle = gcnew Hotkeyfy::Toggle();
+		ConsumeToggle->Location = System::Drawing::Point(70, 131);
+		ConsumeToggle->ToggleChange = gcnew System::EventHandler(this, &Form1::consumeInputToggle);
+
+		actionPanel->Controls->Add(ConsumeToggle);
+
+
+		Hotkeyfy::CButton^ keySelector = gcnew Hotkeyfy::CButton();
+		keySelector->Location = System::Drawing::Point(20, 50);
+		keySelector->setText("Choose");
+		keySelector->Click += gcnew System::EventHandler(this, &Form1::hotkeyChoose_Click);
+		actionPanel->Controls->Add(keySelector);
+
+		actionPanel->Controls->Add(label3);
+		actionPanel->Controls->Add(label4);
+
+
+		Hotkeyfy::CNumericUpDown^ volumeUpDown = gcnew Hotkeyfy::CNumericUpDown();
+		volumeUpDown->Location = System::Drawing::Point(20, 100);
+		volumeUpDown->setText("Choose");
+		volumeUpDown->ValueChanged += gcnew System::EventHandler(this, &Form1::volumeUpDown_ValueChanged);
+		actionPanel->Controls->Add(volumeUpDown);
+
 		panel1 = actionPanel;
-		panel1->Refresh();
+		
+
+
+
+
+
 
 		KeyListener::init();
 	}
@@ -436,7 +436,7 @@ namespace Hotkeyfy {
 	private: System::Void openFileDialog1_FileOk(System::Object^ sender, System::ComponentModel::CancelEventArgs^ e) {
 		textBox1->Text = System::IO::Path::GetFileName(openFileDialog1->FileName);
 	}
-	private: System::Void button2_Click(System::Object^ sender, System::EventArgs^ e) {
+	private: System::Void hotkeyChoose_Click(System::Object^ sender, System::EventArgs^ e) {
 		KeyListener::listen();
 		timer1->Start();
 	}
@@ -457,7 +457,6 @@ namespace Hotkeyfy {
 		{
 			timer1->Stop();
 		}
-
 	}
 	private: System::Void Form1_FormClosing(System::Object^ sender, System::Windows::Forms::FormClosingEventArgs^ e) {
 		config::save();
@@ -468,22 +467,29 @@ namespace Hotkeyfy {
 	private: System::Void textBox1_TextChanged(System::Object^ sender, System::EventArgs^ e) {
 	}
 	private: System::Void label4_TextChanged(System::Object^ sender, System::EventArgs^ e) {
-		config::setHotkeys(msclr::interop::marshal_as<std::wstring>(label2->Text), KeyListener::getKeys(), checkBox1->Checked);
+		//config::setHotkeys(msclr::interop::marshal_as<std::wstring>(label2->Text), KeyListener::getKeys(), checkBox1->Checked);
 	}
 	private: System::Void checkBox1_CheckedChanged(System::Object^ sender, System::EventArgs^ e) {
-		config::setHotkeys(msclr::interop::marshal_as<std::wstring>(label2->Text), KeyListener::getKeys(), checkBox1->Checked);
+		//config::setHotkeys(msclr::interop::marshal_as<std::wstring>(label2->Text), KeyListener::getKeys(), checkBox1->Checked);
 	}
-	private: System::Void numericUpDown1_ValueChanged(System::Object^ sender, System::EventArgs^ e) {
+	private: System::Void consumeInputToggle(System::Object^ sender, System::EventArgs^ e) {
+		
+	}
+	private: System::Void volumeUpDown_ValueChanged(System::Object^ sender, System::EventArgs^ e) {
 		if (label2->Text == "Volume Up")
 		{
-			config::setVolumeIncrement(System::Decimal::ToDouble(numericUpDown1->Value));
+			//config::setVolumeIncrement(System::Decimal::ToDouble(numericUpDown1->Value));
 		}
 		if (label2->Text == "Volume Down")
 		{
-			config::setVolumeDecrement(System::Decimal::ToDouble(numericUpDown1->Value));
+			//config::setVolumeDecrement(System::Decimal::ToDouble(numericUpDown1->Value));
 		}
 	}
 	private: System::Void listView1_DrawItem(System::Object^ sender, System::Windows::Forms::DrawListViewItemEventArgs^ e) {
 	}
-	};
+	private: System::Void Form1_Shown(System::Object^ sender, System::EventArgs^ e) {
+		// this fixes the white background on custom controls
+		panel1->Refresh();
+	}
+};
 }

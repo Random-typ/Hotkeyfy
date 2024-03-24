@@ -14,7 +14,8 @@ namespace Rounded {
         virtual void OnPaint(PaintEventArgs^ e) override {
             Graphics^ g = e->Graphics;
             g->SmoothingMode = SmoothingMode::AntiAlias;
-            
+            g->Clear(this->BackColor);
+
             System::Drawing::Rectangle rect = this->ClientRectangle;
             rect.Inflate(-4, -4);
             
@@ -36,6 +37,8 @@ namespace Rounded {
             format->LineAlignment = StringAlignment::Center;
             
             g->DrawString(this->Text, this->Font, gcnew SolidBrush(this->ForeColor), rect, format);
+
+            _T::OnPaint(e);
         }
         Brush^ brush;
         int radius;
