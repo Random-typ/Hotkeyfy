@@ -1,5 +1,6 @@
 #include <thread>
 #include "Hotkeyfy.h"
+#include "../Hotkeyfy-api/config.h"
 #include "resource.h"
 
 HWND Hotkeyfy::hwnd;
@@ -232,6 +233,7 @@ void Hotkeyfy::showGUI()
     executeInfo.nShow = SW_SHOWNORMAL;
     executeInfo.fMask = SEE_MASK_FLAG_NO_UI | SEE_MASK_NOCLOSEPROCESS;
     executeInfo.hwnd = hwnd;
+    executeInfo.lpParameters = config::launchedFromService.c_str();
 
     if (!ShellExecuteExW(&executeInfo)) {
         return;
@@ -249,3 +251,4 @@ void Hotkeyfy::waitForGUI()
     CloseHandle(guiProcess);
     guiProcess = NULL;
 }
+

@@ -1,4 +1,3 @@
-#include "pch.h"
 #include "KeyListener.h"
 
 std::vector<DWORD> KeyListener::keyList;
@@ -10,7 +9,7 @@ HHOOK KeyListener::keyboardHook = NULL;
 
 bool KeyListener::doListen = false;
 
-bool KeyListener::hotkeysEnabled = false;
+std::atomic_bool KeyListener::hotkeysEnabled = false;
 
 
 void KeyListener::init()

@@ -3,25 +3,31 @@
 
 using json = nlohmann::json;
 
+const std::wstring config::launchedFromService = L"LaunchedFromService";
+
 double config::volumeIncrement = 1.0;
 double config::volumeDecrement = 1.0;
+std::string config::process = "spotify.exe";
 
-std::map<std::wstring/*action*/, std::pair<std::vector<DWORD>/*keys*/, bool/*consume*/>> config::hotkeys;
+std::map<std::string/*action*/, std::pair<std::vector<DWORD>/*keys*/, bool/*consume*/>> config::hotkeys;
 std::wstring config::path;
 
-std::vector<DWORD> config::getHotkeys(const std::wstring& _action)
+std::pair<std::vector<DWORD>, bool/*consume*/> config::getHotkeys(const std::string& _action)
 {
     auto iterator = hotkeys.find(_action);
     if (iterator == hotkeys.end())
     {
-        return std::vector<DWORD>();
+        return { std::vector<DWORD>(), false };
     }
-    return iterator->second.first;
+    return iterator->second;
 }
 
-void config::setHotkeys(const std::wstring& _action, const std::vector<DWORD>& _keys, bool _consume)
+void config::setHotkeys(const std::string& _action, const std::vector<DWORD>& _keys, bool _consume)
 {
-    hotkeys[_action].first = _keys;
+    if (_keys.size())
+    {
+        hotkeys[_action].first = _keys;
+    }
     hotkeys[_action].second = _consume;
 }
 
@@ -33,6 +39,16 @@ void config::setVolumeIncrement(double _value)
 void config::setVolumeDecrement(double _value)
 {
     volumeDecrement = _value;
+}
+
+double config::getVolumeIncrement()
+{
+    return volumeIncrement;
+}
+
+double config::getVolumeDecrement()
+{
+    return volumeDecrement;
 }
 
 void config::load(const std::wstring& _path)
@@ -48,12 +64,13 @@ void config::load(const std::wstring& _path)
     json conf;
     try
     {
-        json conf = json::parse(fs);
+        conf = json::parse(fs);
     }
     catch (const json::exception&)
     {
         return;
     }
+
     if (!conf.contains("actions"))
     {
         return;
@@ -61,6 +78,7 @@ void config::load(const std::wstring& _path)
     
     conf.contains("volumeIncrement") ? volumeIncrement = conf["volumeIncrement"] : 0;
     conf.contains("volumeDecrement") ? volumeDecrement = conf["volumeDecrement"] : 0;
+    conf.contains("process") ? process = conf["process"] : 0;
 
     for (auto& action : conf["actions"])
     {
@@ -74,7 +92,6 @@ void config::load(const std::wstring& _path)
         {
             return;
         }
-
         hotkeys[action["action"]] = data;
     }
 }
@@ -84,6 +101,7 @@ void config::save()
     json conf = {
         {"volumeIncrement", volumeIncrement},
         {"volumeDecrement", volumeDecrement},
+        {"process", process},
         {"actions", {}}
     };
 
@@ -159,4 +177,14 @@ bool config::getAutoStart() {
 
     RegCloseKey(key);
     return autoStart;
+}
+
+void config::setProcess(const std::string& _process)
+{
+    process = _process;
+}
+
+std::string config::getProcess()
+{
+    return process;
 }

@@ -20,6 +20,7 @@ public:
 
 	static HWND getProcessWindow();
 
+
 	static void showGUI();
 
 	// blocks until GUI is closed if it is running

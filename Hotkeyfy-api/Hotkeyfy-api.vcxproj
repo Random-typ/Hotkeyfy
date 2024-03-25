@@ -142,14 +142,24 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="framework.h" />
+    <ClInclude Include="Hotkeyfy.h" />
+    <ClInclude Include="KeyListener.h" />
     <ClInclude Include="nlohmann_json.hpp" />
     <ClInclude Include="ProcessAudioControl.h" />
+    <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="config.cpp" />
     <ClCompile Include="config.h" />
-    <ClCompile Include="dllmain.cpp" />
+    <ClCompile Include="Hotkeyfy.cpp" />
+    <ClCompile Include="KeyListener.cpp" />
     <ClCompile Include="ProcessAudioControl.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="hotkeyfy.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Hotkeyfy-service.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

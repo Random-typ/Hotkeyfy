@@ -60,6 +60,7 @@ namespace Hotkeyfy {
 			this->Cursor = System::Windows::Forms::Cursors::Hand;
 			this->Font = (gcnew System::Drawing::Font(L"Plus Jakarta Sans", 11.25F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
+			this->ForeColor = System::Drawing::SystemColors::Control;
 			this->Margin = System::Windows::Forms::Padding(6, 5, 6, 5);
 			this->Name = L"CButton";
 			this->Size = System::Drawing::Size(98, 50);
@@ -79,8 +80,8 @@ namespace Hotkeyfy {
 			g->SmoothingMode = System::Drawing::Drawing2D::SmoothingMode::AntiAlias;
 
 			System::Drawing::Drawing2D::GraphicsPath^ pillPath = gcnew System::Drawing::Drawing2D::GraphicsPath();
-			RectangleF pillLeft(1, 1, 48, 48);
-			RectangleF pillRight(48, 1, 48, 48);
+			RectangleF pillLeft(1, 1, this->Size.Height - 2, this->Size.Height - 2);
+			RectangleF pillRight(this->Size.Width - this->Size.Height, 1, this->Size.Height - 2, this->Size.Height - 2);
 			if (hover)
 			{
 				pillLeft.Inflate(1, 1);
@@ -95,9 +96,8 @@ namespace Hotkeyfy {
 			StringFormat^ format = gcnew StringFormat();
 			format->Alignment = StringAlignment::Center;
 			format->LineAlignment = StringAlignment::Center;
-			RectangleF rect(1, 1, 96, 48);
-
-			g->DrawString(text, this->Font, Colors::blackBrush, rect, format);
+			
+			g->DrawString(text, this->Font, gcnew SolidBrush(this->ForeColor), this->ClientRectangle, format);
 		}
 	public:
 		void setText(String^ _text) {

@@ -1,4 +1,6 @@
-#include "Hotkeyfy.h"
+#include "../Hotkeyfy-api/Hotkeyfy.h"
+
+#pragma comment(lib, "../x64/Debug/Hotkeyfy-api.lib")
 
 #ifdef _DEBUG
 int main()

@@ -39,6 +39,6 @@ private:
 
 	static bool doListen;
 
-	static bool hotkeysEnabled;
+	static std::atomic_bool hotkeysEnabled;
 };
 

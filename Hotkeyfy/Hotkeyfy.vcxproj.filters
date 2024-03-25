@@ -29,12 +29,6 @@
     <ClInclude Include="Form1.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ProcessAudioControl.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="KeyListener.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Rounded.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -53,6 +47,9 @@
     <ClInclude Include="CNumericUpDown.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="CTextBox.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CppCLR_WinFormsProject.cpp">
@@ -67,12 +64,6 @@
     <ClCompile Include="Form1.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ProcessAudioControl.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="KeyListener.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="toggle.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -83,6 +74,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="CNumericUpDown.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CTextBox.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
