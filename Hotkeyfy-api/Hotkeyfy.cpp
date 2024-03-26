@@ -1,7 +1,11 @@
 #include <thread>
 #include "Hotkeyfy.h"
-#include "../Hotkeyfy-api/config.h"
+#include "config.h"
 #include "resource.h"
+#include <libloaderapi.h>
+#include <iostream>
+#include <memory.h>
+#include <string>
 
 HWND Hotkeyfy::hwnd;
 HANDLE Hotkeyfy::guiProcess = NULL;
@@ -14,7 +18,6 @@ bool Hotkeyfy::createWindows()
 
     hwnd = CreateWindowW(L"HotkeyfyServiceClass", L"Hotkeyfy", WS_OVERLAPPEDWINDOW,
         CW_USEDEFAULT, 0, 250, 200, NULL, NULL, GetModuleHandle(NULL), NULL);
-    //ShowWindow(hwnd, SW_SHOW);
 
     //hwnd = CreateWindowA("STATIC", "Hotkeyfy", 0, 0, 0, 100, 100, NULL, NULL, NULL, NULL);
     return hwnd;
@@ -38,7 +41,7 @@ LRESULT CALLBACK Hotkeyfy::WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARA
             showGUI();
             break;
         case WM_RBUTTONDOWN:
-            std::cout << "context\n";
+            showMenu();
             break;
         default:
             break;
@@ -100,7 +103,7 @@ bool Hotkeyfy::addToSystemTray()
     notify.hWnd = hwnd;
     notify.uFlags = NIF_ICON | NIF_MESSAGE;
     notify.uCallbackMessage = WMAPP_NOTIFYCALLBACK;
-    notify.hIcon = LoadIcon(GetModuleHandle(NULL), MAKEINTRESOURCE(IDI_ICON1));
+    notify.hIcon = LoadIcon(GetModuleHandle(L"Hotkeyfy-api.dll"), MAKEINTRESOURCE(IDI_ICON1));
     const char tooltip[] = "Hotkeyfy";
     memcpy_s(notify.szTip, sizeof(notify.szTip), tooltip, sizeof(tooltip));
     notify.dwState;// unused
@@ -138,6 +141,41 @@ HWND Hotkeyfy::getProcessWindow()
         return true;
         }, (LPARAM)&hwnd);
     return hwnd;
+}
+
+std::wstring Hotkeyfy::getBinaryPath()
+{
+    DWORD size = MAX_PATH;
+    std::wstring path;
+    path.resize(MAX_PATH);
+    if (!QueryFullProcessImageNameW(GetCurrentProcess(), 0, path.data(), &size))
+    {
+        return std::wstring();
+    }
+    path.resize(size);
+
+    return std::filesystem::path(path).parent_path().wstring();
+}
+
+void Hotkeyfy::showMenu()
+{
+    HMENU menu = LoadMenu(GetModuleHandle(L"Hotkeyfy-api.dll"), MAKEINTRESOURCE(IDR_MENU1));
+    if (menu == NULL)
+    {
+        MessageBoxA(NULL, "Error", "Failed to load menu.", MB_OK | MB_ICONERROR);
+        showGUI();
+        return;
+    }
+    bool b = SetMenu(hwnd, menu);
+
+
+    POINT point;
+    GetCursorPos(&point);
+
+    SetWindowPos(hwnd, HWND_TOPMOST, point.x, point.y, 10, 30, SWP_SHOWWINDOW);
+
+    return;
+    //DestroyMenu(menu);
 }
 
 void Hotkeyfy::showGUI()
@@ -215,16 +253,7 @@ void Hotkeyfy::showGUI()
         //}
     }
     
-    DWORD size = MAX_PATH;
-    std::wstring path;
-    path.resize(MAX_PATH);
-    if (!QueryFullProcessImageNameW(GetCurrentProcess(), 0, path.data(), &size))
-    {
-        return;
-    }
-    path.resize(size);
-
-    std::wstring GUIPath = std::filesystem::path(path).parent_path().wstring() + L"/Hotkeyfy.exe";
+    std::wstring GUIPath = getBinaryPath() + L"/Hotkeyfy.exe";
 
     SHELLEXECUTEINFOW executeInfo;
     memset(&executeInfo, 0, sizeof(executeInfo));
@@ -233,7 +262,8 @@ void Hotkeyfy::showGUI()
     executeInfo.nShow = SW_SHOWNORMAL;
     executeInfo.fMask = SEE_MASK_FLAG_NO_UI | SEE_MASK_NOCLOSEPROCESS;
     executeInfo.hwnd = hwnd;
-    executeInfo.lpParameters = config::launchedFromService.c_str();
+    std::wstring wLaunch(config::launchedFromService.begin(), config::launchedFromService.begin());
+    executeInfo.lpParameters = wLaunch.c_str();
 
     if (!ShellExecuteExW(&executeInfo)) {
         return;
@@ -250,5 +280,62 @@ void Hotkeyfy::waitForGUI()
     WaitForSingleObject(guiProcess, INFINITE);
     CloseHandle(guiProcess);
     guiProcess = NULL;
+}
+
+void Hotkeyfy::sendLaunchGUI()
+{
+    bool found = false;
+    EnumWindows([](HWND hwnd, LPARAM lParam) -> BOOL {
+        DWORD pid;
+        GetWindowThreadProcessId(hwnd, &pid);
+        if (!pid)
+        {
+            return true;
+        }
+        HANDLE process = OpenProcess(PROCESS_QUERY_LIMITED_INFORMATION | PROCESS_TERMINATE, false, pid);
+        if (!process)
+        {
+            return true;
+        }
+
+        DWORD size = MAX_PATH;
+        std::wstring path;
+        path.resize(MAX_PATH);
+        if (!QueryFullProcessImageNameW(process, 0, path.data(), &size))
+        {
+            CloseHandle(process);
+            return true;
+        }
+        CloseHandle(process);
+        path.resize(size);
+
+        std::wstring exeFile = std::filesystem::path(path).filename();
+        if (exeFile != L"Hotkeyfy-service.exe")
+        {
+            return true;
+        }
+        *(bool*)(lParam) = true;
+
+        //SendMessageA(hwnd, );
+
+        return false;
+        }, (LPARAM)&found);
+
+    std::wstring ServicePath = getBinaryPath() + L"/Hotkeyfy-service.exe";
+
+    SHELLEXECUTEINFOW executeInfo;
+    memset(&executeInfo, 0, sizeof(executeInfo));
+    executeInfo.cbSize = sizeof(executeInfo);
+    executeInfo.lpFile = ServicePath.c_str();
+    executeInfo.nShow = SW_HIDE;
+    executeInfo.fMask = SEE_MASK_FLAG_NO_UI | SEE_MASK_NOCLOSEPROCESS;
+    executeInfo.hwnd = hwnd;
+
+    std::wstring wLaunch(config::launchedFromService.begin(), config::launchedFromService.begin());
+    executeInfo.lpParameters = wLaunch.c_str();
+
+    if (!ShellExecuteExW(&executeInfo)) {
+        return;
+    }
 }
 

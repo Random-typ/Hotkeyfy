@@ -1,6 +1,4 @@
-#include "../Hotkeyfy-api/Hotkeyfy.h"
-
-#pragma comment(lib, "../x64/Debug/Hotkeyfy-api.lib")
+#include "HotkeyfyService.h"
 
 #ifdef _DEBUG
 int main()
@@ -13,8 +11,5 @@ int WinMain(
 )
 #endif // !_DEBUG
 {
-	Hotkeyfy::createWindows();
-	Sleep(100);
-	Hotkeyfy::addToSystemTray();
-
+	HotkeyfyService::run();
 }

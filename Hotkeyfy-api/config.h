@@ -8,14 +8,10 @@
 #include <fstream>
 #include <filesystem>
 #include <Windows.h>
+#include "HotkeyfyExport.h"
 
 #pragma comment(lib, "Advapi32.lib")
 
-#ifdef HOTKEYFYAPI_EXPORTS
-#define HOTKEYFYAPI_DECLSPEC    __declspec(dllexport)
-#else
-#define HOTKEYFYAPI_DECLSPEC    __declspec(dllimport)
-#endif
 
 class HOTKEYFYAPI_DECLSPEC config
 {
@@ -42,7 +38,8 @@ public:
 	static void setProcess(const std::string& _process);
 	static std::string getProcess();
 
-	static const std::wstring launchedFromService;
+	static const std::string launchedFromService;
+
 private:
 	static double volumeIncrement;
 	static double volumeDecrement;

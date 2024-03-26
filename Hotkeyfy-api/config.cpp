@@ -3,7 +3,7 @@
 
 using json = nlohmann::json;
 
-const std::wstring config::launchedFromService = L"LaunchedFromService";
+const std::string config::launchedFromService = "LaunchedFromService";
 
 double config::volumeIncrement = 1.0;
 double config::volumeDecrement = 1.0;

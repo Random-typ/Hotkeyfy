@@ -5,10 +5,11 @@
 #include <mutex>
 #include <algorithm>
 #include <Windows.h>
+#include "HotkeyfyExport.h"
 
 #pragma comment(lib, "User32.lib")
 
-class KeyListener
+class HOTKEYFYAPI_DECLSPEC KeyListener
 {
 public:
 	static void init();

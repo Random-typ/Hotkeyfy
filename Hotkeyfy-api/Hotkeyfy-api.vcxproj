@@ -113,6 +113,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -141,25 +142,26 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="config.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="Hotkeyfy.h" />
+    <ClInclude Include="HotkeyfyExport.h" />
     <ClInclude Include="KeyListener.h" />
     <ClInclude Include="nlohmann_json.hpp" />
     <ClInclude Include="ProcessAudioControl.h" />
     <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="config.cpp" />
-    <ClCompile Include="config.h" />
-    <ClCompile Include="Hotkeyfy.cpp" />
-    <ClCompile Include="KeyListener.cpp" />
-    <ClCompile Include="ProcessAudioControl.cpp" />
-  </ItemGroup>
-  <ItemGroup>
     <Image Include="hotkeyfy.ico" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Hotkeyfy-service.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="config.cpp" />
+    <ClCompile Include="Hotkeyfy.cpp" />
+    <ClCompile Include="KeyListener.cpp" />
+    <ClCompile Include="ProcessAudioControl.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

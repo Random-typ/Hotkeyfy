@@ -9,12 +9,13 @@
 #include <audiopolicy.h>
 #include <tlhelp32.h>
 #include <Mmdeviceapi.h>
+#include "HotkeyfyExport.h"
 
 #pragma comment(lib, "Kernel32.lib")
 #pragma comment(lib, "Ole32.lib")
 #pragma comment(lib, "User32.lib")
 
-class ProcessAudioControl {
+class HOTKEYFYAPI_DECLSPEC ProcessAudioControl {
 public:
     ProcessAudioControl() : channel(nullptr), hwnd(NULL), pid(NULL), needsCleanup(false), autoReconnect(true) {};
     // Calls cleanup()
