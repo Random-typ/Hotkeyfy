@@ -15,7 +15,6 @@
 #include "Rounded.hpp"
 
 #include "toggle.h"
-//#include "CComboBox.h"
 #include "CButton.h"
 #include "CNumericUpDown.h"
 #include "CTextBox.h"
@@ -25,7 +24,12 @@
 #pragma comment(lib, "Dwmapi.lib")
 #pragma comment(lib, "Gdi32.lib")
 
+#ifdef _DEBUG
 #pragma comment(lib, "../x64/Debug/Hotkeyfy-api.lib")
+#else
+#pragma comment(lib, "../x64/Release/Hotkeyfy-api.lib")
+#endif // _DEBUG
+
 
 namespace Hotkeyfy {
 
@@ -291,9 +295,9 @@ namespace Hotkeyfy {
 		}
 #pragma endregion
 	private: 
-		Hotkeyfy::CTextBox^ processTextBox;
-		Hotkeyfy::Toggle^ consumeToggle;
-		Hotkeyfy::CNumericUpDown^ volumeUpDown;
+		CTextBox^ processTextBox;
+		Toggle^ consumeToggle;
+		CNumericUpDown^ volumeUpDown;
 
 		void setAction(System::String^ _name) {
 			// no action selected label
@@ -301,8 +305,17 @@ namespace Hotkeyfy {
 			panel1->Visible = true;
 
 			label2->Text = _name;
-			std::wstring keys;
+
 			std::pair<std::vector<DWORD>, bool/*consume*/> hotkey = config::getHotkeys(msclr::interop::marshal_as<std::string>(_name));
+			if (hotkey.first.empty())
+			{// default = consume
+				consumeToggle->setCheck(true);
+			}
+			else {
+				consumeToggle->setCheck(hotkey.second);
+			}
+
+			std::wstring keys;
 			for (auto& key : hotkey.first)
 			{
 				if (!keys.empty())
@@ -318,15 +331,6 @@ namespace Hotkeyfy {
 			else {
 				label4->Text = gcnew System::String(keys.c_str());
 			}
-
-			if (hotkey.first.empty())
-			{// default = consume
-				consumeToggle->setCheck(true);
-			}
-			else {
-				consumeToggle->setCheck(hotkey.second);
-			}
-
 
 			if (_name == "Volume Up")
 			{
@@ -349,7 +353,7 @@ namespace Hotkeyfy {
 		}
 		void initCustomControls() {
 			// autoStart toggle
-			Hotkeyfy::Toggle^ autoStartToggle = gcnew Hotkeyfy::Toggle();
+			Toggle^ autoStartToggle = gcnew Toggle();
 			autoStartToggle->Location = System::Drawing::Point(70, 5);
 			autoStartToggle->ToggleChange += gcnew System::EventHandler(this, &Form1::checkBox2_CheckedChanged);
 			autoStartToggle->setCheck(config::getAutoStart());
@@ -358,7 +362,7 @@ namespace Hotkeyfy {
 			
 			
 			// process text box
-			processTextBox = gcnew Hotkeyfy::CTextBox();
+			processTextBox = gcnew CTextBox();
 			processTextBox->Location = System::Drawing::Point(180, 3);
 			processTextBox->setText(msclr::interop::marshal_as<String^>(config::getProcess()));
 			processTextBox->TextChanged += gcnew System::EventHandler(this, &Form1::processTextBox_TextChanged);
@@ -366,7 +370,7 @@ namespace Hotkeyfy {
 
 
 			// chooseProcessButton
-			Hotkeyfy::CButton^ chooseProcessButton = gcnew Hotkeyfy::CButton();
+			CButton^ chooseProcessButton = gcnew CButton();
 			chooseProcessButton->Location = System::Drawing::Point(550, 3);
 			chooseProcessButton->Height = 36;
 			chooseProcessButton->Click += gcnew System::EventHandler(this, &Form1::processChoose_Click);
@@ -382,7 +386,7 @@ namespace Hotkeyfy {
 				control->Refresh();
 			}
 
-			consumeToggle = gcnew Hotkeyfy::Toggle();
+			consumeToggle = gcnew Toggle();
 			consumeToggle->Location = System::Drawing::Point(20, 131);
 			consumeToggle->ToggleChange = gcnew System::EventHandler(this, &Form1::consumeInputToggle_CheckedChanged);
 
@@ -394,7 +398,7 @@ namespace Hotkeyfy {
 
 
 			// key selector button
-			Hotkeyfy::CButton^ keySelectorButton = gcnew Hotkeyfy::CButton();
+			CButton^ keySelectorButton = gcnew CButton();
 			keySelectorButton->Location = System::Drawing::Point(20, 50);
 			keySelectorButton->Width = 150;
 			keySelectorButton->setText("Edit Hotkey");
@@ -404,7 +408,7 @@ namespace Hotkeyfy {
 
 
 			// volume UpDown
-			volumeUpDown = gcnew Hotkeyfy::CNumericUpDown();
+			volumeUpDown = gcnew CNumericUpDown();
 			volumeUpDown->Location = System::Drawing::Point(20, 90);
 			volumeUpDown->ValueChanged += gcnew System::EventHandler(this, &Form1::volumeUpDown_ValueChanged);
 			actionPanel->Controls->Add(volumeUpDown);
@@ -414,14 +418,6 @@ namespace Hotkeyfy {
 		void loadIcon() {
 			HICON hIcon = LoadIconA(GetModuleHandle(NULL), MAKEINTRESOURCEA(1));
 			this->Icon = System::Drawing::Icon::FromHandle(System::IntPtr(hIcon));
-		}
-		void loadConfig() {
-			std::wstring path;
-			path.resize(MAX_PATH);
-			SHGetSpecialFolderPathW(NULL, path.data(), CSIDL_APPDATA, true);
-			path.resize(wcslen(path.c_str()));
-
-			config::load(path + L"/Hotkeyfy/config.json");
 		}
 		void ChangeTitleBarColor() {
 			// Get the handle of the window
@@ -436,6 +432,15 @@ namespace Hotkeyfy {
 				hWnd, DWMWINDOWATTRIBUTE::DWMWA_USE_IMMERSIVE_DARK_MODE,
 				&USE_DARK_MODE, sizeof(USE_DARK_MODE));
 		}
+		void loadConfig()
+		{
+			std::wstring path;
+			path.resize(MAX_PATH);
+			SHGetSpecialFolderPathW(NULL, path.data(), CSIDL_APPDATA, true);
+			path.resize(wcslen(path.c_str()));
+
+			config::load(path + L"/Hotkeyfy/config.json");
+		}
 	private: System::Void Form1_Load(System::Object^ sender, System::EventArgs^ e) {
 		enableDarkTitleBar();
 
@@ -446,6 +451,7 @@ namespace Hotkeyfy {
 		initCustomControls();
 
 		KeyListener::init();
+		KeyListener::enableHotkeys();
 
 		setAction(listView1->Items[0]->Text);
 	}
@@ -464,6 +470,7 @@ namespace Hotkeyfy {
 	}
 	private: System::Void hotkeyChoose_Click(System::Object^ sender, System::EventArgs^ e) {
 		KeyListener::listen();
+		KeyListener::disableHotkeys();
 		timer1->Start();
 	}
 	private: System::Void timer1_Tick(System::Object^ sender, System::EventArgs^ e) {
@@ -482,16 +489,18 @@ namespace Hotkeyfy {
 		if (!KeyListener::isListening())
 		{
 			timer1->Stop();
+			KeyListener::enableHotkeys();
 		}
 	}
 	private: System::Void Form1_FormClosing(System::Object^ sender, System::Windows::Forms::FormClosingEventArgs^ e) {
 		config::save();
 	}
 	private: System::Void checkBox2_CheckedChanged(System::Object^ sender, System::EventArgs^ e) {
-		config::setAutoStart(((Hotkeyfy::Toggle^)sender)->isChecked());
+		config::setAutoStart(((Toggle^)sender)->isChecked());
 	}
 	private: System::Void processTextBox_TextChanged(System::Object^ sender, System::EventArgs^ e) {
 		config::setProcess(msclr::interop::marshal_as<std::string>(processTextBox->Text));
+		KeyListener::reloadConfig();
 	}
 	private: System::Void label4_TextChanged(System::Object^ sender, System::EventArgs^ e) {
 		config::setHotkeys(msclr::interop::marshal_as<std::string>(label2->Text), KeyListener::getKeys(), consumeToggle->isChecked());

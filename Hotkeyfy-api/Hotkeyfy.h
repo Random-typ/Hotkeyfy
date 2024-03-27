@@ -1,20 +1,17 @@
 #pragma once
 
 #include <Windows.h>
-#include <tlhelp32.h>
 #include <filesystem>
-#include <iostream>
 #include "HotkeyfyExport.h"
 
-
+namespace Hotkeyfy {
 class HOTKEYFYAPI_DECLSPEC Hotkeyfy
 {
 public:
 	static void RegisterWindowClass(PCWSTR pszClassName, PCWSTR pszMenuName, WNDPROC lpfnWndProc);
 
 	static LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
-	static LRESULT CALLBACK FlyoutWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
-
+	
 	static bool createWindows();
 
 	static bool addToSystemTray();
@@ -26,17 +23,28 @@ public:
 
 	static void showMenu();
 
-	static void showGUI();
+	static void showGUI(bool _wait);
 
 	// blocks until GUI is closed if it is running
 	static void waitForGUI();
 
 	// sends a message to the service who then calls showGUI()
-	// if the service is not running it willbe started
+	// if the service is not running it is started
 	static void sendLaunchGUI();
+
+	static void loadConfig();
+
+	static void terminate();
+
+	static constexpr const UINT showGUIMSG = WM_USER + 10;
 
 	static HWND hwnd;
 
 	static HANDLE guiProcess;
-};
 
+	static std::thread waitForGUIth;
+
+	static constexpr const int IDM_EXIT = 100;
+	static constexpr const int IDM_SHOW = 101;
+};
+}

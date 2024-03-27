@@ -135,11 +135,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="HotkeyfyService.h" />
-    <ClInclude Include="resource.h" />
-    <ClInclude Include="resource1.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="Hotkeyfy-service1.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

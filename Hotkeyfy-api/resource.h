@@ -3,7 +3,6 @@
 // Used by Hotkeyfy-service.rc
 //
 #define IDI_ICON1                       101
-#define IDR_MENU1                       102
 #define ID_QUITQ                        40001
 #define ID_QUIT_TEST                    40002
 

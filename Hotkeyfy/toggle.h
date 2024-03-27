@@ -74,9 +74,9 @@ namespace Hotkeyfy {
 		}
 #pragma endregion
 	private:
-		
 		bool hovering = false;
 		bool checked = false;
+	
 	public:
 		bool isChecked() {
 			return checked;

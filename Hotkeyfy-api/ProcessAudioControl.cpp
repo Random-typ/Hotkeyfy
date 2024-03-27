@@ -177,10 +177,6 @@ void ProcessAudioControl::findChannel()
     {
         hr = CoInitialize(NULL);
     }
-    if (hr != S_OK)
-    {
-        return;
-    }
 
     needsCleanup = true;
 

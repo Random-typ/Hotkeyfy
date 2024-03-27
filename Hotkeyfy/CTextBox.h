@@ -139,7 +139,6 @@ private: System::Void textBox1_KeyPress(System::Object^ sender, System::Windows:
 	{
 		invisibleLabel->Focus();
 	}
-
 }
 	   
 private: System::Void textBox1_TextChanged(System::Object^ sender, System::EventArgs^ e) {

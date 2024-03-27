@@ -10,12 +10,15 @@ HHOOK KeyListener::keyboardHook = NULL;
 bool KeyListener::doListen = false;
 
 std::atomic_bool KeyListener::hotkeysEnabled = false;
+ProcessAudioControl KeyListener::audioControl;
 
 
 void KeyListener::init()
 {
 	keyboardHook = SetWindowsHookEx(WH_KEYBOARD_LL, KeyboardProc, GetModuleHandle(NULL), 0);
 	loopTh = std::jthread(loop);
+
+	reloadConfig();
 }
 
 void KeyListener::cleanup()
@@ -58,12 +61,13 @@ void KeyListener::disableHotkeys()
 	hotkeysEnabled = false;
 }
 
-std::wstring KeyListener::getKeyName(DWORD _scanCode)
+std::wstring KeyListener::getKeyName(DWORD _extendedKeyCode)
 {
 	std::wstring key;
 	key.resize(64);
 	int len;
-	if (len = GetKeyNameTextW(_scanCode << 16, key.data(), key.size()); !len)
+	DWORD code = ExtendedKeyCodeToExtendedKeyNameCode(_extendedKeyCode);
+	if (len = GetKeyNameTextW(code, key.data(), key.size()); !len)
 	{
 		return std::wstring();
 	}
@@ -71,11 +75,53 @@ std::wstring KeyListener::getKeyName(DWORD _scanCode)
 	return key;
 }
 
+void KeyListener::doAction(std::string_view _action)
+{
+	if (_action == "Play Pause")
+	{
+		audioControl.playPause();
+		return;
+	}
+	if (_action == "Previous Track")
+	{
+		audioControl.prevTrack();
+		return;
+	}
+	if (_action == "Next Track")
+	{
+		audioControl.nextTrack();
+		return;
+	}
+	if (_action == "Volume Up")
+	{
+		audioControl.volumeUp(config::getVolumeIncrement() / 100);
+		return;
+	}
+	if (_action == "Volume Down")
+	{
+		audioControl.volumeDown(config::getVolumeDecrement() / 100);
+		return;
+	}
+}
+
+void KeyListener::reloadConfig() 
+{
+	std::string exe = config::getProcess();
+	audioControl.selectExecutableName(std::wstring(exe.begin(), exe.end()));
+}
+
+
 LRESULT KeyListener::KeyboardProc(int nCode, WPARAM wParam, LPARAM lParam)
 {
+	if (nCode < 0)
+	{
+		return CallNextHookEx(keyboardHook, nCode, wParam, lParam);
+	}
 	KBDLLHOOKSTRUCT* kbStruct = reinterpret_cast<KBDLLHOOKSTRUCT*>(lParam);
+	// extended scan code
+	DWORD scanCode = ScanCodeToExtendedKeyCode(kbStruct->scanCode, kbStruct->flags);
 
-	if (doListen)
+ 	if (doListen)
 	{
 		if (wParam == WM_KEYUP || wParam == WM_SYSKEYUP)
 		{
@@ -83,7 +129,7 @@ LRESULT KeyListener::KeyboardProc(int nCode, WPARAM wParam, LPARAM lParam)
 			return CallNextHookEx(keyboardHook, nCode, wParam, lParam);
 		}
 
-		std::wstring key = getKeyName(kbStruct->scanCode);
+		std::wstring key = getKeyName(scanCode);
 		if (key.empty())
 		{
 			return CallNextHookEx(keyboardHook, nCode, wParam, lParam);
@@ -93,19 +139,39 @@ LRESULT KeyListener::KeyboardProc(int nCode, WPARAM wParam, LPARAM lParam)
 			return kbStruct->scanCode == key;
 			}))
 		{
-			keyList.emplace_back(kbStruct->scanCode);
+			keyList.emplace_back(scanCode);
 		}
 		keyList_mutex.unlock();
 	}
 	if (!hotkeysEnabled)
 	{
-		return CallNextHookEx(keyboardHook, nCode, wParam, lParam);
+ 		return CallNextHookEx(keyboardHook, nCode, wParam, lParam);
 	}
 
-	
+  	if (wParam != WM_KEYDOWN && wParam != WM_SYSKEYDOWN)
+	{
+		return CallNextHookEx(keyboardHook, nCode, wParam, lParam);
+	}
+	auto& hotkeys = config::getHotkeys();
 
+	// hotkey checking
+	for (auto& i : hotkeys)
+	{
+		if (std::all_of(i.second.first.begin(), i.second.first.end(), [scanCode](DWORD key) {
+			return scanCode == key || GetAsyncKeyState(ExtendedKeyCodeToVirtualKey(key)) & 0x8000;
+			}))
+		{
+			doAction(i.first);
 
-	return LRESULT();
+			if (i.second.second/*consume*/)
+			{
+				return 1;
+			}
+			break;
+		}
+	}
+
+	return CallNextHookEx(keyboardHook, nCode, wParam, lParam);
 }
 
 void KeyListener::loop(std::stop_token _stoken)

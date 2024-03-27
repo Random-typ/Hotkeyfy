@@ -7,7 +7,7 @@ const std::string config::launchedFromService = "LaunchedFromService";
 
 double config::volumeIncrement = 1.0;
 double config::volumeDecrement = 1.0;
-std::string config::process = "spotify.exe";
+std::string config::process = "Spotify.exe";
 
 std::map<std::string/*action*/, std::pair<std::vector<DWORD>/*keys*/, bool/*consume*/>> config::hotkeys;
 std::wstring config::path;
@@ -187,4 +187,9 @@ void config::setProcess(const std::string& _process)
 std::string config::getProcess()
 {
     return process;
+}
+
+std::map<std::string, std::pair<std::vector<DWORD>, bool>>& config::getHotkeys()
+{
+    return hotkeys;
 }

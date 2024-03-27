@@ -142,9 +142,6 @@
     <ClInclude Include="CButton.h">
       <FileType>CppControl</FileType>
     </ClInclude>
-    <ClInclude Include="CComboBox.h">
-      <FileType>CppControl</FileType>
-    </ClInclude>
     <ClInclude Include="CNumericUpDown.h">
       <FileType>CppControl</FileType>
     </ClInclude>
@@ -165,7 +162,6 @@
   <ItemGroup>
     <ClCompile Include="AssemblyInfo.cpp" />
     <ClCompile Include="CButton.cpp" />
-    <ClCompile Include="CComboBox.cpp" />
     <ClCompile Include="CNumericUpDown.cpp" />
     <ClCompile Include="CppCLR_WinFormsProject.cpp" />
     <ClCompile Include="CTextBox.cpp" />
@@ -188,9 +184,6 @@
   <ItemGroup>
     <EmbeddedResource Include="CButton.resx">
       <DependentUpon>CButton.h</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="CComboBox.resx">
-      <DependentUpon>CComboBox.h</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="CNumericUpDown.resx">
       <DependentUpon>CNumericUpDown.h</DependentUpon>

@@ -6,11 +6,8 @@
 #include <string>
 #include <vector>
 #include <fstream>
-#include <filesystem>
 #include <Windows.h>
 #include "HotkeyfyExport.h"
-
-#pragma comment(lib, "Advapi32.lib")
 
 
 class HOTKEYFYAPI_DECLSPEC config
@@ -40,6 +37,7 @@ public:
 
 	static const std::string launchedFromService;
 
+	static std::map<std::string/*action*/, std::pair<std::vector<DWORD>/*keys*/, bool/*consume*/>>& getHotkeys();
 private:
 	static double volumeIncrement;
 	static double volumeDecrement;

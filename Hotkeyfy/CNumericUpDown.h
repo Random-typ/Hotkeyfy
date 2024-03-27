@@ -272,7 +272,6 @@ private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e
 private: System::Void button1_MouseEnter(System::Object^ sender, System::EventArgs^ e) {
 	button1->FlatAppearance->MouseOverBackColor = this->BackColor;
 	button1->FlatAppearance->MouseDownBackColor = this->BackColor;
-	//button1->FlatAppearance->BorderColor = this->BackColor;
 }
 };
 }

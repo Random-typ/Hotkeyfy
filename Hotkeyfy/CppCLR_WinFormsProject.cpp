@@ -1,20 +1,17 @@
 #include "pch.h"
 
-// int main(array<System::String ^> ^args)
-// {
-//    return 0;
-// }
-
 #include "Form1.h"
+#include "../Hotkeyfy-api/Hotkeyfy.h"
 
 using namespace System::Windows::Forms;
 
 [System::STAThread]
 int main(array<System::String^>^ args)
 {
-	if (args->Length < 2 || args[1] != msclr::interop::marshal_as<String^>(config::launchedFromService))
+	// The GUI is only ment to be started from the service
+	if (args->Length < 1 || args[0] != msclr::interop::marshal_as<String^>(config::launchedFromService))
 	{
-
+		Hotkeyfy::Hotkeyfy::sendLaunchGUI();
 		return 0;
 	}
 
