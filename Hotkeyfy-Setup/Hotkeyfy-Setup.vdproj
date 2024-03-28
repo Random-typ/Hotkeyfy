@@ -15,38 +15,26 @@
     {
         "Entry"
         {
-        "MsmKey" = "8:_04D5CD62008E47ABAEC703779A03FE44"
+        "MsmKey" = "8:_1DBB4AFCF70C4F1AA11859285CEA47F7"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_3F3CF9F48C15441346B5A04C8119A69F"
-        "OwnerKey" = "8:_04D5CD62008E47ABAEC703779A03FE44"
+        "MsmKey" = "8:_606ACF7F83624E879D2E89A382679F92"
+        "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_7CEE7562F134EBDADD68D52372703C05"
-        "OwnerKey" = "8:_04D5CD62008E47ABAEC703779A03FE44"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_84629ECA1DB200E1A0EE781D0F118F09"
-        "OwnerKey" = "8:_04D5CD62008E47ABAEC703779A03FE44"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_FC38328E01691AE88704B0DCC1935C91"
-        "OwnerKey" = "8:_04D5CD62008E47ABAEC703779A03FE44"
+        "MsmKey" = "8:_75A9C51B931B4FB0979770271648D9CB"
+        "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_04D5CD62008E47ABAEC703779A03FE44"
+        "OwnerKey" = "8:_1DBB4AFCF70C4F1AA11859285CEA47F7"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -74,6 +62,14 @@
             "PrerequisitesLocation" = "2:1"
             "Url" = "8:"
             "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.7.2"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4.7.2 (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.7.2"
+                    }
+                }
             }
         }
         "Release"
@@ -98,6 +94,14 @@
             "PrerequisitesLocation" = "2:1"
             "Url" = "8:"
             "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.7.2"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4.7.2 (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.7.2"
+                    }
+                }
             }
         }
     }
@@ -128,10 +132,21 @@
         }
         "File"
         {
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_3F3CF9F48C15441346B5A04C8119A69F"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_1DBB4AFCF70C4F1AA11859285CEA47F7"
             {
-            "SourcePath" = "8:MSVCP140D_ATOMIC_WAIT.dll"
-            "TargetName" = "8:MSVCP140D_ATOMIC_WAIT.dll"
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:Hotkeyfy, Version=1.0.8853.20316, Culture=neutral, processorArchitecture=AMD64"
+                "ScatterAssemblies"
+                {
+                    "_1DBB4AFCF70C4F1AA11859285CEA47F7"
+                    {
+                    "Name" = "8:Hotkeyfy.exe"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:..\\x64\\Release\\Hotkeyfy.exe"
+            "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_FB277457611B40D1BCF77E266A2C25C5"
             "Condition" = "8:"
@@ -145,13 +160,13 @@
             "PackageAs" = "3:1"
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
+            "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_7CEE7562F134EBDADD68D52372703C05"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_606ACF7F83624E879D2E89A382679F92"
             {
-            "SourcePath" = "8:ucrtbased.dll"
-            "TargetName" = "8:ucrtbased.dll"
+            "SourcePath" = "8:..\\x64\\Release\\Hotkeyfy-api.dll"
+            "TargetName" = "8:Hotkeyfy-api.dll"
             "Tag" = "8:"
             "Folder" = "8:_FB277457611B40D1BCF77E266A2C25C5"
             "Condition" = "8:"
@@ -165,13 +180,13 @@
             "PackageAs" = "3:1"
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
+            "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_84629ECA1DB200E1A0EE781D0F118F09"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_75A9C51B931B4FB0979770271648D9CB"
             {
-            "SourcePath" = "8:MSVCP140D.dll"
-            "TargetName" = "8:MSVCP140D.dll"
+            "SourcePath" = "8:..\\x64\\Release\\Hotkeyfy-service.exe"
+            "TargetName" = "8:Hotkeyfy-service.exe"
             "Tag" = "8:"
             "Folder" = "8:_FB277457611B40D1BCF77E266A2C25C5"
             "Condition" = "8:"
@@ -185,27 +200,7 @@
             "PackageAs" = "3:1"
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_FC38328E01691AE88704B0DCC1935C91"
-            {
-            "SourcePath" = "8:VCRUNTIME140D.dll"
-            "TargetName" = "8:VCRUNTIME140D.dll"
-            "Tag" = "8:"
-            "Folder" = "8:_FB277457611B40D1BCF77E266A2C25C5"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
+            "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
         }
@@ -234,17 +229,6 @@
             "Property" = "8:AppDataFolder"
                 "Folders"
                 {
-                    "{9EF0B969-E518-4E46-987F-47570745A589}:_60B5B3E7455E442599B7821EFEB3B10B"
-                    {
-                    "Name" = "8:[ProductName]"
-                    "AlwaysCreate" = "11:TRUE"
-                    "Condition" = "8:"
-                    "Transitive" = "11:FALSE"
-                    "Property" = "8:_998C49BC8BD547BAB4E8BD465E0AEBC2"
-                        "Folders"
-                        {
-                        }
-                    }
                 }
             }
             "{1525181F-901A-416C-8A58-119130FE478E}:_E2DFB01F9C604BC6AA63B6862E99952F"
@@ -287,22 +271,22 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Hotkeyfy-Setup"
         "ProductCode" = "8:{751A5C7C-57AF-4CE0-8D7A-043537F48923}"
-        "PackageCode" = "8:{3960153F-E5BA-4BCB-9BF4-F4B361C7B8A9}"
+        "PackageCode" = "8:{5400FB70-7993-4DC0-B79B-D175EB52CB68}"
         "UpgradeCode" = "8:{664FCCD2-D087-45DF-A795-7ABAC4EF8818}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
-        "RemovePreviousVersions" = "11:FALSE"
+        "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
         "ProductVersion" = "8:1.0.0"
-        "Manufacturer" = "8:Default Company Name"
+        "Manufacturer" = "8:Hotkeyfy"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
         "Title" = "8:Hotkeyfy-Setup"
         "Subject" = "8:"
-        "ARPCONTACT" = "8:Default Company Name"
+        "ARPCONTACT" = "8:Luca Trefz"
         "Keywords" = "8:"
-        "ARPCOMMENTS" = "8:"
+        "ARPCOMMENTS" = "8:Hotkeyfy makes it possible to add sound control hotkeys to any process."
         "ARPURLINFOABOUT" = "8:"
         "ARPPRODUCTICON" = "8:"
         "ARPIconIndex" = "3:0"
@@ -364,13 +348,63 @@
                         {
                             "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_B917B98444D145C19A6A13637F58869F"
                             {
-                            "Name" = "8:[Manufacturer]"
+                            "Name" = "8:Microsoft"
                             "Condition" = "8:"
                             "AlwaysCreate" = "11:FALSE"
                             "DeleteAtUninstall" = "11:FALSE"
                             "Transitive" = "11:FALSE"
                                 "Keys"
                                 {
+                                    "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_461A2940BB0442B293C225ACC0C0EA35"
+                                    {
+                                    "Name" = "8:Windows"
+                                    "Condition" = "8:"
+                                    "AlwaysCreate" = "11:FALSE"
+                                    "DeleteAtUninstall" = "11:FALSE"
+                                    "Transitive" = "11:FALSE"
+                                        "Keys"
+                                        {
+                                            "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_0DFC216B2F274D658045ED64E31D0EC8"
+                                            {
+                                            "Name" = "8:CurrentVersion"
+                                            "Condition" = "8:"
+                                            "AlwaysCreate" = "11:FALSE"
+                                            "DeleteAtUninstall" = "11:FALSE"
+                                            "Transitive" = "11:FALSE"
+                                                "Keys"
+                                                {
+                                                    "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_680A6C87395B4F5EBA8EBEB3B2066F9A"
+                                                    {
+                                                    "Name" = "8:Run"
+                                                    "Condition" = "8:"
+                                                    "AlwaysCreate" = "11:FALSE"
+                                                    "DeleteAtUninstall" = "11:FALSE"
+                                                    "Transitive" = "11:FALSE"
+                                                        "Keys"
+                                                        {
+                                                        }
+                                                        "Values"
+                                                        {
+                                                            "{ADCFDA98-8FDD-45E4-90BC-E3D20B029870}:_B295168EACC34B1096E4D332A69EA482"
+                                                            {
+                                                            "Name" = "8:Hotkeyfy"
+                                                            "Condition" = "8:"
+                                                            "Transitive" = "11:FALSE"
+                                                            "ValueTypes" = "3:1"
+                                                            "Value" = "8:C:\\Program Files\\Hotkeyfy"
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                                "Values"
+                                                {
+                                                }
+                                            }
+                                        }
+                                        "Values"
+                                        {
+                                        }
+                                    }
                                 }
                                 "Values"
                                 {
@@ -407,6 +441,20 @@
         }
         "Shortcut"
         {
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_917CE9086D044C16B95C6AFB21D4AA5E"
+            {
+            "Name" = "8:Hotkeyfy"
+            "Arguments" = "8:"
+            "Description" = "8:"
+            "ShowCmd" = "3:1"
+            "IconIndex" = "3:0"
+            "Transitive" = "11:FALSE"
+            "Target" = "8:_1DBB4AFCF70C4F1AA11859285CEA47F7"
+            "Folder" = "8:_2C54CC52A3644FE98D4EE085CF0B302B"
+            "WorkingFolder" = "8:_FB277457611B40D1BCF77E266A2C25C5"
+            "Icon" = "8:"
+            "Feature" = "8:"
+            }
         }
         "UserInterface"
         {
@@ -502,8 +550,8 @@
                             "Type" = "3:3"
                             "ContextData" = "8:"
                             "Attributes" = "3:0"
-                            "Setting" = "3:1"
-                            "Value" = "8:#1202"
+                            "Setting" = "3:2"
+                            "Value" = "8:HIER: [DATE]"
                             "DefaultValue" = "8:#1202"
                             "UsePlugInResources" = "11:TRUE"
                             }
@@ -669,8 +717,8 @@
                             "Type" = "3:3"
                             "ContextData" = "8:"
                             "Attributes" = "3:0"
-                            "Setting" = "3:1"
-                            "Value" = "8:#1202"
+                            "Setting" = "3:2"
+                            "Value" = "8:"
                             "DefaultValue" = "8:#1202"
                             "UsePlugInResources" = "11:TRUE"
                             }
@@ -806,34 +854,6 @@
         }
         "ProjectOutput"
         {
-            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_04D5CD62008E47ABAEC703779A03FE44"
-            {
-            "SourcePath" = "8:..\\x64\\Debug\\Hotkeyfy.exe"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_FB277457611B40D1BCF77E266A2C25C5"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            "ProjectOutputGroupRegister" = "3:1"
-            "OutputConfiguration" = "8:"
-            "OutputGroupCanonicalName" = "8:Built"
-            "OutputProjectGuid" = "8:{4386D317-BE0D-4C07-A9B0-955DFC1D64AA}"
-            "ShowKeyOutput" = "11:TRUE"
-                "ExcludeFilters"
-                {
-                }
-            }
         }
     }
 }

@@ -2,9 +2,10 @@
 #ifndef __HotkeyfyConfig_H__
 #define __HotkeyfyConfig_H__
 
-#include <map>
-#include <string>
 #include <vector>
+#include <filesystem>
+#include <string>
+#include <map>
 #include <fstream>
 #include <Windows.h>
 #include "HotkeyfyExport.h"
@@ -25,6 +26,7 @@ public:
 
 	// @returns true if successful, false otherwise
 	static void load(const std::wstring& _path);
+	static void reload();
 
 	// @returns true if successful, false otherwise
 	static void save();

@@ -23,6 +23,10 @@ void HotkeyfyService::parseCommandLine()
 	{
 		Hotkeyfy::Hotkeyfy::showGUI(true);
 	}
+	else if (FindWindow(NULL, L"Hotkeyfy"))
+	{
+		Hotkeyfy::Hotkeyfy::showGUI(true);
+	}
 }
 
 void HotkeyfyService::run()

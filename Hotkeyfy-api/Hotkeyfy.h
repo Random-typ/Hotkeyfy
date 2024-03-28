@@ -1,7 +1,10 @@
 #pragma once
 
-#include <Windows.h>
-#include <filesystem>
+#include <Shlobj.h>
+
+#include "config.h"
+#include "resource.h"
+#include "KeyListener.h"
 #include "HotkeyfyExport.h"
 
 namespace Hotkeyfy {
@@ -34,7 +37,7 @@ public:
 
 	static void loadConfig();
 
-	static void terminate();
+	static void terminateHotkeyfy();
 
 	static constexpr const UINT showGUIMSG = WM_USER + 10;
 

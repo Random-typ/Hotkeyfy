@@ -1,17 +1,4 @@
-#include <thread>
 #include "Hotkeyfy.h"
-#include "config.h"
-#include "resource.h"
-#include "KeyListener.h"
-#include <libloaderapi.h>
-#include <Shlobj.h>
-#include <windowsx.h>
-#include <iostream>
-#include <memory.h>
-#include <string>
-
-
-#pragma comment(lib, "Shell32.lib")
 
 namespace Hotkeyfy {
 
@@ -19,18 +6,16 @@ namespace Hotkeyfy {
     HANDLE Hotkeyfy::guiProcess = NULL;
     std::thread Hotkeyfy::waitForGUIth;
 
-
-
     UINT const WMAPP_NOTIFYCALLBACK = WM_APP + 1;
     bool Hotkeyfy::createWindows()
     {
         if (FindWindow(L"HotkeyfyServiceClass", NULL))
         {
-            terminate();
+            terminateHotkeyfy();
         }
         RegisterWindowClass(L"HotkeyfyServiceClass", NULL, WndProc);
 
-        hwnd = CreateWindowW(L"HotkeyfyServiceClass", L"Hotkeyfy", WS_EX_TOOLWINDOW,
+        hwnd = CreateWindowW(L"HotkeyfyServiceClass", L"HotkeyfyService", WS_EX_TOOLWINDOW,
             CW_USEDEFAULT, 0, 250, 200, NULL, NULL, GetModuleHandle(NULL), NULL);
 
         return hwnd;
@@ -44,6 +29,8 @@ namespace Hotkeyfy {
             showGUI(true);
             break;
         case WM_CREATE:
+            break;
+        case WM_QUIT:
             break;
         case WMAPP_NOTIFYCALLBACK:
             switch (lParam)
@@ -98,7 +85,7 @@ namespace Hotkeyfy {
 
         if (!Shell_NotifyIcon(NIM_ADD, &notify))
         {
-            std::cout << "Shell_NotifyIcon() failed\n";
+            // "Shell_NotifyIcon() failed\n";
         }
         MSG msg;
         while (GetMessage(&msg, NULL, 0, 0))
@@ -183,7 +170,7 @@ namespace Hotkeyfy {
             showGUI(true);
             break;
         case IDM_EXIT:
-            terminate();
+            terminateHotkeyfy();
             break;
         }
     }
@@ -284,6 +271,7 @@ namespace Hotkeyfy {
         WaitForSingleObject(guiProcess, INFINITE);
         CloseHandle(guiProcess);
         KeyListener::enableHotkeys();
+        config::reload();
         guiProcess = NULL;
     }
 
@@ -359,7 +347,7 @@ namespace Hotkeyfy {
         config::load(path + L"/Hotkeyfy/config.json");
     }
 
-    void Hotkeyfy::terminate()
+    void Hotkeyfy::terminateHotkeyfy()
     {
         if (guiProcess)
         {
@@ -372,12 +360,12 @@ namespace Hotkeyfy {
             DWORD pid;
             GetWindowThreadProcessId(hwnd, &pid);
 
-            const auto explorer = OpenProcess(PROCESS_TERMINATE, false, pid);
-            TerminateProcess(explorer, 1);
-            CloseHandle(explorer);
+            const HANDLE hotkeyfyGUI = OpenProcess(PROCESS_TERMINATE, false, pid);
+            TerminateProcess(hotkeyfyGUI, 0);
+            CloseHandle(hotkeyfyGUI);
         }
 
-        terminate();
+        exit(0);
     }
 
 }

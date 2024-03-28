@@ -142,6 +142,8 @@ LRESULT KeyListener::KeyboardProc(int nCode, WPARAM wParam, LPARAM lParam)
 			keyList.emplace_back(scanCode);
 		}
 		keyList_mutex.unlock();
+		// listening -> no hotkeys should work
+		return CallNextHookEx(keyboardHook, nCode, wParam, lParam);
 	}
 	if (!hotkeysEnabled)
 	{

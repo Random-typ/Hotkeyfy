@@ -53,8 +53,14 @@ double config::getVolumeDecrement()
 
 void config::load(const std::wstring& _path)
 {
-    hotkeys.clear();
     path = _path;
+    reload();
+}
+
+void config::reload()
+{
+    hotkeys.clear();
+
     std::filesystem::create_directories(std::filesystem::path(path).parent_path());
     std::ifstream fs(path);
     if (!fs.is_open())
@@ -75,7 +81,7 @@ void config::load(const std::wstring& _path)
     {
         return;
     }
-    
+
     conf.contains("volumeIncrement") ? volumeIncrement = conf["volumeIncrement"] : 0;
     conf.contains("volumeDecrement") ? volumeDecrement = conf["volumeDecrement"] : 0;
     conf.contains("process") ? process = conf["process"] : 0;
