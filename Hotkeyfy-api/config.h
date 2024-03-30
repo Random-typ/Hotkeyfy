@@ -38,6 +38,7 @@ public:
 	static std::string getProcess();
 
 	static const std::string launchedFromService;
+	static const std::string showGUI;
 
 	static std::map<std::string/*action*/, std::pair<std::vector<DWORD>/*keys*/, bool/*consume*/>>& getHotkeys();
 private:

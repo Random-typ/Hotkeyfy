@@ -15,26 +15,26 @@
     {
         "Entry"
         {
-        "MsmKey" = "8:_1DBB4AFCF70C4F1AA11859285CEA47F7"
+        "MsmKey" = "8:_5397F099F3E14F9996246A326C31A42B"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_606ACF7F83624E879D2E89A382679F92"
+        "MsmKey" = "8:_91884388953C42D1A374A2C7F8415220"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_75A9C51B931B4FB0979770271648D9CB"
+        "MsmKey" = "8:_FCDD5EA3D1E24CBCA5343A216F3A2DB3"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_1DBB4AFCF70C4F1AA11859285CEA47F7"
+        "OwnerKey" = "8:_5397F099F3E14F9996246A326C31A42B"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -132,14 +132,14 @@
         }
         "File"
         {
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_1DBB4AFCF70C4F1AA11859285CEA47F7"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_5397F099F3E14F9996246A326C31A42B"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
             "AssemblyAsmDisplayName" = "8:Hotkeyfy, Version=1.0.8853.20316, Culture=neutral, processorArchitecture=AMD64"
                 "ScatterAssemblies"
                 {
-                    "_1DBB4AFCF70C4F1AA11859285CEA47F7"
+                    "_5397F099F3E14F9996246A326C31A42B"
                     {
                     "Name" = "8:Hotkeyfy.exe"
                     "Attributes" = "3:512"
@@ -163,7 +163,7 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_606ACF7F83624E879D2E89A382679F92"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_91884388953C42D1A374A2C7F8415220"
             {
             "SourcePath" = "8:..\\x64\\Release\\Hotkeyfy-api.dll"
             "TargetName" = "8:Hotkeyfy-api.dll"
@@ -183,7 +183,7 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_75A9C51B931B4FB0979770271648D9CB"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_FCDD5EA3D1E24CBCA5343A216F3A2DB3"
             {
             "SourcePath" = "8:..\\x64\\Release\\Hotkeyfy-service.exe"
             "TargetName" = "8:Hotkeyfy-service.exe"
@@ -244,7 +244,7 @@
             }
             "{3C67513D-01DD-4637-8A68-80971EB9504F}:_FB277457611B40D1BCF77E266A2C25C5"
             {
-            "DefaultLocation" = "8:[ProgramFiles64Folder][Manufacturer]\\[ProductName]"
+            "DefaultLocation" = "8:[ProgramFiles64Folder]Hotkeyfy\\"
             "Name" = "8:#1925"
             "AlwaysCreate" = "11:FALSE"
             "Condition" = "8:"
@@ -269,9 +269,9 @@
         "Product"
         {
         "Name" = "8:Microsoft Visual Studio"
-        "ProductName" = "8:Hotkeyfy-Setup"
+        "ProductName" = "8:Hotkeyfy"
         "ProductCode" = "8:{751A5C7C-57AF-4CE0-8D7A-043537F48923}"
-        "PackageCode" = "8:{5400FB70-7993-4DC0-B79B-D175EB52CB68}"
+        "PackageCode" = "8:{B53254B5-3D7A-4E5D-89F6-3D5A354AD4D9}"
         "UpgradeCode" = "8:{664FCCD2-D087-45DF-A795-7ABAC4EF8818}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
@@ -282,12 +282,12 @@
         "Manufacturer" = "8:Hotkeyfy"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
-        "Title" = "8:Hotkeyfy-Setup"
+        "Title" = "8:Hotkeyfy"
         "Subject" = "8:"
         "ARPCONTACT" = "8:Luca Trefz"
-        "Keywords" = "8:"
+        "Keywords" = "8:Hotkeys, music, audio, sound, spotify"
         "ARPCOMMENTS" = "8:Hotkeyfy makes it possible to add sound control hotkeys to any process."
-        "ARPURLINFOABOUT" = "8:"
+        "ARPURLINFOABOUT" = "8:https://github.com/Random-typ/Hotkeyfy"
         "ARPPRODUCTICON" = "8:"
         "ARPIconIndex" = "3:0"
         "SearchPath" = "8:"
@@ -441,16 +441,30 @@
         }
         "Shortcut"
         {
-            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_917CE9086D044C16B95C6AFB21D4AA5E"
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_779CC0EE2BB24C14985D788DEBAE9B9E"
             {
             "Name" = "8:Hotkeyfy"
+            "Arguments" = "8:-gui"
+            "Description" = "8:"
+            "ShowCmd" = "3:1"
+            "IconIndex" = "3:0"
+            "Transitive" = "11:FALSE"
+            "Target" = "8:_5397F099F3E14F9996246A326C31A42B"
+            "Folder" = "8:_E2DFB01F9C604BC6AA63B6862E99952F"
+            "WorkingFolder" = "8:_FB277457611B40D1BCF77E266A2C25C5"
+            "Icon" = "8:"
+            "Feature" = "8:"
+            }
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_AB21388DA1FE4E80982D298AEE17CD24"
+            {
+            "Name" = "8:Shortcut to %sHotkeyfy.exe"
             "Arguments" = "8:"
             "Description" = "8:"
             "ShowCmd" = "3:1"
             "IconIndex" = "3:0"
             "Transitive" = "11:FALSE"
-            "Target" = "8:_1DBB4AFCF70C4F1AA11859285CEA47F7"
-            "Folder" = "8:_2C54CC52A3644FE98D4EE085CF0B302B"
+            "Target" = "8:_5397F099F3E14F9996246A326C31A42B"
+            "Folder" = "8:_FB277457611B40D1BCF77E266A2C25C5"
             "WorkingFolder" = "8:_FB277457611B40D1BCF77E266A2C25C5"
             "Icon" = "8:"
             "Feature" = "8:"
@@ -551,7 +565,7 @@
                             "ContextData" = "8:"
                             "Attributes" = "3:0"
                             "Setting" = "3:2"
-                            "Value" = "8:HIER: [DATE]"
+                            "Value" = "8:This is an opensource project running under the MIT licence. Visit Hotkeyfy on Github: https://github.com/Random-typ/Hotkeyfy"
                             "DefaultValue" = "8:#1202"
                             "UsePlugInResources" = "11:TRUE"
                             }
@@ -718,7 +732,7 @@
                             "ContextData" = "8:"
                             "Attributes" = "3:0"
                             "Setting" = "3:2"
-                            "Value" = "8:"
+                            "Value" = "8:This is an opensource project running under the MIT licence. Visit Hotkeyfy on Github: https://github.com/Random-typ/Hotkeyfy"
                             "DefaultValue" = "8:#1202"
                             "UsePlugInResources" = "11:TRUE"
                             }

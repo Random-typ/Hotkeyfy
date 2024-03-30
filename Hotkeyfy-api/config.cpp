@@ -4,6 +4,7 @@
 using json = nlohmann::json;
 
 const std::string config::launchedFromService = "LaunchedFromService";
+const std::string config::showGUI = "-gui";
 
 double config::volumeIncrement = 1.0;
 double config::volumeDecrement = 1.0;

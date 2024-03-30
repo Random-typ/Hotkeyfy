@@ -4,22 +4,11 @@ void HotkeyfyService::parseCommandLine()
 {
 	std::string cml = GetCommandLineA();
 
-	std::vector<std::string> paramList;
+	auto view = cml | std::views::split(' ');
 
-	for (size_t start = 0, end = 0;;)
-	{
-		
-		end = cml.find(" ", start);
-		paramList.emplace_back(cml.substr(start, end - start));
-
-		if (end == std::string::npos || end >= cml.size() - 1)
-		{
-			break;
-		}
-		start = end + 1;
-	}
-	
-	if (paramList.size() > 1 && paramList[1] == config::launchedFromService)
+	if (std::ranges::any_of(view, [](const std::string_view _param){
+		return _param == config::launchedFromService || _param == config::showGUI;
+		}))
 	{
 		Hotkeyfy::Hotkeyfy::showGUI(true);
 	}
