@@ -112,15 +112,15 @@ namespace Hotkeyfy {
 		void InitializeComponent(void)
 		{
 			this->components = (gcnew System::ComponentModel::Container());
-			System::Windows::Forms::ListViewItem^ listViewItem6 = (gcnew System::Windows::Forms::ListViewItem(gcnew cli::array< System::String^  >(1) { L"Play Pause" },
+			System::Windows::Forms::ListViewItem^ listViewItem1 = (gcnew System::Windows::Forms::ListViewItem(gcnew cli::array< System::String^  >(1) { L"Play Pause" },
 				-1, System::Drawing::SystemColors::ControlLight, System::Drawing::Color::Empty, nullptr));
-			System::Windows::Forms::ListViewItem^ listViewItem7 = (gcnew System::Windows::Forms::ListViewItem(gcnew cli::array< System::String^  >(1) { L"Previous Track" },
+			System::Windows::Forms::ListViewItem^ listViewItem2 = (gcnew System::Windows::Forms::ListViewItem(gcnew cli::array< System::String^  >(1) { L"Previous Track" },
 				-1, System::Drawing::SystemColors::ControlLight, System::Drawing::Color::Empty, nullptr));
-			System::Windows::Forms::ListViewItem^ listViewItem8 = (gcnew System::Windows::Forms::ListViewItem(gcnew cli::array< System::String^  >(1) { L"Next Track" },
+			System::Windows::Forms::ListViewItem^ listViewItem3 = (gcnew System::Windows::Forms::ListViewItem(gcnew cli::array< System::String^  >(1) { L"Next Track" },
 				-1, System::Drawing::SystemColors::ControlLight, System::Drawing::Color::Empty, nullptr));
-			System::Windows::Forms::ListViewItem^ listViewItem9 = (gcnew System::Windows::Forms::ListViewItem(gcnew cli::array< System::String^  >(1) { L"Volume Up" },
+			System::Windows::Forms::ListViewItem^ listViewItem4 = (gcnew System::Windows::Forms::ListViewItem(gcnew cli::array< System::String^  >(1) { L"Volume Up" },
 				-1, System::Drawing::SystemColors::ControlLight, System::Drawing::Color::Empty, nullptr));
-			System::Windows::Forms::ListViewItem^ listViewItem10 = (gcnew System::Windows::Forms::ListViewItem(gcnew cli::array< System::String^  >(1) { L"Volume Down" },
+			System::Windows::Forms::ListViewItem^ listViewItem5 = (gcnew System::Windows::Forms::ListViewItem(gcnew cli::array< System::String^  >(1) { L"Volume Down" },
 				-1, System::Drawing::SystemColors::ControlLight, System::Drawing::Color::Empty, nullptr));
 			this->label1 = (gcnew System::Windows::Forms::Label());
 			this->panel1 = (gcnew System::Windows::Forms::Panel());
@@ -223,8 +223,8 @@ namespace Hotkeyfy {
 				static_cast<System::Byte>(0)));
 			this->listView1->HideSelection = false;
 			this->listView1->Items->AddRange(gcnew cli::array< System::Windows::Forms::ListViewItem^  >(5) {
-				listViewItem6, listViewItem7,
-					listViewItem8, listViewItem9, listViewItem10
+				listViewItem1, listViewItem2,
+					listViewItem3, listViewItem4, listViewItem5
 			});
 			this->listView1->Location = System::Drawing::Point(14, 44);
 			this->listView1->MultiSelect = false;
@@ -267,8 +267,7 @@ namespace Hotkeyfy {
 			// 
 			// Form1
 			// 
-			this->AutoScaleDimensions = System::Drawing::SizeF(7, 18);
-			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
+			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::None;
 			this->BackColor = System::Drawing::Color::Black;
 			this->ClientSize = System::Drawing::Size(653, 311);
 			this->Controls->Add(this->label8);
@@ -422,8 +421,8 @@ namespace Hotkeyfy {
 		void ChangeTitleBarColor() {
 			// Get the handle of the window
 			HWND hwnd = (HWND)this->Handle.ToPointer();
-			LONG_PTR v = SetWindowLongPtr(hwnd, GWL_EXSTYLE, GetWindowLongPtr(hwnd, GWL_EXSTYLE) | WS_EX_LAYERED);
-			bool b = SetLayeredWindowAttributes(hwnd, RGB(255, 0, 0), 0, LWA_COLORKEY);
+			SetWindowLongPtr(hwnd, GWL_EXSTYLE, GetWindowLongPtr(hwnd, GWL_EXSTYLE) | WS_EX_LAYERED);
+			SetLayeredWindowAttributes(hwnd, RGB(255, 0, 0), 0, LWA_COLORKEY);
 		}
 		void enableDarkTitleBar() {
 			HWND hWnd = static_cast<HWND>(Handle.ToPointer());

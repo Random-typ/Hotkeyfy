@@ -15,6 +15,12 @@
     {
         "Entry"
         {
+        "MsmKey" = "8:_51325F063B814B26B23472E52FE774DD"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_5397F099F3E14F9996246A326C31A42B"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -27,7 +33,31 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_9C32F70899E94435B8740966DD19B723"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_A76694B6C1924D3FBB1F7D98327E34BA"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_B7F6F6F9387A4839B97B2540D1AB6C19"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_FCDD5EA3D1E24CBCA5343A216F3A2DB3"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_FE321DC01C374490B7B3070AC265205F"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -101,6 +131,11 @@
                     "Name" = "8:Microsoft .NET Framework 4.7.2 (x86 and x64)"
                     "ProductCode" = "8:.NETFramework,Version=v4.7.2"
                     }
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.Visual.C++.14.0.x64"
+                    {
+                    "Name" = "8:Visual C++ \"14\" Runtime Libraries (x64)"
+                    "ProductCode" = "8:Microsoft.Visual.C++.14.0.x64"
+                    }
                 }
             }
         }
@@ -132,11 +167,31 @@
         }
         "File"
         {
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_51325F063B814B26B23472E52FE774DD"
+            {
+            "SourcePath" = "8:..\\Hotkeyfy\\font\\PlusJakartaSans-2.7.1\\ttf\\PlusJakartaSans-Bold.ttf"
+            "TargetName" = "8:PlusJakartaSans-Bold.ttf"
+            "Tag" = "8:"
+            "Folder" = "8:_6986BCA2B37941E5BB86B5EC1320F3FA"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:5"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_5397F099F3E14F9996246A326C31A42B"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:Hotkeyfy, Version=1.0.8855.36622, Culture=neutral, processorArchitecture=AMD64"
+            "AssemblyAsmDisplayName" = "8:Hotkeyfy, Version=1.0.8856.35744, Culture=neutral, processorArchitecture=AMD64"
                 "ScatterAssemblies"
                 {
                     "_5397F099F3E14F9996246A326C31A42B"
@@ -183,6 +238,66 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_9C32F70899E94435B8740966DD19B723"
+            {
+            "SourcePath" = "8:msvcp140.dll"
+            "TargetName" = "8:msvcp140.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_FB277457611B40D1BCF77E266A2C25C5"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_A76694B6C1924D3FBB1F7D98327E34BA"
+            {
+            "SourcePath" = "8:vcruntime140_1.dll"
+            "TargetName" = "8:vcruntime140_1.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_FB277457611B40D1BCF77E266A2C25C5"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_B7F6F6F9387A4839B97B2540D1AB6C19"
+            {
+            "SourcePath" = "8:vcruntime140.dll"
+            "TargetName" = "8:vcruntime140.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_FB277457611B40D1BCF77E266A2C25C5"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_FCDD5EA3D1E24CBCA5343A216F3A2DB3"
             {
             "SourcePath" = "8:..\\x64\\Release\\Hotkeyfy-service.exe"
@@ -199,6 +314,26 @@
             "SharedLegacy" = "11:FALSE"
             "PackageAs" = "3:1"
             "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_FE321DC01C374490B7B3070AC265205F"
+            {
+            "SourcePath" = "8:..\\Hotkeyfy\\font\\PlusJakartaSans-2.7.1\\ttf\\PlusJakartaSans-Regular.ttf"
+            "TargetName" = "8:PlusJakartaSans-Regular.ttf"
+            "Tag" = "8:"
+            "Folder" = "8:_6986BCA2B37941E5BB86B5EC1320F3FA"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:5"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
@@ -220,13 +355,13 @@
                 {
                 }
             }
-            "{1525181F-901A-416C-8A58-119130FE478E}:_C4D3F960D99344B389D00F0CD6A7D0A3"
+            "{1525181F-901A-416C-8A58-119130FE478E}:_6986BCA2B37941E5BB86B5EC1320F3FA"
             {
-            "Name" = "8:#1915"
+            "Name" = "8:#1911"
             "AlwaysCreate" = "11:FALSE"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
-            "Property" = "8:AppDataFolder"
+            "Property" = "8:FontsFolder"
                 "Folders"
                 {
                 }
@@ -271,7 +406,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Hotkeyfy"
         "ProductCode" = "8:{751A5C7C-57AF-4CE0-8D7A-043537F48923}"
-        "PackageCode" = "8:{76938E79-6466-429B-B873-F291E6C8CD95}"
+        "PackageCode" = "8:{B5F8E9D9-F8D7-4571-A29F-10A5D905D9F9}"
         "UpgradeCode" = "8:{664FCCD2-D087-45DF-A795-7ABAC4EF8818}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
@@ -294,7 +429,7 @@
         "UseSystemSearchPath" = "11:TRUE"
         "TargetPlatform" = "3:1"
         "PreBuildEvent" = "8:"
-        "PostBuildEvent" = "8:"
+        "PostBuildEvent" = "8:CALL cscript.exe \"$(ProjectDir)EnableLaunchApplication.js\" \"$(BuiltOuputPath)\""
         "RunPostBuildEvent" = "3:0"
         }
         "Registry"
