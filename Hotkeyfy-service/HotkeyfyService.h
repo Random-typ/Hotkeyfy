@@ -3,6 +3,7 @@
 #include "../Hotkeyfy-api/config.h"
 #include "../Hotkeyfy-api/KeyListener.h"
 #include <ranges>
+#include <algorithm>
 
 #ifdef _DEBUG
 #pragma comment(lib, "../x64/Debug/Hotkeyfy-api.lib")
