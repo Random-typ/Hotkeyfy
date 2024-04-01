@@ -364,8 +364,8 @@ namespace Hotkeyfy {
             TerminateProcess(hotkeyfyGUI, 0);
             CloseHandle(hotkeyfyGUI);
         }
-
-        exit(0);
+        // this is the most relieable way i found, to close the current process
+        TerminateProcess(GetCurrentProcess(), 0);
     }
 
 }
