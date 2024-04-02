@@ -10,13 +10,57 @@
 #include <Windows.h>
 #include "HotkeyfyExport.h"
 
+// https://learn.microsoft.com/en-us/windows/win32/inputdev/about-keyboard-input#keystroke-message-flags
+struct KeystrokeMessage {
+	DWORD repeatCount : 16;
+	DWORD scanCode : 8;
+	DWORD extendedFlag : 1;
+	DWORD reserved : 4;
+	DWORD contextCode : 1;
+	DWORD previousKeyStateFlag : 1;
+	DWORD transitionStateFlag : 1;
+
+	DWORD toDWORD() const
+	{
+		return repeatCount |
+			(scanCode << 16) |
+			(extendedFlag << 24) |
+			(reserved << 25) |
+			(contextCode << 29) |
+			(previousKeyStateFlag << 30) |
+			(transitionStateFlag << 31);
+	}
+
+	bool operator==(KeystrokeMessage _other) const {
+		return _other.toDWORD() == toDWORD();
+	}
+};
+
+class Keys : public std::vector<KeystrokeMessage> {
+public:
+	std::vector<DWORD> toDWORDs() const {
+		std::vector<DWORD> DWORDs;
+		for (auto& i : *this)
+		{
+			DWORDs.emplace_back(i.toDWORD());
+		}
+		return DWORDs;
+	}
+};
+
+using Action = std::pair<Keys, bool/*consume*/>;
+using ActionMap = std::map<std::string/*action name*/, Action>;
 
 class HOTKEYFYAPI_DECLSPEC config
 {
 public:
-	static std::pair<std::vector<DWORD>, bool/*consume*/> getHotkeys(const std::string& _action);
+	static Action getHotkeys(const std::string& _action);
 
-	static void setHotkeys(const std::string& _action, const std::vector<DWORD>& _keys, bool _consume);
+	static void setHotkeys(const std::string& _action, const Keys& _keys, bool _consume);
+
+	// Check wether specified hotkeys are already used by an action that is not the specified action
+	// @returns if a value is returned the name of the action, which has the keys specified
+	static std::optional<std::string> alreadySet(const std::string& _actionName, const Keys& _keys);
 
 	static void setVolumeIncrement(double _value);
 	static void setVolumeDecrement(double _value);
@@ -40,13 +84,13 @@ public:
 	static const std::string launchedFromService;
 	static const std::string showGUI;
 
-	static std::map<std::string/*action*/, std::pair<std::vector<DWORD>/*keys*/, bool/*consume*/>>& getHotkeys();
+	static ActionMap& getHotkeys();
 private:
 	static double volumeIncrement;
 	static double volumeDecrement;
 	static std::string process;
 
-	static std::map<std::string/*action*/, std::pair<std::vector<DWORD>/*keys*/, bool/*consume*/>> hotkeys;
+	static ActionMap hotkeys;
 	static std::wstring path;
 };
 #endif // !__HotkeyfyConfig_H__

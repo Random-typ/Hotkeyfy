@@ -1,5 +1,5 @@
 #pragma once
-
+#define _CRT_SECURE_NO_WARNINGS
 #include <thread>
 #include <vector>
 #include <mutex>
@@ -35,14 +35,14 @@ public:
 
 	static void listen();
 
-	static const std::vector<DWORD> getKeys();
+	static const Keys& getKeys();
 
 	static bool isListening();
 
 	static void enableHotkeys();
 	static void disableHotkeys();
 
-	static std::wstring getKeyName(DWORD _extendedKeyCode);
+	static std::wstring getKeyName(KeystrokeMessage _extendedKeyCode);
 
 	static void doAction(std::string_view _action);
 
@@ -54,7 +54,7 @@ private:
 
 	static void loop(std::stop_token _stoken);
 
-	static std::vector<DWORD> keyList;
+	static Keys keyList;
 	static std::mutex keyList_mutex;
 
 	static std::jthread loopTh;

@@ -10,20 +10,20 @@ double config::volumeIncrement = 1.0;
 double config::volumeDecrement = 1.0;
 std::string config::process = "Spotify.exe";
 
-std::map<std::string/*action*/, std::pair<std::vector<DWORD>/*keys*/, bool/*consume*/>> config::hotkeys;
+ActionMap config::hotkeys;
 std::wstring config::path;
 
-std::pair<std::vector<DWORD>, bool/*consume*/> config::getHotkeys(const std::string& _action)
+Action config::getHotkeys(const std::string& _action)
 {
     auto iterator = hotkeys.find(_action);
     if (iterator == hotkeys.end())
     {
-        return { std::vector<DWORD>(), false };
+        return { Keys(), false };
     }
     return iterator->second;
 }
 
-void config::setHotkeys(const std::string& _action, const std::vector<DWORD>& _keys, bool _consume)
+void config::setHotkeys(const std::string& _action, const Keys& _keys, bool _consume)
 {
     if (_keys.size())
     {
@@ -31,6 +31,25 @@ void config::setHotkeys(const std::string& _action, const std::vector<DWORD>& _k
     }
     hotkeys[_action].second = _consume;
 }
+
+std::optional<std::string> config::alreadySet(const std::string& _actionName, const Keys& _keys)
+{
+    for (auto& hotkey : hotkeys)
+    {
+        if (_actionName != hotkey.first &&
+            hotkey.second.first.size() == _keys.size() &&
+            std::all_of(hotkey.second.first.begin(), hotkey.second.first.end(), [_keys](KeystrokeMessage key) {
+                return std::any_of(_keys.begin(), _keys.end(), [key](KeystrokeMessage newkey) {
+                    return newkey == key;
+                    });
+                }))
+        {
+            return hotkey.first;
+        }
+    }
+    return {};
+}
+
 
 void config::setVolumeIncrement(double _value)
 {
@@ -89,7 +108,7 @@ void config::reload()
 
     for (auto& action : conf["actions"])
     {
-        std::pair<std::vector<DWORD>/*keys*/, bool/*consume*/> data;
+        Action data;
         data.second = action["consume"];
         for (auto& key : action["keys"])
         {
@@ -116,9 +135,9 @@ void config::save()
     for (auto& key : hotkeys)
     {
         conf["actions"] += {
-            { "action", std::string(key.first.begin(), key.first.end()) },
+            { "action", key.first },
             { "consume", key.second.second },
-            { "keys", key.second.first }
+            { "keys", key.second.first.toDWORDs() }
         };
     }
     
@@ -196,7 +215,7 @@ std::string config::getProcess()
     return process;
 }
 
-std::map<std::string, std::pair<std::vector<DWORD>, bool>>& config::getHotkeys()
+ActionMap& config::getHotkeys()
 {
     return hotkeys;
 }

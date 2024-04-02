@@ -191,7 +191,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:Hotkeyfy, Version=1.0.8856.35744, Culture=neutral, processorArchitecture=AMD64"
+            "AssemblyAsmDisplayName" = "8:Hotkeyfy, Version=1.0.8857.26310, Culture=neutral, processorArchitecture=AMD64"
                 "ScatterAssemblies"
                 {
                     "_5397F099F3E14F9996246A326C31A42B"
@@ -406,7 +406,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Hotkeyfy"
         "ProductCode" = "8:{751A5C7C-57AF-4CE0-8D7A-043537F48923}"
-        "PackageCode" = "8:{B5F8E9D9-F8D7-4571-A29F-10A5D905D9F9}"
+        "PackageCode" = "8:{92FF41D7-67E2-4DB7-8370-CC8D3A25521F}"
         "UpgradeCode" = "8:{664FCCD2-D087-45DF-A795-7ABAC4EF8818}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
@@ -526,7 +526,7 @@
                                                             "Condition" = "8:"
                                                             "Transitive" = "11:FALSE"
                                                             "ValueTypes" = "3:1"
-                                                            "Value" = "8:C:\\Program Files\\Hotkeyfy"
+                                                            "Value" = "8:\"[ProgramFiles64Folder]Hotkeyfy\\Hotkeyfy-service.exe\""
                                                             }
                                                         }
                                                     }

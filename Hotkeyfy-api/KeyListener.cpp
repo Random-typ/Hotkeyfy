@@ -1,6 +1,7 @@
 #include "KeyListener.h"
+#include <iostream>
 
-std::vector<DWORD> KeyListener::keyList;
+Keys KeyListener::keyList;
 std::mutex KeyListener::keyList_mutex;
 
 std::jthread KeyListener::loopTh;
@@ -41,7 +42,7 @@ void KeyListener::listen()
 	doListen = true;
 }
 
-const std::vector<DWORD> KeyListener::getKeys()
+const Keys& KeyListener::getKeys()
 {
 	return keyList;
 }
@@ -61,22 +62,33 @@ void KeyListener::disableHotkeys()
 	hotkeysEnabled = false;
 }
 
-std::wstring KeyListener::getKeyName(DWORD _extendedKeyCode)
+std::wstring KeyListener::getKeyName(KeystrokeMessage _extendedKeyCode)
 {
 	std::wstring key;
 	key.resize(64);
 	int len;
-	DWORD code = ExtendedKeyCodeToExtendedKeyNameCode(_extendedKeyCode);
-	if (len = GetKeyNameTextW(code, key.data(), key.size()); !len)
+	
+	if (len = GetKeyNameTextW(_extendedKeyCode.toDWORD(), key.data(), key.size()); !len)
 	{
 		return std::wstring();
 	}
 	key.resize(len);
-	return key;
+ 	return key;
 }
 
 void KeyListener::doAction(std::string_view _action)
 {
+	// time between actions must be 100 ms or more unless the action controls volume
+	static std::chrono::milliseconds lastDoActionCall = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch());
+
+	if (_action != "Volume Up" && 
+		_action != "Volume Down" && 
+		(std::chrono::system_clock::now().time_since_epoch() - lastDoActionCall).count() < 100)
+	{
+		return;
+	}
+	lastDoActionCall = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch());
+
 	if (_action == "Play Pause")
 	{
 		audioControl.playPause();
@@ -113,13 +125,45 @@ void KeyListener::reloadConfig()
 
 LRESULT KeyListener::KeyboardProc(int nCode, WPARAM wParam, LPARAM lParam)
 {
-	if (nCode < 0)
-	{
-		return CallNextHookEx(keyboardHook, nCode, wParam, lParam);
-	}
+
+	
 	KBDLLHOOKSTRUCT* kbStruct = reinterpret_cast<KBDLLHOOKSTRUCT*>(lParam);
-	// extended scan code
-	DWORD scanCode = ScanCodeToExtendedKeyCode(kbStruct->scanCode, kbStruct->flags);
+	
+	WORD w = HIWORD(lParam);
+	kbStruct->flags = w;
+	KeystrokeMessage keyCode{0};
+	if (kbStruct->flags & KF_EXTENDED)
+	{
+		keyCode.extendedFlag = 0;
+	}
+	else {
+		keyCode.extendedFlag = 1;
+	}
+	if (kbStruct->flags & KF_ALTDOWN)
+	{
+		keyCode.contextCode = 0x1;
+	}
+	if (kbStruct->flags & KF_REPEAT)
+	{
+		keyCode.previousKeyStateFlag = 0x1;
+	}
+	if (kbStruct->flags & KF_UP)
+	{
+		keyCode.transitionStateFlag = 0x1;
+	}
+
+	keyCode.scanCode = kbStruct->scanCode;
+
+	WORD vkCode = LOWORD(wParam);                                 // virtual-key code
+
+	WORD keyFlags = HIWORD(lParam);
+
+	WORD scanCode = LOBYTE(keyFlags);                             // scan code
+	BOOL isExtendedKey = (keyFlags & KF_EXTENDED) == KF_EXTENDED; // extended-key flag, 1 if scancode has 0xE0 prefix
+
+	if (isExtendedKey)
+		scanCode = MAKEWORD(scanCode, 0xE0);
+
 
  	if (doListen)
 	{
@@ -129,17 +173,17 @@ LRESULT KeyListener::KeyboardProc(int nCode, WPARAM wParam, LPARAM lParam)
 			return CallNextHookEx(keyboardHook, nCode, wParam, lParam);
 		}
 
-		std::wstring key = getKeyName(scanCode);
+		std::wstring key = getKeyName(keyCode);
 		if (key.empty())
 		{
 			return CallNextHookEx(keyboardHook, nCode, wParam, lParam);
 		}
 		keyList_mutex.lock();
-		if (std::none_of(keyList.begin(), keyList.end(), [&](DWORD key){
-			return kbStruct->scanCode == key;
+		if (!std::any_of(keyList.begin(), keyList.end(), [&](KeystrokeMessage key){
+			return keyCode == key;
 			}))
 		{
-			keyList.emplace_back(scanCode);
+			keyList.emplace_back(keyCode);
 		}
 		keyList_mutex.unlock();
 		// listening -> no hotkeys should work
@@ -159,8 +203,8 @@ LRESULT KeyListener::KeyboardProc(int nCode, WPARAM wParam, LPARAM lParam)
 	// hotkey checking
 	for (auto& i : hotkeys)
 	{
-		if (std::all_of(i.second.first.begin(), i.second.first.end(), [scanCode](DWORD key) {
-			return scanCode == key || GetAsyncKeyState(ExtendedKeyCodeToVirtualKey(key)) & 0x8000;
+		if (!i.second.first.empty() && std::all_of(i.second.first.begin(), i.second.first.end(), [keyCode](KeystrokeMessage key) {
+			return keyCode == key || GetAsyncKeyState(LOWORD(MapVirtualKeyA(key.scanCode, MAPVK_VSC_TO_VK_EX))) & 0x8000;
 			}))
 		{
 			doAction(i.first);
