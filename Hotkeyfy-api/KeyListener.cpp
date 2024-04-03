@@ -65,15 +65,14 @@ void KeyListener::disableHotkeys()
 std::wstring KeyListener::getKeyName(KeystrokeMessage _extendedKeyCode)
 {
 	std::wstring key;
-	key.resize(64);
-	int len;
+	int len = 256;
+	key.resize(len);
 	
-	if (len = GetKeyNameTextW(_extendedKeyCode.toDWORD(), key.data(), key.size()); !len)
-	{
+	if (len = GetKeyNameTextW(_extendedKeyCode.scanCode << 16, key.data(), key.size()); !len) {
 		return std::wstring();
 	}
 	key.resize(len);
- 	return key;
+	return key + (_extendedKeyCode.flags ? L"(special)" : L"");
 }
 
 void KeyListener::doAction(std::string_view _action)
@@ -125,45 +124,30 @@ void KeyListener::reloadConfig()
 
 LRESULT KeyListener::KeyboardProc(int nCode, WPARAM wParam, LPARAM lParam)
 {
-
-	
-	KBDLLHOOKSTRUCT* kbStruct = reinterpret_cast<KBDLLHOOKSTRUCT*>(lParam);
-	
-	WORD w = HIWORD(lParam);
-	kbStruct->flags = w;
-	KeystrokeMessage keyCode{0};
-	if (kbStruct->flags & KF_EXTENDED)
+	if (nCode < 0)
 	{
-		keyCode.extendedFlag = 0;
+		return CallNextHookEx(keyboardHook, nCode, wParam, lParam);
 	}
-	else {
-		keyCode.extendedFlag = 1;
+
+	// convert the message to "useful" value
+
+	KeystrokeMessage keyCode{ 0 };
+	keyCode.scanCode = ((KBDLLHOOKSTRUCT*)lParam)->scanCode;
+	keyCode.flags = ((KBDLLHOOKSTRUCT*)lParam)->flags;
+
+	bool extendedKey = ((lParam >> 24) & 0x01);
+
+	bool numpadKey = (keyCode.scanCode >= 0x47 && keyCode.scanCode <= 0x53) || // Numpad keys
+		(keyCode.scanCode == 0x35 && !extendedKey);       // "/" on numpad
+
+	if (numpadKey) {
+		keyCode.scanCode |= 0x100; // Set the extended bit
 	}
-	if (kbStruct->flags & KF_ALTDOWN)
+
+	if (!keyCode.scanCode)
 	{
-		keyCode.contextCode = 0x1;
+		return CallNextHookEx(keyboardHook, nCode, wParam, lParam);
 	}
-	if (kbStruct->flags & KF_REPEAT)
-	{
-		keyCode.previousKeyStateFlag = 0x1;
-	}
-	if (kbStruct->flags & KF_UP)
-	{
-		keyCode.transitionStateFlag = 0x1;
-	}
-
-	keyCode.scanCode = kbStruct->scanCode;
-
-	WORD vkCode = LOWORD(wParam);                                 // virtual-key code
-
-	WORD keyFlags = HIWORD(lParam);
-
-	WORD scanCode = LOBYTE(keyFlags);                             // scan code
-	BOOL isExtendedKey = (keyFlags & KF_EXTENDED) == KF_EXTENDED; // extended-key flag, 1 if scancode has 0xE0 prefix
-
-	if (isExtendedKey)
-		scanCode = MAKEWORD(scanCode, 0xE0);
-
 
  	if (doListen)
 	{
@@ -179,11 +163,20 @@ LRESULT KeyListener::KeyboardProc(int nCode, WPARAM wParam, LPARAM lParam)
 			return CallNextHookEx(keyboardHook, nCode, wParam, lParam);
 		}
 		keyList_mutex.lock();
-		if (!std::any_of(keyList.begin(), keyList.end(), [&](KeystrokeMessage key){
+		if (!std::any_of(keyList.begin(), keyList.end(), [keyCode](KeystrokeMessage key){
 			return keyCode == key;
 			}))
 		{
+
 			keyList.emplace_back(keyCode);
+			if (keyList.size() > 1)
+			{
+				Beep(0, 0);
+			}
+			for (auto& i : keyList)
+			{
+				std::wcout << getKeyName(i) << GetAsyncKeyState(MapVirtualKeyA(i.scanCode | (i.flags ? (0xe0 << 16) : 0), MAPVK_VSC_TO_VK_EX)) <<"\n";
+			}
 		}
 		keyList_mutex.unlock();
 		// listening -> no hotkeys should work
@@ -203,8 +196,18 @@ LRESULT KeyListener::KeyboardProc(int nCode, WPARAM wParam, LPARAM lParam)
 	// hotkey checking
 	for (auto& i : hotkeys)
 	{
+		DWORD dd = MapVirtualKeyA(VK_RMENU, MAPVK_VK_TO_VSC_EX);
+		
+
 		if (!i.second.first.empty() && std::all_of(i.second.first.begin(), i.second.first.end(), [keyCode](KeystrokeMessage key) {
-			return keyCode == key || GetAsyncKeyState(LOWORD(MapVirtualKeyA(key.scanCode, MAPVK_VSC_TO_VK_EX))) & 0x8000;
+			
+			DWORD d = key.scanCode | (key.flags ? (0xe0 << 8) : 0);
+			bool b = (GetAsyncKeyState(MapVirtualKeyA(d, MAPVK_VSC_TO_VK_EX)) & 0x8000);
+			if (key.flags)
+			{
+				Beep(0, 0);
+			}
+			return keyCode == key || b;
 			}))
 		{
 			doAction(i.first);

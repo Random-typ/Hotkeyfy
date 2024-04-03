@@ -137,7 +137,7 @@ void config::save()
         conf["actions"] += {
             { "action", key.first },
             { "consume", key.second.second },
-            { "keys", key.second.first.toDWORDs() }
+            { "keys", key.second.first.toNumbers() }
         };
     }
     

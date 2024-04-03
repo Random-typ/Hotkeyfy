@@ -12,39 +12,30 @@
 
 // https://learn.microsoft.com/en-us/windows/win32/inputdev/about-keyboard-input#keystroke-message-flags
 struct KeystrokeMessage {
-	DWORD repeatCount : 16;
-	DWORD scanCode : 8;
-	DWORD extendedFlag : 1;
-	DWORD reserved : 4;
-	DWORD contextCode : 1;
-	DWORD previousKeyStateFlag : 1;
-	DWORD transitionStateFlag : 1;
+	KeystrokeMessage(uint64_t _value) : scanCode(_value & 0xFFFFFFFF), flags(_value >> 32), unused(0){}
+	DWORD scanCode;
+	DWORD flags : 1;
+	DWORD unused : 31;
 
-	DWORD toDWORD() const
+	uint64_t toNum() const
 	{
-		return repeatCount |
-			(scanCode << 16) |
-			(extendedFlag << 24) |
-			(reserved << 25) |
-			(contextCode << 29) |
-			(previousKeyStateFlag << 30) |
-			(transitionStateFlag << 31);
+		return uint64_t(scanCode) | (uint64_t(flags) << 32);
 	}
 
 	bool operator==(KeystrokeMessage _other) const {
-		return _other.toDWORD() == toDWORD();
+		return _other.toNum() == toNum();
 	}
 };
 
 class Keys : public std::vector<KeystrokeMessage> {
 public:
-	std::vector<DWORD> toDWORDs() const {
-		std::vector<DWORD> DWORDs;
+	std::vector<uint64_t> toNumbers() const {
+		std::vector<uint64_t> nums;
 		for (auto& i : *this)
 		{
-			DWORDs.emplace_back(i.toDWORD());
+			nums.emplace_back(i.toNum());
 		}
-		return DWORDs;
+		return nums;
 	}
 };
 
@@ -68,11 +59,9 @@ public:
 	static double getVolumeIncrement();
 	static double getVolumeDecrement();
 
-	// @returns true if successful, false otherwise
 	static void load(const std::wstring& _path);
 	static void reload();
 
-	// @returns true if successful, false otherwise
 	static void save();
 
 	static void setAutoStart(bool _autoStart);
