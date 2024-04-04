@@ -76,7 +76,7 @@ namespace Hotkeyfy {
 
 	private: System::Windows::Forms::Label^ label3;
 
-	private: System::Windows::Forms::Label^ label4;
+
 	private: System::Windows::Forms::OpenFileDialog^ openFileDialog1;
 	private: System::Windows::Forms::Timer^ timer1;
 
@@ -88,6 +88,8 @@ namespace Hotkeyfy {
 
 	private: System::Windows::Forms::LinkLabel^ linkLabel1;
 	private: System::Windows::Forms::Label^ label8;
+	private: System::Windows::Forms::TextBox^ textBox1;
+	private: System::Windows::Forms::Label^ label4;
 
 	private: System::ComponentModel::IContainer^ components;
 
@@ -126,10 +128,10 @@ namespace Hotkeyfy {
 				-1, System::Drawing::SystemColors::ControlLight, System::Drawing::Color::Empty, nullptr));
 			this->label1 = (gcnew System::Windows::Forms::Label());
 			this->panel1 = (gcnew System::Windows::Forms::Panel());
+			this->textBox1 = (gcnew System::Windows::Forms::TextBox());
 			this->label8 = (gcnew System::Windows::Forms::Label());
 			this->label5 = (gcnew System::Windows::Forms::Label());
 			this->label7 = (gcnew System::Windows::Forms::Label());
-			this->label4 = (gcnew System::Windows::Forms::Label());
 			this->label3 = (gcnew System::Windows::Forms::Label());
 			this->label2 = (gcnew System::Windows::Forms::Label());
 			this->listView1 = (gcnew System::Windows::Forms::ListView());
@@ -137,6 +139,7 @@ namespace Hotkeyfy {
 			this->timer1 = (gcnew System::Windows::Forms::Timer(this->components));
 			this->label6 = (gcnew System::Windows::Forms::Label());
 			this->linkLabel1 = (gcnew System::Windows::Forms::LinkLabel());
+			this->label4 = (gcnew System::Windows::Forms::Label());
 			this->panel1->SuspendLayout();
 			this->SuspendLayout();
 			// 
@@ -153,10 +156,10 @@ namespace Hotkeyfy {
 			// 
 			this->panel1->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(18)), static_cast<System::Int32>(static_cast<System::Byte>(18)),
 				static_cast<System::Int32>(static_cast<System::Byte>(18)));
+			this->panel1->Controls->Add(this->textBox1);
 			this->panel1->Controls->Add(this->label8);
 			this->panel1->Controls->Add(this->label5);
 			this->panel1->Controls->Add(this->label7);
-			this->panel1->Controls->Add(this->label4);
 			this->panel1->Controls->Add(this->label3);
 			this->panel1->Controls->Add(this->label2);
 			this->panel1->Location = System::Drawing::Point(206, 44);
@@ -164,6 +167,23 @@ namespace Hotkeyfy {
 			this->panel1->Size = System::Drawing::Size(435, 257);
 			this->panel1->TabIndex = 3;
 			this->panel1->Visible = false;
+			// 
+			// textBox1
+			// 
+			this->textBox1->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(18)), static_cast<System::Int32>(static_cast<System::Byte>(18)),
+				static_cast<System::Int32>(static_cast<System::Byte>(18)));
+			this->textBox1->BorderStyle = System::Windows::Forms::BorderStyle::None;
+			this->textBox1->Font = (gcnew System::Drawing::Font(L"Plus Jakarta Sans", 9));
+			this->textBox1->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(167)), static_cast<System::Int32>(static_cast<System::Byte>(167)),
+				static_cast<System::Int32>(static_cast<System::Byte>(167)));
+			this->textBox1->Location = System::Drawing::Point(192, 59);
+			this->textBox1->Multiline = true;
+			this->textBox1->Name = L"textBox1";
+			this->textBox1->Size = System::Drawing::Size(240, 40);
+			this->textBox1->TabIndex = 12;
+			this->textBox1->Text = L"Keys";
+			this->textBox1->TextChanged += gcnew System::EventHandler(this, &Form1::textBox1_TextChanged);
+			this->textBox1->Enter += gcnew System::EventHandler(this, &Form1::textBox1_Enter);
 			// 
 			// label8
 			// 
@@ -184,7 +204,7 @@ namespace Hotkeyfy {
 			this->label5->AutoSize = true;
 			this->label5->Font = (gcnew System::Drawing::Font(L"Plus Jakarta Sans", 9, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
-			this->label5->Location = System::Drawing::Point(188, 130);
+			this->label5->Location = System::Drawing::Point(188, 139);
 			this->label5->Name = L"label5";
 			this->label5->Size = System::Drawing::Size(116, 20);
 			this->label5->TabIndex = 10;
@@ -200,18 +220,6 @@ namespace Hotkeyfy {
 			this->label7->Size = System::Drawing::Size(70, 20);
 			this->label7->TabIndex = 9;
 			this->label7->Text = L"Consume*";
-			// 
-			// label4
-			// 
-			this->label4->AutoSize = true;
-			this->label4->Font = (gcnew System::Drawing::Font(L"Plus Jakarta Sans", 9, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-				static_cast<System::Byte>(0)));
-			this->label4->Location = System::Drawing::Point(188, 65);
-			this->label4->Name = L"label4";
-			this->label4->Size = System::Drawing::Size(36, 20);
-			this->label4->TabIndex = 6;
-			this->label4->Text = L"Keys";
-			this->label4->TextChanged += gcnew System::EventHandler(this, &Form1::label4_TextChanged);
 			// 
 			// label3
 			// 
@@ -285,11 +293,20 @@ namespace Hotkeyfy {
 			this->linkLabel1->Text = L"©Luca Trefz";
 			this->linkLabel1->LinkClicked += gcnew System::Windows::Forms::LinkLabelLinkClickedEventHandler(this, &Form1::linkLabel1_LinkClicked);
 			// 
+			// label4
+			// 
+			this->label4->AutoSize = true;
+			this->label4->Location = System::Drawing::Point(30, 259);
+			this->label4->Name = L"label4";
+			this->label4->Size = System::Drawing::Size(0, 18);
+			this->label4->TabIndex = 13;
+			// 
 			// Form1
 			// 
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::None;
 			this->BackColor = System::Drawing::Color::Black;
 			this->ClientSize = System::Drawing::Size(653, 311);
+			this->Controls->Add(this->label4);
 			this->Controls->Add(this->linkLabel1);
 			this->Controls->Add(this->label6);
 			this->Controls->Add(this->listView1);
@@ -356,12 +373,12 @@ namespace Hotkeyfy {
 			}
 			if (keys.empty())
 			{
-				label4->Text = "No Hotkey set!";
+				textBox1->Text = "No Hotkey set!";
 			}
 			else {
-				label4->Text = gcnew System::String(keys.c_str());
+				textBox1->Text = gcnew System::String(keys.c_str());
 			}
-			label4->ForeColor = Colors::lightGrayBrush->Color;
+			textBox1->ForeColor = Colors::lightGrayBrush->Color;
 
 			checkKeys(hotkey.first);
 
@@ -427,7 +444,7 @@ namespace Hotkeyfy {
 
 			actionPanel->Controls->Add(label2);
 			actionPanel->Controls->Add(label3);
-			actionPanel->Controls->Add(label4);
+			actionPanel->Controls->Add(textBox1);
 			actionPanel->Controls->Add(label5);
 			actionPanel->Controls->Add(label7);
 			actionPanel->Controls->Add(label8);
@@ -526,22 +543,22 @@ namespace Hotkeyfy {
 			keys += L"+" + key;
 		}
 		
-		label4->ForeColor = Colors::lightOrangeBrush->Color;
+		textBox1->ForeColor = Colors::lightOrangeBrush->Color;
 
 		if (keys.empty())
 		{
-			label4->Text = "Press any key or key sequence...";
+			textBox1->Text = "Press any key or key sequence...";
 			
 		}
 		else {
-			label4->Text = gcnew System::String(keys.c_str());
+			textBox1->Text = gcnew System::String(keys.c_str());
 		}
 
 		if (!KeyListener::isListening())
 		{
 			timer1->Stop();
 			KeyListener::enableHotkeys();
-			label4->ForeColor = Color::LimeGreen;
+			textBox1->ForeColor = Color::LimeGreen;
 		}
 	}
 	private: System::Void Form1_FormClosing(System::Object^ sender, System::Windows::Forms::FormClosingEventArgs^ e) {
@@ -554,11 +571,33 @@ namespace Hotkeyfy {
 		config::setProcess(msclr::interop::marshal_as<std::string>(processTextBox->Text));
 		KeyListener::reloadConfig();
 	}
-	private: System::Void label4_TextChanged(System::Object^ sender, System::EventArgs^ e) {
+	private: System::Void textBox1_TextChanged(System::Object^ sender, System::EventArgs^ e) {
 		if (KeyListener::isListening())
 		{
 			config::setHotkeys(msclr::interop::marshal_as<std::string>(label2->Text), KeyListener::getKeys(), consumeToggle->isChecked());
 		}
+
+		const int maxLineLength = 38;
+		std::wstring text = msclr::interop::marshal_as<std::wstring>(textBox1->Text);
+		for (size_t pos = text.rfind('\n'); (pos != std::string::npos && text.size() - pos > maxLineLength) || text.size() > maxLineLength; pos = text.rfind('\n'))
+		{
+			size_t plusPos = text.find('+', (pos == std::string::npos ? 0 : pos + 1) + maxLineLength);
+			if (plusPos != std::string::npos)
+			{
+				text.insert(text.begin() + plusPos + 1, '\n');
+			}
+			else
+			{
+				size_t lastNL = text.rfind('\n');
+				size_t insertPos = (lastNL == std::string::npos ? 0 : lastNL) + (maxLineLength - 1);
+				if (insertPos > text.size())
+				{
+					break;
+				}
+				text.insert(text.begin() + insertPos, '\n');
+			}
+		}
+		textBox1->Text = msclr::interop::marshal_as<System::String^>(text);
 	}
 	private: System::Void consumeInputToggle_CheckedChanged(System::Object^ sender, System::EventArgs^ e) {
 		config::setHotkeys(msclr::interop::marshal_as<std::string>(label2->Text), {}, consumeToggle->isChecked());
@@ -581,6 +620,9 @@ namespace Hotkeyfy {
 	}
 private: System::Void linkLabel1_LinkClicked(System::Object^ sender, System::Windows::Forms::LinkLabelLinkClickedEventArgs^ e) {
 	System::Diagnostics::Process::Start(L"https://github.com/Random-typ/Hotkeyfy");
+}
+private: System::Void textBox1_Enter(System::Object^ sender, System::EventArgs^ e) {
+	label4->Focus();
 }
 };
 }

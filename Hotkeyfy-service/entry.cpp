@@ -1,5 +1,5 @@
 #include "HotkeyfyService.h"
-
+#include <iostream>
 #ifdef _DEBUG
 int main()
 #else

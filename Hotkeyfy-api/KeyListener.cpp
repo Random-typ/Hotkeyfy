@@ -133,15 +133,17 @@ LRESULT KeyListener::KeyboardProc(int nCode, WPARAM wParam, LPARAM lParam)
 
 	KeystrokeMessage keyCode{ 0 };
 	keyCode.scanCode = ((KBDLLHOOKSTRUCT*)lParam)->scanCode;
-	keyCode.flags = ((KBDLLHOOKSTRUCT*)lParam)->flags;
-
+	keyCode.flags = ((KBDLLHOOKSTRUCT*)lParam)->flags & LLKHF_EXTENDED;
+	
+	KBDLLHOOKSTRUCT*  pppp = ((KBDLLHOOKSTRUCT*)lParam);
+	
 	bool extendedKey = ((lParam >> 24) & 0x01);
 
 	bool numpadKey = (keyCode.scanCode >= 0x47 && keyCode.scanCode <= 0x53) || // Numpad keys
 		(keyCode.scanCode == 0x35 && !extendedKey);       // "/" on numpad
 
 	if (numpadKey) {
-		keyCode.scanCode |= 0x100; // Set the extended bit
+		//keyCode.scanCode |= 0x100; // Set the extended bit
 	}
 
 	if (!keyCode.scanCode)
@@ -167,16 +169,7 @@ LRESULT KeyListener::KeyboardProc(int nCode, WPARAM wParam, LPARAM lParam)
 			return keyCode == key;
 			}))
 		{
-
 			keyList.emplace_back(keyCode);
-			if (keyList.size() > 1)
-			{
-				Beep(0, 0);
-			}
-			for (auto& i : keyList)
-			{
-				std::wcout << getKeyName(i) << GetAsyncKeyState(MapVirtualKeyA(i.scanCode | (i.flags ? (0xe0 << 16) : 0), MAPVK_VSC_TO_VK_EX)) <<"\n";
-			}
 		}
 		keyList_mutex.unlock();
 		// listening -> no hotkeys should work
@@ -200,14 +193,21 @@ LRESULT KeyListener::KeyboardProc(int nCode, WPARAM wParam, LPARAM lParam)
 		
 
 		if (!i.second.first.empty() && std::all_of(i.second.first.begin(), i.second.first.end(), [keyCode](KeystrokeMessage key) {
-			
-			DWORD d = key.scanCode | (key.flags ? (0xe0 << 8) : 0);
-			bool b = (GetAsyncKeyState(MapVirtualKeyA(d, MAPVK_VSC_TO_VK_EX)) & 0x8000);
-			if (key.flags)
+			DWORD ee = GetAsyncKeyState(VK_RMENU);
+			std::cout << ee << "\n";
+			bool keyState = false;
+			DWORD extendedScanCode = key.scanCode | (key.flags ? (0xe0 << 8) : 0);
+			if (extendedScanCode == MapVirtualKeyA(VK_RMENU, MAPVK_VK_TO_VSC_EX))// right alt is special :^)
 			{
-				Beep(0, 0);
+				
+				keyState = true;
 			}
-			return keyCode == key || b;
+			else
+			{
+				keyState = 1;
+			}
+
+			return (keyCode.scanCode == key.scanCode) || (GetKeyState(MapVirtualKeyA(extendedScanCode, MAPVK_VSC_TO_VK_EX)) & 0x8000);
 			}))
 		{
 			doAction(i.first);
