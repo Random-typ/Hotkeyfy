@@ -18,7 +18,7 @@ Action config::getHotkeys(const std::string& _action)
     auto iterator = hotkeys.find(_action);
     if (iterator == hotkeys.end())
     {
-        return { Keys(), false };
+        return Action();
     }
     return iterator->second;
 }
@@ -27,9 +27,9 @@ void config::setHotkeys(const std::string& _action, const Keys& _keys, bool _con
 {
     if (_keys.size())
     {
-        hotkeys[_action].first = _keys;
+        hotkeys[_action].keys = _keys;
     }
-    hotkeys[_action].second = _consume;
+    hotkeys[_action].consume = _consume;
 }
 
 std::optional<std::string> config::alreadySet(const std::string& _actionName, const Keys& _keys)
@@ -37,8 +37,8 @@ std::optional<std::string> config::alreadySet(const std::string& _actionName, co
     for (auto& hotkey : hotkeys)
     {
         if (_actionName != hotkey.first &&
-            hotkey.second.first.size() == _keys.size() &&
-            std::all_of(hotkey.second.first.begin(), hotkey.second.first.end(), [_keys](KeystrokeMessage key) {
+            hotkey.second.keys.size() == _keys.size() &&
+            std::all_of(hotkey.second.keys.begin(), hotkey.second.keys.end(), [_keys](KeystrokeMessage key) {
                 return std::any_of(_keys.begin(), _keys.end(), [key](KeystrokeMessage newkey) {
                     return newkey == key;
                     });
@@ -109,10 +109,10 @@ void config::reload()
     for (auto& action : conf["actions"])
     {
         Action data;
-        data.second = action["consume"];
+        data.consume = action["consume"];
         for (auto& key : action["keys"])
         {
-            data.first.emplace_back(key);
+            data.keys.emplace_back(key);
         }
         if (!action.contains("action"))
         {
@@ -136,8 +136,8 @@ void config::save()
     {
         conf["actions"] += {
             { "action", key.first },
-            { "consume", key.second.second },
-            { "keys", key.second.first.toNumbers() }
+            { "consume", key.second.consume },
+            { "keys", key.second.keys.toNumbers() }
         };
     }
     
@@ -213,6 +213,17 @@ void config::setProcess(const std::string& _process)
 std::string config::getProcess()
 {
     return process;
+}
+
+void config::resetKeyStatus()
+{
+    for (auto& hotkey : hotkeys)
+    {
+        for (auto& key : hotkey.second.keys)
+        {
+            key.status = KeystrokeMessage::unknown;
+        }
+    }
 }
 
 ActionMap& config::getHotkeys()

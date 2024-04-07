@@ -12,10 +12,20 @@
 
 // https://learn.microsoft.com/en-us/windows/win32/inputdev/about-keyboard-input#keystroke-message-flags
 struct KeystrokeMessage {
-	KeystrokeMessage(uint64_t _value) : scanCode(_value & 0xFFFFFFFF), flags(_value >> 32), unused(0){}
+	enum KeystrokeMessageStatus : uint16_t
+	{
+		unknown,
+		pressed,
+		// one might say it is depressed
+		notPressed
+	};
+
+	KeystrokeMessage(uint64_t _value) : scanCode(_value & 0xFFFFFFFF), flags(_value >> 32), status(KeystrokeMessageStatus::unknown), unused(0) {}
 	DWORD scanCode;
 	DWORD flags : 1;
-	DWORD unused : 31;
+	// This value is not stored in the file
+	DWORD status : 16;
+	DWORD unused : 15;
 
 	uint64_t toNum() const
 	{
@@ -39,7 +49,11 @@ public:
 	}
 };
 
-using Action = std::pair<Keys, bool/*consume*/>;
+struct Action {
+	Action() : consume(false) {}
+	Keys keys;
+	bool consume;
+};
 using ActionMap = std::map<std::string/*action name*/, Action>;
 
 class HOTKEYFYAPI_DECLSPEC config
@@ -74,6 +88,8 @@ public:
 	static const std::string showGUI;
 
 	static ActionMap& getHotkeys();
+
+	static void resetKeyStatus();
 private:
 	static double volumeIncrement;
 	static double volumeDecrement;

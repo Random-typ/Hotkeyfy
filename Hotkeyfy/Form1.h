@@ -90,6 +90,7 @@ namespace Hotkeyfy {
 	private: System::Windows::Forms::Label^ label8;
 	private: System::Windows::Forms::TextBox^ textBox1;
 	private: System::Windows::Forms::Label^ label4;
+	private: System::Windows::Forms::Label^ label9;
 
 	private: System::ComponentModel::IContainer^ components;
 
@@ -116,18 +117,19 @@ namespace Hotkeyfy {
 		void InitializeComponent(void)
 		{
 			this->components = (gcnew System::ComponentModel::Container());
-			System::Windows::Forms::ListViewItem^ listViewItem1 = (gcnew System::Windows::Forms::ListViewItem(gcnew cli::array< System::String^  >(1) { L"Play Pause" },
+			System::Windows::Forms::ListViewItem^ listViewItem21 = (gcnew System::Windows::Forms::ListViewItem(gcnew cli::array< System::String^  >(1) { L"Play Pause" },
 				-1, System::Drawing::SystemColors::ControlLight, System::Drawing::Color::Empty, nullptr));
-			System::Windows::Forms::ListViewItem^ listViewItem2 = (gcnew System::Windows::Forms::ListViewItem(gcnew cli::array< System::String^  >(1) { L"Previous Track" },
+			System::Windows::Forms::ListViewItem^ listViewItem22 = (gcnew System::Windows::Forms::ListViewItem(gcnew cli::array< System::String^  >(1) { L"Previous Track" },
 				-1, System::Drawing::SystemColors::ControlLight, System::Drawing::Color::Empty, nullptr));
-			System::Windows::Forms::ListViewItem^ listViewItem3 = (gcnew System::Windows::Forms::ListViewItem(gcnew cli::array< System::String^  >(1) { L"Next Track" },
+			System::Windows::Forms::ListViewItem^ listViewItem23 = (gcnew System::Windows::Forms::ListViewItem(gcnew cli::array< System::String^  >(1) { L"Next Track" },
 				-1, System::Drawing::SystemColors::ControlLight, System::Drawing::Color::Empty, nullptr));
-			System::Windows::Forms::ListViewItem^ listViewItem4 = (gcnew System::Windows::Forms::ListViewItem(gcnew cli::array< System::String^  >(1) { L"Volume Up" },
+			System::Windows::Forms::ListViewItem^ listViewItem24 = (gcnew System::Windows::Forms::ListViewItem(gcnew cli::array< System::String^  >(1) { L"Volume Up" },
 				-1, System::Drawing::SystemColors::ControlLight, System::Drawing::Color::Empty, nullptr));
-			System::Windows::Forms::ListViewItem^ listViewItem5 = (gcnew System::Windows::Forms::ListViewItem(gcnew cli::array< System::String^  >(1) { L"Volume Down" },
+			System::Windows::Forms::ListViewItem^ listViewItem25 = (gcnew System::Windows::Forms::ListViewItem(gcnew cli::array< System::String^  >(1) { L"Volume Down" },
 				-1, System::Drawing::SystemColors::ControlLight, System::Drawing::Color::Empty, nullptr));
 			this->label1 = (gcnew System::Windows::Forms::Label());
 			this->panel1 = (gcnew System::Windows::Forms::Panel());
+			this->label9 = (gcnew System::Windows::Forms::Label());
 			this->textBox1 = (gcnew System::Windows::Forms::TextBox());
 			this->label8 = (gcnew System::Windows::Forms::Label());
 			this->label5 = (gcnew System::Windows::Forms::Label());
@@ -156,6 +158,7 @@ namespace Hotkeyfy {
 			// 
 			this->panel1->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(18)), static_cast<System::Int32>(static_cast<System::Byte>(18)),
 				static_cast<System::Int32>(static_cast<System::Byte>(18)));
+			this->panel1->Controls->Add(this->label9);
 			this->panel1->Controls->Add(this->textBox1);
 			this->panel1->Controls->Add(this->label8);
 			this->panel1->Controls->Add(this->label5);
@@ -168,6 +171,20 @@ namespace Hotkeyfy {
 			this->panel1->TabIndex = 3;
 			this->panel1->Visible = false;
 			// 
+			// label9
+			// 
+			this->label9->AutoSize = true;
+			this->label9->Font = (gcnew System::Drawing::Font(L"Plus Jakarta Sans", 9, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
+			this->label9->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(192)), static_cast<System::Int32>(static_cast<System::Byte>(0)),
+				static_cast<System::Int32>(static_cast<System::Byte>(0)));
+			this->label9->Location = System::Drawing::Point(21, 122);
+			this->label9->Name = L"label9";
+			this->label9->Size = System::Drawing::Size(350, 20);
+			this->label9->TabIndex = 13;
+			this->label9->Text = L"Some keys marked with \"(special)\" might not work correctly.";
+			this->label9->Visible = false;
+			// 
 			// textBox1
 			// 
 			this->textBox1->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(18)), static_cast<System::Int32>(static_cast<System::Byte>(18)),
@@ -176,7 +193,7 @@ namespace Hotkeyfy {
 			this->textBox1->Font = (gcnew System::Drawing::Font(L"Plus Jakarta Sans", 9));
 			this->textBox1->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(167)), static_cast<System::Int32>(static_cast<System::Byte>(167)),
 				static_cast<System::Int32>(static_cast<System::Byte>(167)));
-			this->textBox1->Location = System::Drawing::Point(192, 59);
+			this->textBox1->Location = System::Drawing::Point(192, 64);
 			this->textBox1->Multiline = true;
 			this->textBox1->Name = L"textBox1";
 			this->textBox1->Size = System::Drawing::Size(240, 40);
@@ -204,7 +221,7 @@ namespace Hotkeyfy {
 			this->label5->AutoSize = true;
 			this->label5->Font = (gcnew System::Drawing::Font(L"Plus Jakarta Sans", 9, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
-			this->label5->Location = System::Drawing::Point(188, 139);
+			this->label5->Location = System::Drawing::Point(188, 142);
 			this->label5->Name = L"label5";
 			this->label5->Size = System::Drawing::Size(116, 20);
 			this->label5->TabIndex = 10;
@@ -224,7 +241,7 @@ namespace Hotkeyfy {
 			// label3
 			// 
 			this->label3->AutoSize = true;
-			this->label3->Location = System::Drawing::Point(20, 226);
+			this->label3->Location = System::Drawing::Point(21, 226);
 			this->label3->Name = L"label3";
 			this->label3->Size = System::Drawing::Size(337, 18);
 			this->label3->TabIndex = 3;
@@ -249,8 +266,8 @@ namespace Hotkeyfy {
 				static_cast<System::Byte>(0)));
 			this->listView1->HideSelection = false;
 			this->listView1->Items->AddRange(gcnew cli::array< System::Windows::Forms::ListViewItem^  >(5) {
-				listViewItem1, listViewItem2,
-					listViewItem3, listViewItem4, listViewItem5
+				listViewItem21, listViewItem22,
+					listViewItem23, listViewItem24, listViewItem25
 			});
 			this->listView1->Location = System::Drawing::Point(14, 44);
 			this->listView1->MultiSelect = false;
@@ -354,16 +371,16 @@ namespace Hotkeyfy {
 			label2->Text = _name;
 
 			::Action hotkey = config::getHotkeys(msclr::interop::marshal_as<std::string>(_name));
-			if (hotkey.first.empty())
+			if (hotkey.keys.empty())
 			{// default = consume
 				consumeToggle->setCheck(true);
 			}
 			else {
-				consumeToggle->setCheck(hotkey.second);
+				consumeToggle->setCheck(hotkey.consume);
 			}
 
 			std::wstring keys;
-			for (auto& key : hotkey.first)
+			for (auto& key : hotkey.keys)
 			{
 				if (!keys.empty())
 				{
@@ -380,7 +397,7 @@ namespace Hotkeyfy {
 			}
 			textBox1->ForeColor = Colors::lightGrayBrush->Color;
 
-			checkKeys(hotkey.first);
+			checkKeys(hotkey.keys);
 
 			if (_name == "Volume Up")
 			{
@@ -462,7 +479,7 @@ namespace Hotkeyfy {
 
 			// volume UpDown
 			volumeUpDown = gcnew CNumericUpDown();
-			volumeUpDown->Location = System::Drawing::Point(20, 90);
+			volumeUpDown->Location = System::Drawing::Point(20, 100);
 			volumeUpDown->ValueChanged += gcnew System::EventHandler(this, &Form1::volumeUpDown_ValueChanged);
 			actionPanel->Controls->Add(volumeUpDown);
 
@@ -577,27 +594,30 @@ namespace Hotkeyfy {
 			config::setHotkeys(msclr::interop::marshal_as<std::string>(label2->Text), KeyListener::getKeys(), consumeToggle->isChecked());
 		}
 
-		const int maxLineLength = 38;
+		//const int maxLineLength = 38;
 		std::wstring text = msclr::interop::marshal_as<std::wstring>(textBox1->Text);
-		for (size_t pos = text.rfind('\n'); (pos != std::string::npos && text.size() - pos > maxLineLength) || text.size() > maxLineLength; pos = text.rfind('\n'))
-		{
-			size_t plusPos = text.find('+', (pos == std::string::npos ? 0 : pos + 1) + maxLineLength);
-			if (plusPos != std::string::npos)
-			{
-				text.insert(text.begin() + plusPos + 1, '\n');
-			}
-			else
-			{
-				size_t lastNL = text.rfind('\n');
-				size_t insertPos = (lastNL == std::string::npos ? 0 : lastNL) + (maxLineLength - 1);
-				if (insertPos > text.size())
-				{
-					break;
-				}
-				text.insert(text.begin() + insertPos, '\n');
-			}
-		}
-		textBox1->Text = msclr::interop::marshal_as<System::String^>(text);
+		//for (size_t pos = text.rfind('\n'); (pos != std::string::npos && text.size() - pos > maxLineLength) || text.size() > maxLineLength; pos = text.rfind('\n'))
+		//{
+		//	size_t plusPos = text.find('+', (pos == std::string::npos ? 0 : pos + 1) + maxLineLength);
+		//	if (plusPos != std::string::npos)
+		//	{
+		//		text.insert(text.begin() + plusPos + 1, '\n');
+		//	}
+		//	else
+		//	{
+		//		size_t lastNL = text.rfind('\n');
+		//		size_t insertPos = (lastNL == std::string::npos ? 0 : lastNL) + (maxLineLength - 1);
+		//		if (insertPos > text.size())
+		//		{
+		//			break;
+		//		}
+		//		text.insert(text.begin() + insertPos, '\n');
+		//	}
+		//}
+
+		//textBox1->Text = msclr::interop::marshal_as<System::String^>(text);
+
+		label9->Visible = textBox1->Text->Contains("(special)");
 	}
 	private: System::Void consumeInputToggle_CheckedChanged(System::Object^ sender, System::EventArgs^ e) {
 		config::setHotkeys(msclr::interop::marshal_as<std::string>(label2->Text), {}, consumeToggle->isChecked());

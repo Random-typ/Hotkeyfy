@@ -120,11 +120,14 @@ void KeyListener::reloadConfig()
 	std::string exe = config::getProcess();
 	audioControl.selectExecutableName(std::wstring(exe.begin(), exe.end()));
 }
-
+bool altPressed = false;
 
 LRESULT KeyListener::KeyboardProc(int nCode, WPARAM wParam, LPARAM lParam)
 {
-	if (nCode < 0)
+#if 0
+	auto start = std::chrono::high_resolution_clock::now();
+#endif // 0	
+	if (nCode < 0 || nCode != HC_ACTION)
 	{
 		return CallNextHookEx(keyboardHook, nCode, wParam, lParam);
 	}
@@ -135,16 +138,14 @@ LRESULT KeyListener::KeyboardProc(int nCode, WPARAM wParam, LPARAM lParam)
 	keyCode.scanCode = ((KBDLLHOOKSTRUCT*)lParam)->scanCode;
 	keyCode.flags = ((KBDLLHOOKSTRUCT*)lParam)->flags & LLKHF_EXTENDED;
 	
-	KBDLLHOOKSTRUCT*  pppp = ((KBDLLHOOKSTRUCT*)lParam);
-	
-	bool extendedKey = ((lParam >> 24) & 0x01);
+	//bool extendedKey = ((lParam >> 24) & 0x01);
 
-	bool numpadKey = (keyCode.scanCode >= 0x47 && keyCode.scanCode <= 0x53) || // Numpad keys
-		(keyCode.scanCode == 0x35 && !extendedKey);       // "/" on numpad
+	//bool numpadKey = (keyCode.scanCode >= 0x47 && keyCode.scanCode <= 0x53) || // Numpad keys
+	//	(keyCode.scanCode == 0x35 && !extendedKey);       // "/" on numpad
 
-	if (numpadKey) {
-		//keyCode.scanCode |= 0x100; // Set the extended bit
-	}
+	//if (numpadKey) {
+	//	//keyCode.scanCode |= 0x100; // Set the extended bit
+	//}
 
 	if (!keyCode.scanCode)
 	{
@@ -165,7 +166,7 @@ LRESULT KeyListener::KeyboardProc(int nCode, WPARAM wParam, LPARAM lParam)
 			return CallNextHookEx(keyboardHook, nCode, wParam, lParam);
 		}
 		keyList_mutex.lock();
-		if (!std::any_of(keyList.begin(), keyList.end(), [keyCode](KeystrokeMessage key){
+		if (!std::any_of(keyList.begin(), keyList.end(), [keyCode, lParam](KeystrokeMessage key){
 			return keyCode == key;
 			}))
 		{
@@ -179,8 +180,7 @@ LRESULT KeyListener::KeyboardProc(int nCode, WPARAM wParam, LPARAM lParam)
 	{
  		return CallNextHookEx(keyboardHook, nCode, wParam, lParam);
 	}
-
-  	if (wParam != WM_KEYDOWN && wParam != WM_SYSKEYDOWN)
+	if (wParam != WM_KEYDOWN && wParam != WM_SYSKEYDOWN)
 	{
 		return CallNextHookEx(keyboardHook, nCode, wParam, lParam);
 	}
@@ -189,30 +189,16 @@ LRESULT KeyListener::KeyboardProc(int nCode, WPARAM wParam, LPARAM lParam)
 	// hotkey checking
 	for (auto& i : hotkeys)
 	{
-		DWORD dd = MapVirtualKeyA(VK_RMENU, MAPVK_VK_TO_VSC_EX);
-		
-
-		if (!i.second.first.empty() && std::all_of(i.second.first.begin(), i.second.first.end(), [keyCode](KeystrokeMessage key) {
-			DWORD ee = GetAsyncKeyState(VK_RMENU);
-			std::cout << ee << "\n";
-			bool keyState = false;
+		if (!i.second.keys.empty() && std::all_of(i.second.keys.begin(), i.second.keys.end(), [keyCode, lParam, wParam](KeystrokeMessage& key) {
 			DWORD extendedScanCode = key.scanCode | (key.flags ? (0xe0 << 8) : 0);
-			if (extendedScanCode == MapVirtualKeyA(VK_RMENU, MAPVK_VK_TO_VSC_EX))// right alt is special :^)
-			{
-				
-				keyState = true;
-			}
-			else
-			{
-				keyState = 1;
-			}
+			DWORD vKey = MapVirtualKeyA(extendedScanCode, MAPVK_VSC_TO_VK_EX);
 
-			return (keyCode.scanCode == key.scanCode) || (GetKeyState(MapVirtualKeyA(extendedScanCode, MAPVK_VSC_TO_VK_EX)) & 0x8000);
+			return ((KBDLLHOOKSTRUCT*)lParam)->vkCode == vKey || (GetAsyncKeyState(vKey) & 0x8000);
 			}))
-		{
+		{			
 			doAction(i.first);
 
-			if (i.second.second/*consume*/)
+			if (i.second.consume/*consume*/)
 			{
 				return 1;
 			}
@@ -220,6 +206,10 @@ LRESULT KeyListener::KeyboardProc(int nCode, WPARAM wParam, LPARAM lParam)
 		}
 	}
 
+#if 0
+	auto end = std::chrono::high_resolution_clock::now();
+	std::cout << "Procedure took:" << (end - start) << "\n";
+#endif // 0	
 	return CallNextHookEx(keyboardHook, nCode, wParam, lParam);
 }
 

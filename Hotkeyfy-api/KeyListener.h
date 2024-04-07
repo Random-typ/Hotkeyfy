@@ -4,6 +4,7 @@
 #include <vector>
 #include <mutex>
 #include <algorithm>
+#include <array>
 #include <Windows.h>
 #include "HotkeyfyExport.h"
 #include "config.h"
