@@ -14,7 +14,7 @@ Hotkeyfy makes it possible to add sound control hotkeys to any process.
 
 ## Installing
 
-Just download the newest installer from the [releases section](https://github.com/Random-typ/Hotkeyfy/releases). Then follow the instructions of the installer.
+Just download the latest installer from the [releases section](https://github.com/Random-typ/Hotkeyfy/releases). Then follow the instructions in the installer.
 
 ## Building yourself
 Download the repository from the master branch and open the solution with Visual Studio.
