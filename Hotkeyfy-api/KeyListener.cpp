@@ -1,6 +1,8 @@
 #include "KeyListener.h"
 #include <iostream>
 
+#include <GameInput.h>
+
 Keys KeyListener::keyList;
 std::mutex KeyListener::keyList_mutex;
 
@@ -16,6 +18,11 @@ ProcessAudioControl KeyListener::audioControl;
 
 void KeyListener::init()
 {
+	IGameInput* input;
+	
+	HRESULT hres = GameInputCreate(&input);
+	input->GetCurrentReading(GameInputKind::GameInputKindKeyboard, );
+	
 	keyboardHook = SetWindowsHookEx(WH_KEYBOARD_LL, KeyboardProc, GetModuleHandle(NULL), 0);
 	loopTh = std::jthread(loop);
 
@@ -69,7 +76,7 @@ std::wstring KeyListener::getKeyName(KeystrokeMessage _extendedKeyCode)
 	key.resize(len);
 	
 	if (len = GetKeyNameTextW(_extendedKeyCode.scanCode << 16, key.data(), key.size()); !len) {
-		return std::wstring();
+		return std::wstring(L"UnKnOwN");
 	}
 	key.resize(len);
 	return key + (_extendedKeyCode.flags ? L"(special)" : L"");
@@ -131,6 +138,51 @@ LRESULT KeyListener::KeyboardProc(int nCode, WPARAM wParam, LPARAM lParam)
 	{
 		return CallNextHookEx(keyboardHook, nCode, wParam, lParam);
 	}
+	
+	HRESULT hres = CoInitialize(NULL);
+
+	IGameInputReading* input;
+
+	hres = CoCreateInstance(__uuidof(IGameInputReading), NULL, CLSCTX_ALL, __uuidof(IGameInputReading), (void**)&input);
+
+	const uint32_t intKeyCount = input->GetKeyCount();
+
+	std::vector<GameInputKeyState> keys;
+	keys.resize(intKeyCount);
+
+	input->GetKeyState(intKeyCount, keys.data());
+	
+	for (auto& i : keys)
+	{
+		KeystrokeMessage msg(0);
+		msg.scanCode = i.scanCode;
+		//msg.flags = i.;
+		std::wcout << getKeyName(msg) << L"\n";
+	}
+
+
+	return CallNextHookEx(keyboardHook, nCode, wParam, lParam);
+
+
+	//KBDLLHOOKSTRUCT* p = ((KBDLLHOOKSTRUCT*)lParam);
+	//
+	//std::array<char, 256> keyboard;
+	//GetKeyboardState((PBYTE)keyboard.data());
+	//static bool stop = false;
+	//if (!stop)
+	//{
+	//	stop = true;
+	//	for (auto& i : keyboard)
+	//	{
+	//		std::cout << (int)i << ", ";
+	//	}
+	//}
+
+	//wchar_t name[256];
+	//HKL hkl = GetKeyboardLayout(0);
+	//int ee = ToUnicodeEx(p->vkCode, p->scanCode, (LPBYTE)keyboard.data(), name, sizeof(name) / sizeof(name[0]), 2, hkl);
+	//std::wcout << ee << "  " << name << "\n";
+	//return CallNextHookEx(keyboardHook, nCode, wParam, lParam);
 
 	// convert the message to "useful" value
 
@@ -189,11 +241,12 @@ LRESULT KeyListener::KeyboardProc(int nCode, WPARAM wParam, LPARAM lParam)
 	// hotkey checking
 	for (auto& i : hotkeys)
 	{
+		
 		if (!i.second.keys.empty() && std::all_of(i.second.keys.begin(), i.second.keys.end(), [keyCode, lParam, wParam](KeystrokeMessage& key) {
 			DWORD extendedScanCode = key.scanCode | (key.flags ? (0xe0 << 8) : 0);
 			DWORD vKey = MapVirtualKeyA(extendedScanCode, MAPVK_VSC_TO_VK_EX);
-
-			return ((KBDLLHOOKSTRUCT*)lParam)->vkCode == vKey || (GetAsyncKeyState(vKey) & 0x8000);
+			
+			return ((KBDLLHOOKSTRUCT*)lParam)->vkCode == vKey || (GetAsyncKeyState(vKey) < 0);
 			}))
 		{			
 			doAction(i.first);

@@ -87,4 +87,7 @@
       <Filter>Resource Files</Filter>
     </Font>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
 </Project>
