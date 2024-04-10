@@ -573,6 +573,8 @@ namespace Hotkeyfy {
 
 		if (!KeyListener::isListening())
 		{
+			config::setHotkeys(msclr::interop::marshal_as<std::string>(label2->Text), KeyListener::getKeys(), consumeToggle->isChecked());
+
 			timer1->Stop();
 			KeyListener::enableHotkeys();
 			textBox1->ForeColor = Color::LimeGreen;
@@ -589,12 +591,7 @@ namespace Hotkeyfy {
 		KeyListener::reloadConfig();
 	}
 	private: System::Void textBox1_TextChanged(System::Object^ sender, System::EventArgs^ e) {
-		if (KeyListener::isListening())
-		{
-			config::setHotkeys(msclr::interop::marshal_as<std::string>(label2->Text), KeyListener::getKeys(), consumeToggle->isChecked());
-		}
-
-		label9->Visible = textBox1->Text->Contains("(special)");
+		// label9->Visible = textBox1->Text->Contains("(special)");
 	}
 	private: System::Void consumeInputToggle_CheckedChanged(System::Object^ sender, System::EventArgs^ e) {
 		config::setHotkeys(msclr::interop::marshal_as<std::string>(label2->Text), {}, consumeToggle->isChecked());

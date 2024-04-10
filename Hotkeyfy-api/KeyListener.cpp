@@ -1,7 +1,6 @@
+#define NOMINMAX
 #include "KeyListener.h"
 #include <iostream>
-
-#include <GameInput.h>
 
 Keys KeyListener::keyList;
 std::mutex KeyListener::keyList_mutex;
@@ -15,14 +14,81 @@ bool KeyListener::doListen = false;
 std::atomic_bool KeyListener::hotkeysEnabled = false;
 ProcessAudioControl KeyListener::audioControl;
 
+/*
+// Apparently Microsoft has not finished this library...
+#include <GameInput.h>
+#include <wrl/client.h>
+
+Microsoft::WRL::ComPtr<IGameInput> gameInput;
+Microsoft::WRL::ComPtr<IGameInputDevice> gamepad;
+Microsoft::WRL::ComPtr<IGameInputReading> prevReading;
+
+void PollGamepadInput() noexcept
+{
+	HRESULT hr = GameInputCreate(gameInput.GetAddressOf());
+
+	while (true)
+	{
+		PollGamepadInput();
+	}
+	IGameInput* input;
+
+	HRESULT hres = GameInputCreate(&input);
+
+	IGameInputReading* reading;
+	while (true)
+	{
+		hres = input->GetCurrentReading(GameInputKind::GameInputKindKeyboard, nullptr, &reading);
+
+		int keyCount = reading->GetKeyCount();
+		std::cout << keyCount << "\n";
+		std::vector<GameInputKeyState> state;
+		state.resize(keyCount);
+
+		uint32_t u = reading->GetKeyState(keyCount, state.data());
+
+	}
+
+	if (!prevReading)
+	{
+		if (SUCCEEDED(gameInput->GetCurrentReading(
+			GameInputKindGamepad,
+			nullptr,
+			&prevReading)))
+		{
+			prevReading->GetDevice(&gamepad);
+
+			// Application-specific code to process the initial reading. 
+		}
+	}
+
+	else
+	{
+		Microsoft::WRL::ComPtr<IGameInputReading> nextReading;
+		HRESULT hr = gameInput->GetNextReading(
+			prevReading.Get(),
+			GameInputKindGamepad,
+			gamepad.Get(),
+			&nextReading);
+
+		if (SUCCEEDED(hr))
+		{
+			// Application-specific code to process the next reading. 
+
+			prevReading = nextReading;
+		}
+
+		else if (hr != GAMEINPUT_E_READING_NOT_FOUND)
+		{
+			gamepad = nullptr;
+			prevReading = nullptr;
+		}
+	}
+}
+*/
 
 void KeyListener::init()
 {
-	IGameInput* input;
-	
-	HRESULT hres = GameInputCreate(&input);
-	input->GetCurrentReading(GameInputKind::GameInputKindKeyboard, );
-	
 	keyboardHook = SetWindowsHookEx(WH_KEYBOARD_LL, KeyboardProc, GetModuleHandle(NULL), 0);
 	loopTh = std::jthread(loop);
 
@@ -138,66 +204,18 @@ LRESULT KeyListener::KeyboardProc(int nCode, WPARAM wParam, LPARAM lParam)
 	{
 		return CallNextHookEx(keyboardHook, nCode, wParam, lParam);
 	}
-	
-	HRESULT hres = CoInitialize(NULL);
 
-	IGameInputReading* input;
-
-	hres = CoCreateInstance(__uuidof(IGameInputReading), NULL, CLSCTX_ALL, __uuidof(IGameInputReading), (void**)&input);
-
-	const uint32_t intKeyCount = input->GetKeyCount();
-
-	std::vector<GameInputKeyState> keys;
-	keys.resize(intKeyCount);
-
-	input->GetKeyState(intKeyCount, keys.data());
-	
-	for (auto& i : keys)
+	if (wParam != WM_KEYUP && wParam != WM_SYSKEYUP && wParam != WM_KEYDOWN && wParam != WM_SYSKEYDOWN)
 	{
-		KeystrokeMessage msg(0);
-		msg.scanCode = i.scanCode;
-		//msg.flags = i.;
-		std::wcout << getKeyName(msg) << L"\n";
+		return CallNextHookEx(keyboardHook, nCode, wParam, lParam);
 	}
-
-
-	return CallNextHookEx(keyboardHook, nCode, wParam, lParam);
-
-
-	//KBDLLHOOKSTRUCT* p = ((KBDLLHOOKSTRUCT*)lParam);
-	//
-	//std::array<char, 256> keyboard;
-	//GetKeyboardState((PBYTE)keyboard.data());
-	//static bool stop = false;
-	//if (!stop)
-	//{
-	//	stop = true;
-	//	for (auto& i : keyboard)
-	//	{
-	//		std::cout << (int)i << ", ";
-	//	}
-	//}
-
-	//wchar_t name[256];
-	//HKL hkl = GetKeyboardLayout(0);
-	//int ee = ToUnicodeEx(p->vkCode, p->scanCode, (LPBYTE)keyboard.data(), name, sizeof(name) / sizeof(name[0]), 2, hkl);
-	//std::wcout << ee << "  " << name << "\n";
-	//return CallNextHookEx(keyboardHook, nCode, wParam, lParam);
-
+	
 	// convert the message to "useful" value
-
 	KeystrokeMessage keyCode{ 0 };
 	keyCode.scanCode = ((KBDLLHOOKSTRUCT*)lParam)->scanCode;
 	keyCode.flags = ((KBDLLHOOKSTRUCT*)lParam)->flags & LLKHF_EXTENDED;
 	
-	//bool extendedKey = ((lParam >> 24) & 0x01);
-
-	//bool numpadKey = (keyCode.scanCode >= 0x47 && keyCode.scanCode <= 0x53) || // Numpad keys
-	//	(keyCode.scanCode == 0x35 && !extendedKey);       // "/" on numpad
-
-	//if (numpadKey) {
-	//	//keyCode.scanCode |= 0x100; // Set the extended bit
-	//}
+	config::updateKeyStatus(keyCode, wParam);
 
 	if (!keyCode.scanCode)
 	{
@@ -207,7 +225,7 @@ LRESULT KeyListener::KeyboardProc(int nCode, WPARAM wParam, LPARAM lParam)
  	if (doListen)
 	{
 		if (wParam == WM_KEYUP || wParam == WM_SYSKEYUP)
-		{
+		{// key lifted -> stop listening
 			doListen = false;
 			return CallNextHookEx(keyboardHook, nCode, wParam, lParam);
 		}
@@ -228,35 +246,19 @@ LRESULT KeyListener::KeyboardProc(int nCode, WPARAM wParam, LPARAM lParam)
 		// listening -> no hotkeys should work
 		return CallNextHookEx(keyboardHook, nCode, wParam, lParam);
 	}
-	if (!hotkeysEnabled)
+	if (!hotkeysEnabled ||
+		wParam == WM_KEYUP || 
+		wParam == WM_SYSKEYUP ||
+		// This is here purely for optimization
+		!config::hasKey(keyCode)
+		)
 	{
  		return CallNextHookEx(keyboardHook, nCode, wParam, lParam);
 	}
-	if (wParam != WM_KEYDOWN && wParam != WM_SYSKEYDOWN)
-	{
-		return CallNextHookEx(keyboardHook, nCode, wParam, lParam);
-	}
-	auto& hotkeys = config::getHotkeys();
 
-	// hotkey checking
-	for (auto& i : hotkeys)
-	{
-		
-		if (!i.second.keys.empty() && std::all_of(i.second.keys.begin(), i.second.keys.end(), [keyCode, lParam, wParam](KeystrokeMessage& key) {
-			DWORD extendedScanCode = key.scanCode | (key.flags ? (0xe0 << 8) : 0);
-			DWORD vKey = MapVirtualKeyA(extendedScanCode, MAPVK_VSC_TO_VK_EX);
-			
-			return ((KBDLLHOOKSTRUCT*)lParam)->vkCode == vKey || (GetAsyncKeyState(vKey) < 0);
-			}))
-		{			
-			doAction(i.first);
-
-			if (i.second.consume/*consume*/)
-			{
-				return 1;
-			}
-			break;
-		}
+	if (checkHotkeys())
+	{// consume key
+		return 1;
 	}
 
 #if 0
@@ -264,6 +266,29 @@ LRESULT KeyListener::KeyboardProc(int nCode, WPARAM wParam, LPARAM lParam)
 	std::cout << "Procedure took:" << (end - start) << "\n";
 #endif // 0	
 	return CallNextHookEx(keyboardHook, nCode, wParam, lParam);
+}
+
+bool KeyListener::checkHotkeys()
+{
+	auto& hotkeys = config::getHotkeys();
+
+	// hotkey checking
+	for (auto& i : hotkeys)
+	{
+		if (!i.second.keys.empty() && std::all_of(i.second.keys.begin(), i.second.keys.end(), [](KeystrokeMessage& key) {
+			return config::isKeyDown(key);
+			}))
+		{
+			doAction(i.first);
+
+			if (i.second.consume)
+			{
+				return true;
+			}
+			break;
+			}
+	}
+	return false;
 }
 
 void KeyListener::loop(std::stop_token _stoken)

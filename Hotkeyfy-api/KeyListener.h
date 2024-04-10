@@ -51,7 +51,12 @@ public:
 
 	static ProcessAudioControl audioControl;
 private:
+	// this function adds overhead in form of time to every key pressed.
+	// However, most of the time it should be less than 0.01ms.
 	static LRESULT CALLBACK KeyboardProc(int nCode, WPARAM wParam, LPARAM lParam);
+	
+	// @return true if the key should be consumed
+	static bool checkHotkeys();
 
 	static void loop(std::stop_token _stoken);
 

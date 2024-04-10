@@ -6,26 +6,18 @@
 #include <filesystem>
 #include <string>
 #include <map>
+#include <mutex>
 #include <fstream>
 #include <Windows.h>
 #include "HotkeyfyExport.h"
 
 // https://learn.microsoft.com/en-us/windows/win32/inputdev/about-keyboard-input#keystroke-message-flags
-struct KeystrokeMessage {
-	enum KeystrokeMessageStatus : uint16_t
-	{
-		unknown,
-		pressed,
-		// one might say it is depressed
-		notPressed
-	};
 
-	KeystrokeMessage(uint64_t _value) : scanCode(_value & 0xFFFFFFFF), flags(_value >> 32), status(KeystrokeMessageStatus::unknown), unused(0) {}
+struct KeystrokeMessage {
+	KeystrokeMessage(uint64_t _value) : scanCode(_value & 0xFFFFFFFF), flags(_value >> 32), unused(0) {}
 	DWORD scanCode;
 	DWORD flags : 1;
-	// This value is not stored in the file
-	DWORD status : 16;
-	DWORD unused : 15;
+	DWORD unused : 31;
 
 	uint64_t toNum() const
 	{
@@ -35,6 +27,20 @@ struct KeystrokeMessage {
 	bool operator==(KeystrokeMessage _other) const {
 		return _other.toNum() == toNum();
 	}
+	bool operator<(KeystrokeMessage _other) const {
+		return _other.toNum() < toNum();
+	}
+	bool operator>(KeystrokeMessage _other) const {
+		return _other.toNum() > toNum();
+	}
+};
+
+enum class KeystrokeMessageStatus
+{
+	unknown,
+	pressed,
+	// one might say it is depressed
+	notPressed
 };
 
 class Keys : public std::vector<KeystrokeMessage> {
@@ -75,6 +81,7 @@ public:
 
 	static void load(const std::wstring& _path);
 	static void reload();
+	static void reloadKeyStatus();
 
 	static void save();
 
@@ -90,6 +97,12 @@ public:
 	static ActionMap& getHotkeys();
 
 	static void resetKeyStatus();
+
+	static bool isKeyDown(KeystrokeMessage _key);
+
+	static void updateKeyStatus(KeystrokeMessage _key, WPARAM _status);
+
+	static bool hasKey(KeystrokeMessage _key);
 private:
 	static double volumeIncrement;
 	static double volumeDecrement;
@@ -97,5 +110,8 @@ private:
 
 	static ActionMap hotkeys;
 	static std::wstring path;
+
+	static std::map<KeystrokeMessage, KeystrokeMessageStatus> keyStatus;
+	static std::mutex keyStatus_mutex;
 };
 #endif // !__HotkeyfyConfig_H__

@@ -12,6 +12,9 @@ std::string config::process = "Spotify.exe";
 
 ActionMap config::hotkeys;
 std::wstring config::path;
+std::map<KeystrokeMessage, KeystrokeMessageStatus> config::keyStatus;
+std::mutex config::keyStatus_mutex;
+
 
 Action config::getHotkeys(const std::string& _action)
 {
@@ -28,6 +31,7 @@ void config::setHotkeys(const std::string& _action, const Keys& _keys, bool _con
     if (_keys.size())
     {
         hotkeys[_action].keys = _keys;
+        reloadKeyStatus();
     }
     hotkeys[_action].consume = _consume;
 }
@@ -80,6 +84,9 @@ void config::load(const std::wstring& _path)
 void config::reload()
 {
     hotkeys.clear();
+    keyStatus_mutex.lock();
+    keyStatus.clear();
+    keyStatus_mutex.unlock();
 
     std::filesystem::create_directories(std::filesystem::path(path).parent_path());
     std::ifstream fs(path);
@@ -120,6 +127,21 @@ void config::reload()
         }
         hotkeys[action["action"]] = data;
     }
+    reloadKeyStatus();
+}
+
+void config::reloadKeyStatus()
+{
+    keyStatus_mutex.lock();
+    keyStatus.clear();
+    for (auto& i : hotkeys)
+    {
+        for (auto& j : i.second.keys)
+        {
+            keyStatus.emplace(j, KeystrokeMessageStatus::unknown);
+        }
+    }
+    keyStatus_mutex.unlock();
 }
 
 void config::save()
@@ -217,14 +239,49 @@ std::string config::getProcess()
 
 void config::resetKeyStatus()
 {
-    for (auto& hotkey : hotkeys)
+    for (auto& hotkey : keyStatus)
     {
-        for (auto& key : hotkey.second.keys)
-        {
-            key.status = KeystrokeMessage::unknown;
-        }
+        hotkey.second = KeystrokeMessageStatus::unknown;
     }
 }
+
+bool config::isKeyDown(KeystrokeMessage _key)
+{
+    auto status = keyStatus.find(_key);
+    if (status == keyStatus.end())
+    {
+        return false;
+    }
+    return status->second == KeystrokeMessageStatus::pressed;
+}
+
+void config::updateKeyStatus(KeystrokeMessage _key, WPARAM _status)
+{
+    auto key = keyStatus.find(_key);
+    if (key == keyStatus.end())
+    {
+        return;
+    }
+    keyStatus_mutex.lock();
+    switch (_status)
+    {
+    case WM_KEYUP:
+    case WM_SYSKEYUP:
+        key->second = KeystrokeMessageStatus::notPressed;
+        break;
+    case WM_KEYDOWN:
+    case WM_SYSKEYDOWN:
+        key->second = KeystrokeMessageStatus::pressed;
+        break;
+    }
+    keyStatus_mutex.unlock();
+}
+
+bool config::hasKey(KeystrokeMessage _key) 
+{
+    return keyStatus.contains(_key);
+}
+
 
 ActionMap& config::getHotkeys()
 {
