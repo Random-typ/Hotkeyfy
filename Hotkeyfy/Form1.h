@@ -393,7 +393,7 @@ namespace Hotkeyfy {
 				textBox1->Text = "No Hotkey set!";
 			}
 			else {
-				textBox1->Text = gcnew System::String(keys.c_str());
+				textBox1->Text = msclr::interop::marshal_as<String^>(keys);
 			}
 			textBox1->ForeColor = Colors::lightGrayBrush->Color;
 
