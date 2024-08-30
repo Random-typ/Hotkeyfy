@@ -275,7 +275,7 @@ namespace Hotkeyfy {
         guiProcess = NULL;
     }
 
-    void Hotkeyfy::sendLaunchGUI()
+    bool Hotkeyfy::sendLaunchGUI()
     {
         bool found = false;
         EnumWindows([](HWND hwnd, LPARAM lParam) -> BOOL {
@@ -316,7 +316,7 @@ namespace Hotkeyfy {
 
         if (found)
         {
-            return;
+            return true;
         }
 
         std::wstring ServicePath = getBinaryPath() + L"/Hotkeyfy-service.exe";
@@ -333,8 +333,9 @@ namespace Hotkeyfy {
         executeInfo.lpParameters = wLaunch.c_str();
 
         if (!ShellExecuteExW(&executeInfo)) {
-            return;
+            return false;
         }
+        return true;
     }
 
     void Hotkeyfy::loadConfig()

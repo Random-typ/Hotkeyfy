@@ -333,7 +333,7 @@ namespace Hotkeyfy {
 				static_cast<System::Byte>(0)));
 			this->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(167)), static_cast<System::Int32>(static_cast<System::Byte>(167)),
 				static_cast<System::Int32>(static_cast<System::Byte>(167)));
-			this->MaximumSize = System::Drawing::Size(836, 350);
+			this->MaximumSize = System::Drawing::Size(669, 350);
 			this->MinimumSize = System::Drawing::Size(669, 350);
 			this->Name = L"Form1";
 			this->Text = L"Hotkeyfy";
@@ -522,8 +522,8 @@ namespace Hotkeyfy {
 
 		KeyListener::init();
 		KeyListener::enableHotkeys();
-
-		setAction(listView1->Items[0]->Text);
+		
+		ListView_SetItemState(static_cast<HWND>(listView1->Handle.ToPointer()), 0, LVIS_SELECTED, LVIS_SELECTED);
 	}
 	private: System::Void listView1_SelectedIndexChanged(System::Object^ sender, System::EventArgs^ e) {
 		ListView^ listView = (ListView^)sender;

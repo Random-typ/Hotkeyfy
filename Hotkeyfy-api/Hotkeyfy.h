@@ -33,7 +33,8 @@ public:
 
 	// sends a message to the service who then calls showGUI()
 	// if the service is not running it is started
-	static void sendLaunchGUI();
+	// @returns true if the message was send successfully, false if the service couldn't be started
+	static bool sendLaunchGUI();
 
 	static void loadConfig();
 

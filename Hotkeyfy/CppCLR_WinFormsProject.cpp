@@ -11,8 +11,11 @@ int main(array<System::String^>^ args)
 	// The GUI is only ment to be started from the service
 	if (args->Length < 1 || args[0] != msclr::interop::marshal_as<String^>(config::launchedFromService))
 	{
-		Hotkeyfy::Hotkeyfy::sendLaunchGUI();
-		return 0;
+		if (Hotkeyfy::Hotkeyfy::sendLaunchGUI())
+		{
+			return 0;
+		}
+		System::Windows::Forms::MessageBox::Show("Failed to launch service. Your installation may be corrupted, please reinstall the program.", "Failed to launch service!", System::Windows::Forms::MessageBoxButtons::OK, System::Windows::Forms::MessageBoxIcon::Error);
 	}
 
 	Application::EnableVisualStyles();
