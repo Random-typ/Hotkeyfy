@@ -1,4 +1,5 @@
 #include "Hotkeyfy.h"
+#include <filesystem>
 
 namespace Hotkeyfy {
 
@@ -9,9 +10,10 @@ namespace Hotkeyfy {
     UINT const WMAPP_NOTIFYCALLBACK = WM_APP + 1;
     bool Hotkeyfy::createWindows()
     {
-        if (FindWindow(L"HotkeyfyServiceClass", NULL))
+        if (findServiceWindow())
         {
-            terminateHotkeyfy();
+            std::cout << "HotkeyfyServiceClass class already registered\n";
+            terminateSelf();
         }
         RegisterWindowClass(L"HotkeyfyServiceClass", NULL, WndProc);
 
@@ -66,6 +68,7 @@ namespace Hotkeyfy {
 
     bool Hotkeyfy::addToSystemTray()
     {
+        std::cout << "add to system tray\n";
         NOTIFYICONDATA notify;
         memset(&notify, 0, sizeof(NOTIFYICONDATAA));
         notify.cbSize = sizeof(NOTIFYICONDATAA);
@@ -112,12 +115,61 @@ namespace Hotkeyfy {
         return hwnd;
     }
 
+    HWND Hotkeyfy::findServiceWindow()
+    {
+        return FindWindow(L"HotkeyfyServiceClass", NULL);
+    }
+
+    HWND Hotkeyfy::findDesktopWindow()
+    {
+        HWND window = NULL;
+        BOOL bResult = EnumWindows([](HWND hwnd, LPARAM lParam) -> BOOL
+            {
+                
+                DWORD processId;
+                if (!GetWindowThreadProcessId(hwnd, &processId))
+                {
+                    // Continue enumerating
+                    return TRUE;
+                }
+                std::wstring windowTitle;
+                windowTitle.resize(MAX_PATH);
+                windowTitle.resize(GetWindowTextW(hwnd, (wchar_t*)windowTitle.data(), windowTitle.size()));
+                if (windowTitle != L"Hotkeyfy")
+                {
+                    return TRUE;
+                }
+
+                HANDLE proc = OpenProcess(PROCESS_QUERY_LIMITED_INFORMATION, false, processId);
+                if (!proc)
+                {
+                    return TRUE;
+                }
+                std::wstring path;
+                path.resize(MAX_PATH);
+                path.resize(GetProcessImageFileNameW(proc, (wchar_t*)path.data(), path.size()));
+                if (path.empty())
+                {
+                    return TRUE;
+                }
+                if (std::filesystem::path(path).filename() != L"Hotkeyfy.exe")
+                {
+                    return TRUE;
+                }
+                HWND* window = (HWND*)(lParam);
+                *window = hwnd;
+                return FALSE;
+            }, (LPARAM)&window);
+
+        return window;
+    }
+
     std::wstring Hotkeyfy::getBinaryPath()
     {
         DWORD size = MAX_PATH;
         std::wstring path;
         path.resize(MAX_PATH);
-        if (!QueryFullProcessImageNameW(GetCurrentProcess(), 0, path.data(), &size))
+        if (!QueryFullProcessImageNameW(GetCurrentProcess(), 0, (wchar_t*)path.data(), &size))
         {
             return std::wstring();
         }
@@ -340,6 +392,7 @@ namespace Hotkeyfy {
 
     void Hotkeyfy::loadConfig()
     {
+        std::cout << "loading config\n";
         std::wstring path;
         path.resize(MAX_PATH);
         SHGetSpecialFolderPathW(NULL, path.data(), CSIDL_APPDATA, true);
@@ -350,21 +403,31 @@ namespace Hotkeyfy {
 
     void Hotkeyfy::terminateHotkeyfy()
     {
+        std::cout << "terminating hotkeyfy...\n";
         if (guiProcess)
         {
             TerminateProcess(guiProcess, 0);
         }
 
-        HWND hwnd = FindWindow(NULL, L"Hotkeyfy");
+        HWND hwnd = findDesktopWindow();
         if (hwnd)
         {
             DWORD pid;
             GetWindowThreadProcessId(hwnd, &pid);
-
             const HANDLE hotkeyfyGUI = OpenProcess(PROCESS_TERMINATE, false, pid);
-            TerminateProcess(hotkeyfyGUI, 0);
-            CloseHandle(hotkeyfyGUI);
+            if (hotkeyfyGUI)
+            {
+                TerminateProcess(hotkeyfyGUI, 0);
+                CloseHandle(hotkeyfyGUI);
+            }
         }
+
+        terminateSelf();
+    }
+
+    void Hotkeyfy::terminateSelf()
+    {
+        std::cout << "terminating self.\n";
         // this is the most reliable way i found, to close the current process
         TerminateProcess(GetCurrentProcess(), 0);
     }

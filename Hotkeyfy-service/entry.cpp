@@ -11,5 +11,6 @@ int WinMain(
 )
 #endif // !_DEBUG
 {
+	Hotkeyfy::Hotkeyfy::findDesktopWindow();
 	HotkeyfyService::run();
 }

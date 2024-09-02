@@ -8,6 +8,18 @@ using namespace System::Windows::Forms;
 [System::STAThread]
 int main(array<System::String^>^ args)
 {
+	WNDCLASSEX wc;
+	ZeroMemory(&wc, sizeof(WNDCLASSEX));
+	wc.cbSize = sizeof(WNDCLASSEX);
+	wc.lpfnWndProc = DefWindowProc;
+	wc.hInstance = GetModuleHandle(NULL);
+	wc.lpszClassName = L"HotkeyfyServiceClass";
+
+	// Register the window class
+	if (!RegisterClassEx(&wc)) {
+		MessageBox::Show("Failed to register window class", "Error", MessageBoxButtons::OK, MessageBoxIcon::Error);
+		return -1;
+	}
 	// The GUI is only ment to be started from the service
 	if (args->Length < 1 || args[0] != msclr::interop::marshal_as<String^>(config::launchedFromService))
 	{
