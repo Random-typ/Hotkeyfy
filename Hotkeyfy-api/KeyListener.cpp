@@ -89,6 +89,8 @@ void PollGamepadInput() noexcept
 
 void KeyListener::init()
 {
+	std::cout << "init keylistener\n";
+
 	keyboardHook = SetWindowsHookEx(WH_KEYBOARD_LL, KeyboardProc, GetModuleHandle(NULL), 0);
 	loopTh = std::jthread(loop);
 
@@ -97,6 +99,8 @@ void KeyListener::init()
 
 void KeyListener::cleanup()
 {
+	std::cout << "cleanup()\n";
+
 	loopTh.request_stop();
 	PostThreadMessageA(GetThreadId(loopTh.native_handle()), WM_USER, 0, 0);
 	loopTh.join();
@@ -127,11 +131,13 @@ bool KeyListener::isListening()
 
 void KeyListener::enableHotkeys()
 {
+	std::cout << "enable hotkeys\n";
 	hotkeysEnabled = true;
 }
 
 void KeyListener::disableHotkeys()
 {
+	std::cout << "disable hotkeys\n";
 	hotkeysEnabled = false;
 }
 
@@ -190,6 +196,7 @@ void KeyListener::doAction(std::string_view _action)
 
 void KeyListener::reloadConfig() 
 {
+	std::cout << "reloading config\n";
 	std::string exe = config::getProcess();
 	audioControl.selectExecutableName(std::wstring(exe.begin(), exe.end()));
 }

@@ -1,11 +1,11 @@
 # Hotkeyfy
-Hotkeyfy makes it possible to add sound control hotkeys to any process.
+Hotkeyfy makes it possible to add global sound control hotkeys to any process.
 
 ![Hotkeyfy](images/hotkeyfy.png)
 ![Hotkeyfy](images/system_tray.png)
 
 ## Features
-- Global custom Hotkeys for
+- Global custom hotkeys for
     - Play-Pause
     - Previous Track
     - Next Track

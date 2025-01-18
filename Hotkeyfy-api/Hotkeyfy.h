@@ -1,6 +1,8 @@
 #pragma once
 
 #include <Shlobj.h>
+#include <psapi.h>
+#include <iostream>
 
 #include "config.h"
 #include "resource.h"
@@ -21,6 +23,10 @@ public:
 
 	static HWND getProcessWindow();
 
+	static HWND findServiceWindow();
+
+	static HWND findDesktopWindow();
+
 	// gets current process binary location directory
 	static std::wstring getBinaryPath();
 
@@ -33,11 +39,14 @@ public:
 
 	// sends a message to the service who then calls showGUI()
 	// if the service is not running it is started
-	static void sendLaunchGUI();
+	// @returns true if the message was send successfully, false if the service couldn't be started
+	static bool sendLaunchGUI();
 
 	static void loadConfig();
 
 	static void terminateHotkeyfy();
+	
+	static void terminateSelf();
 
 	static constexpr const UINT showGUIMSG = WM_USER + 10;
 

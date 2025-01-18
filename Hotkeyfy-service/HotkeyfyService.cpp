@@ -2,6 +2,7 @@
 
 void HotkeyfyService::parseCommandLine()
 {
+	std::cout << "parse command line\n";
 	std::string cml = GetCommandLineA();
 
 	std::vector<std::string> paramList;
@@ -34,7 +35,7 @@ void HotkeyfyService::parseCommandLine()
 
 	if (std::any_of(paramList.begin(), paramList.end(), [](const std::string& _param){
 		return _param == config::launchedFromService || _param == config::showGUI;
-		}) || FindWindow(NULL, L"Hotkeyfy"))
+		}) || Hotkeyfy::Hotkeyfy::findDesktopWindow())
 	{
 		Hotkeyfy::Hotkeyfy::showGUI(true);
 	}
