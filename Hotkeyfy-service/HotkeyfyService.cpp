@@ -19,6 +19,19 @@ void HotkeyfyService::parseCommandLine()
 		start = end + 1;
 	}
 	
+	if (std::any_of(paramList.begin(), paramList.end(), [](auto _param) { return _param == config::uninstall; }))
+	{// uninstall called -> reset audio settings and exit all.
+
+		// reset volume
+		Hotkeyfy::Hotkeyfy::loadConfig();
+		KeyListener::reloadConfig();
+		KeyListener::audioControl.setVolume(1);
+
+		Hotkeyfy::Hotkeyfy::terminateHotkeyfy();
+		exit(0);
+		return;
+	}
+
 	if (std::any_of(paramList.begin(), paramList.end(), [](const std::string& _param){
 		return _param == config::launchedFromService || _param == config::showGUI;
 		}) || FindWindow(NULL, L"Hotkeyfy"))

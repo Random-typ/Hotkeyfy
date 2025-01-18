@@ -93,6 +93,7 @@ public:
 
 	static const std::string launchedFromService;
 	static const std::string showGUI;
+	static const std::string uninstall;
 
 	static ActionMap& getHotkeys();
 

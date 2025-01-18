@@ -144,6 +144,20 @@
     {
         "CustomAction"
         {
+            "{4AA51A2D-7D85-4A59-BA75-B0809FC8B380}:_771E31293A5140BA9C8AFBE0A7F656FF"
+            {
+            "Name" = "8:Hotkeyfy-service.exe"
+            "Condition" = "8:"
+            "Object" = "8:_FCDD5EA3D1E24CBCA5343A216F3A2DB3"
+            "FileType" = "3:2"
+            "InstallAction" = "3:4"
+            "Arguments" = "8:-uninstall"
+            "EntryPoint" = "8:"
+            "Sequence" = "3:1"
+            "Identifier" = "8:_535F308D_349B_4EF8_9DFA_AA9EE3BA07BF"
+            "InstallerClass" = "11:FALSE"
+            "CustomActionData" = "8:"
+            }
         }
         "DefaultFeature"
         {
@@ -191,7 +205,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:Hotkeyfy, Version=1.0.8866.40452, Culture=neutral, processorArchitecture=AMD64"
+            "AssemblyAsmDisplayName" = "8:Hotkeyfy, Version=1.0.8867.32689, Culture=neutral, processorArchitecture=AMD64"
                 "ScatterAssemblies"
                 {
                     "_5397F099F3E14F9996246A326C31A42B"
