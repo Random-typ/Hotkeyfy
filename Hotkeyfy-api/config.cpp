@@ -192,11 +192,11 @@ void config::setAutoStart(bool _autoStart) {
     }
     path.resize(size);
 
-    std::wstring GUIPath = std::filesystem::path(path).parent_path().wstring() + L"/Hotkeyfy-service.exe";
+    std::wstring ServicePath = std::filesystem::path(path).parent_path().wstring() + L"/Hotkeyfy-service.exe";
 
     if (_autoStart)
     {
-        if (RegSetValueExW(key, L"Hotkeyfy", 0, REG_SZ, (BYTE*)GUIPath.c_str(), (GUIPath.size() * sizeof(GUIPath[0])) + sizeof(GUIPath[0]))
+        if (RegSetValueExW(key, L"Hotkeyfy", 0, REG_SZ, (BYTE*)ServicePath.c_str(), (ServicePath.size() * sizeof(ServicePath[0])) + sizeof(ServicePath[0]))
             != ERROR_SUCCESS)
         {// failed
             RegCloseKey(key);

@@ -304,10 +304,10 @@ namespace Hotkeyfy {
 				static_cast<System::Int32>(static_cast<System::Byte>(64)));
 			this->linkLabel1->Location = System::Drawing::Point(13, 287);
 			this->linkLabel1->Name = L"linkLabel1";
-			this->linkLabel1->Size = System::Drawing::Size(106, 18);
+			this->linkLabel1->Size = System::Drawing::Size(109, 18);
 			this->linkLabel1->TabIndex = 12;
 			this->linkLabel1->TabStop = true;
-			this->linkLabel1->Text = L"©Luca Trefz    v1.0.1";
+			this->linkLabel1->Text = L"©Luca Trefz    v1.0.2";
 			this->linkLabel1->LinkClicked += gcnew System::Windows::Forms::LinkLabelLinkClickedEventHandler(this, &Form1::linkLabel1_LinkClicked);
 			// 
 			// label4

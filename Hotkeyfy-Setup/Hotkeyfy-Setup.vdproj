@@ -205,7 +205,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:Hotkeyfy, Version=1.0.8867.32689, Culture=neutral, processorArchitecture=AMD64"
+            "AssemblyAsmDisplayName" = "8:Hotkeyfy, Version=1.0.9449.34820, Culture=neutral, processorArchitecture=AMD64"
                 "ScatterAssemblies"
                 {
                     "_5397F099F3E14F9996246A326C31A42B"
@@ -419,15 +419,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Hotkeyfy"
-        "ProductCode" = "8:{8D896F34-5446-425F-A1EE-617A7B15AD18}"
-        "PackageCode" = "8:{2367E377-880D-41A3-BBBE-9324EA0237D5}"
+        "ProductCode" = "8:{4E2E5D74-2C5E-44E2-90E6-2A623B85B141}"
+        "PackageCode" = "8:{3A4B666A-6561-4486-9DF9-A83A1E244DCD}"
         "UpgradeCode" = "8:{664FCCD2-D087-45DF-A795-7ABAC4EF8818}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:1.0.1"
+        "ProductVersion" = "8:1.0.2"
         "Manufacturer" = "8:Hotkeyfy"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"

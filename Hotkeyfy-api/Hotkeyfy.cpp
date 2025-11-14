@@ -421,6 +421,39 @@ namespace Hotkeyfy {
                 CloseHandle(hotkeyfyGUI);
             }
         }
+        
+        // kill other service instances
+        DWORD size = MAX_PATH;
+        std::wstring path;
+        path.resize(MAX_PATH);
+        if (QueryFullProcessImageNameW(GetCurrentProcess(), 0, (wchar_t*)path.data(), &size))
+        {
+            path.resize(size);
+            path = std::filesystem::path(path).filename();
+            std::vector<DWORD> processes;
+            processes.resize(64);
+
+            DWORD size = 0;
+            while (processes.size() <= size || !size)
+            {
+                EnumProcesses(processes.data(), processes.size() * sizeof(DWORD), &size);
+                processes.resize(processes.size() + 64);
+            }
+            processes.resize(size);
+
+            for (auto& pid : processes)
+            {
+                if (GetCurrentProcessId() != pid && ProcessAudioControl::matchProcess(path, pid))
+                {
+                    const HANDLE hotkeyfyService = OpenProcess(PROCESS_TERMINATE, false, pid);
+                    if (hotkeyfyService)
+                    {
+                        TerminateProcess(hotkeyfyService, 0);
+                        CloseHandle(hotkeyfyService);
+                    }
+                }
+            }
+        }
 
         terminateSelf();
     }
@@ -428,8 +461,7 @@ namespace Hotkeyfy {
     void Hotkeyfy::terminateSelf()
     {
         std::cout << "terminating self.\n";
-        // this is the most reliable way i found, to close the current process
+        // this is the most reliable way i found to close the current process
         TerminateProcess(GetCurrentProcess(), 0);
     }
-
 }

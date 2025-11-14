@@ -23,38 +23,42 @@ void ProcessAudioControl::setVolume(float _value)
     }
 
     findChannel();
-    if (!channel)
+    if (channels.empty())
     {
         return;
     }
     // set volume on all channels
     // channels here refer to speakers e.g. left speaker right speaker
     UINT32 count = 0;
-    channel->GetChannelCount(&count);
-    for (size_t i = 0; i < count; i++)
+    for (auto& channel : channels)
     {
-        channel->SetChannelVolume(i, _value, NULL);
+        channel->GetChannelCount(&count);
+        for (size_t i = 0; i < count; i++)
+        {
+            channel->SetChannelVolume(i, _value, NULL);
+        }
     }
 }
 
 float ProcessAudioControl::getVolume()
 {
     findChannel();
-    if (!channel)
+    if (channels.empty())
     {
         return 0;
     }
 
+    // find max volume
     float max = 0;
     UINT32 count = 0;
-    channel->GetChannelCount(&count);
-    for (size_t i = 0; i < count; i++)
+    for (auto& channel : channels)
     {
-        float volume = 0;
-        channel->GetChannelVolume(i, &volume);
-        if (volume > max)
+        channel->GetChannelCount(&count);
+        for (size_t i = 0; i < count; i++)
         {
-            max = volume;
+            float volume = 0;
+            channel->GetChannelVolume(i, &volume);
+            max = std::max(max, volume);
         }
     }
     return max;
@@ -63,7 +67,7 @@ float ProcessAudioControl::getVolume()
 void ProcessAudioControl::cleanup()
 {
     hwnd = NULL;
-    pid = NULL;
+    PIDs.clear();
     partialCleanup();
 }
 
@@ -92,10 +96,13 @@ void ProcessAudioControl::checkConnection()
 
 void ProcessAudioControl::partialCleanup()
 {
-    if (channel)
+    if (!channels.empty())
     {
-        channel->Release();
-        channel = nullptr;
+        for (auto& channel : channels)
+        {
+            channel->Release();
+        }
+        channels.clear();
     }
     if (!needsCleanup)
     {
@@ -112,61 +119,56 @@ void ProcessAudioControl::selectExecutableName()
     {
         return;
     }
-    std::tuple<HWND, std::wstring, DWORD> params = { 0, exe, 0 };
-
+    
+    std::tuple<HWND*, std::wstring> params = { &hwnd, exe };
     // Enumerate the windows using a lambda to process each window
     BOOL bResult = EnumWindows([](HWND hwnd, LPARAM lParam) -> BOOL
         {
-            std::tuple<HWND, std::wstring, DWORD>* param = (std::tuple<HWND, std::wstring, DWORD>*)lParam;
+            std::tuple<HWND*, std::wstring>* param = (std::tuple<HWND*, std::wstring>*)lParam;
             DWORD pid;
-            GetWindowThreadProcessId(hwnd, &pid);
             if (!IsWindowVisible(hwnd))
             {
                 return true;
             }
+            GetWindowThreadProcessId(hwnd, &pid);
 
-            HANDLE proc = OpenProcess(PROCESS_QUERY_INFORMATION, false, pid);
-            if (!proc)
+            if (!matchProcess(std::get<1>(*param), pid))
             {
                 return true;
             }
 
-            wchar_t path[MAX_PATH];
-            DWORD len = MAX_PATH;
-            QueryFullProcessImageName(proc, 0, path, &len);
-
-            CloseHandle(proc);
-
-            wchar_t* fileName = 0;
-            for (size_t i = 0; ; i++)
+            if (!*std::get<0>(*param))
             {
-                if (path[i] == '\0')
-                {
-                    break;
-                }
-                if (path[i] == '\\')
-                {
-                    fileName = &path[i + 1];
-                }
+                *std::get<0>(*param) = hwnd;
             }
 
-            if (!fileName || wcslen(fileName) != std::get<1>(*param).size() || memcmp(std::get<1>(*param).c_str(), fileName, std::get<1>(*param).size()))
-            {
-                return true;
-            }
-            std::get<0>(*param) = hwnd;
-            std::get<2>(*param) = pid;
             return false;
         }, (LPARAM)&params);
 
-    hwnd = std::get<0>(params);
-    pid = std::get<2>(params);
+    std::vector<DWORD> processes;
+    processes.resize(64);
+
+    DWORD size = 0;
+    while (processes.size() <= size || !size)
+    {
+        EnumProcesses(processes.data(), processes.size() * sizeof(DWORD), &size);
+        processes.resize(processes.size() + 64);
+    }
+    processes.resize(size);
+
+    for (auto& pid : processes)
+    {
+        if (ProcessAudioControl::matchProcess(exe, pid))
+        {
+            PIDs.push_back(pid);
+        }
+    }
 }
 
 void ProcessAudioControl::findChannel()
 {
     checkConnection();
-    if (channel)
+    if (!channels.empty())
     {
         return;
     }
@@ -242,18 +244,14 @@ void ProcessAudioControl::findChannel()
         DWORD id;
         session2->GetProcessId(&id);
 
-        if (id == pid)
-
+        if (std::any_of(PIDs.begin(), PIDs.end(), [&id](DWORD pid){ return pid == id; }))
         {
+            IChannelAudioVolume*& channel = channels.emplace_back();
             hr = session2->QueryInterface(__uuidof(IChannelAudioVolume), (LPVOID*)&channel);
-            if (hr != S_OK)
+            if (hr == S_OK)
             {
-                channel = nullptr;
-                continue;
+                channels.push_back(channel);
             }
-            session->Release();
-            session2->Release();
-            break;
         }
 
         session->Release();
@@ -266,10 +264,47 @@ void ProcessAudioControl::findChannel()
     deviceEnumerator->Release();
 }
 
+bool ProcessAudioControl::matchProcess(const std::wstring& exe, DWORD pid)
+{
+    HANDLE proc = OpenProcess(PROCESS_QUERY_INFORMATION, false, pid);
+    if (!proc)
+    {
+        return false;
+    }
+
+    wchar_t path[MAX_PATH];
+    DWORD len = MAX_PATH;
+    QueryFullProcessImageName(proc, 0, path, &len);
+
+    CloseHandle(proc);
+
+    wchar_t* fileName = 0;
+    for (size_t i = 0; ; i++)
+    {
+        if (path[i] == '\0')
+        {
+            break;
+        }
+        if (path[i] == '\\')
+        {
+            fileName = &path[i + 1];
+        }
+    }
+
+    if (!fileName || wcslen(fileName) != exe.size() || memcmp(exe.c_str(), fileName, exe.size()))
+    {
+        return false;
+    }
+    return true;
+}
+
 void ProcessAudioControl::selectProcess(HWND _hwnd, DWORD _pid)
 {
-    hwnd = _hwnd;
-    pid = _pid;
+    if (_hwnd)
+    {
+        hwnd = _hwnd;
+    }
+    PIDs.push_back(_pid);
     autoReconnect = false;
 }
 

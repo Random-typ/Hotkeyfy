@@ -3,12 +3,17 @@
 #ifndef __ProcessAudioControl_H__
 #define __ProcessAudioControl_H__
 
+#define NOMINMAX
+
 #include <string>
 #include <tuple>
 #include <Windows.h>
+#include <psapi.h>
 #include <audiopolicy.h>
 #include <tlhelp32.h>
 #include <Mmdeviceapi.h>
+#include <vector>
+#include <algorithm>
 #include "HotkeyfyExport.h"
 
 #pragma comment(lib, "Kernel32.lib")
@@ -17,7 +22,7 @@
 
 class HOTKEYFYAPI_DECLSPEC ProcessAudioControl {
 public:
-    ProcessAudioControl() : channel(nullptr), hwnd(NULL), pid(NULL), needsCleanup(false), autoReconnect(true) {};
+    ProcessAudioControl() : hwnd(NULL), needsCleanup(false), autoReconnect(true) {};
     // Calls cleanup()
     ~ProcessAudioControl();
 
@@ -76,6 +81,10 @@ public:
 
     // Closes open handles and opens them again (if the target process is running)
     void reconnect();
+
+    // check wether pid matches exe
+    // @returns true on match, false otherwise
+    static bool matchProcess(const std::wstring& exe, DWORD pid);
 private:
     void sendMessage(int _msg);
     // checks wether the handles are still valid and 
@@ -91,11 +100,11 @@ private:
     // select/sets the channel variable based on the pid variable
     void findChannel();
 
-    IChannelAudioVolume* channel;
+    std::vector<IChannelAudioVolume*> channels;
 
     HWND hwnd;
 
-    DWORD pid;
+    std::vector<DWORD> PIDs;
 
     std::wstring exe;
 
