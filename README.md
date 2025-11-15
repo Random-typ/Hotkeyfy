@@ -16,7 +16,7 @@ Hotkeyfy makes it possible to add global sound control hotkeys to any process.
 ## Installing
 
 Just download the latest installer from the [releases section](https://github.com/Random-typ/Hotkeyfy/releases). Then follow the instructions in the installer.
-
+> Future releases of this program will use free code signing provided by [SignPath.io](https://signpath.io/) and a certificate by the [SignPath Foundation](https://signpath.org).
 ## Building yourself
 Download the repository from the master branch and open the solution with Visual Studio.
 You may need the following components:
